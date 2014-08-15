@@ -35,8 +35,7 @@ class ControllerMultisellerTransaction extends ControllerMultisellerBase {
 				array(
 					'id' => $result['balance_id'],
 					'seller' => $result['nickname'],
-					//'amount' => $this->currency->format($result['amount'], $this->config->get('config_currency')),
-					'amount' => $this->currency->format($result['amount'], $result['currency_code']),
+					'amount' => $this->currency->format($result['amount'], $this->config->get('config_currency')),
 					'description' => (mb_strlen($result['mb.description']) > 80 ? mb_substr($result['mb.description'], 0, 80) . '...' : $result['mb.description']),
 					'date_created' => date($this->language->get('date_format_short'), strtotime($result['mb.date_created'])),
 				)
