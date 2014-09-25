@@ -1318,8 +1318,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
   		$decimal_point = $this->language->get('decimal_point');
   		$thousand_point = $this->language->get('thousand_point');
 		//$product['price'] = number_format(round($this->currency->convert($product['price'], $this->MsLoader->MsProduct->getDefaultCurrency(), $_SESSION['currency'] ), (int)$decimal_place), (int)$decimal_place, $decimal_point, '');
-		$product['price'] = number_format(round($product['price'], (int)$decimal_place), (int)$decimal_place, $decimal_point, $thousand_point);
-		
+		$product['price'] = round($product['price'], (int)$decimal_place);
+
         if(isset($product['manufacturer_id'])){
             $product['manufacturer_id'] = (int)$product['manufacturer_id'];
 			$this->load->model('catalog/manufacturer');

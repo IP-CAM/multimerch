@@ -233,7 +233,7 @@ class MsHelper extends Model {
 	}
 	
 	public function uniformDecimalPoint($number) {
-		return (float)(str_replace(',', '.', $number));
+		return (float)(str_replace($this->language->get('thousand_point'), '', $number));
 	}
 	
 	public function trueCurrencyFormat($number) {
