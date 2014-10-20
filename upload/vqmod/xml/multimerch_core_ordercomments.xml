@@ -88,17 +88,6 @@
 
 	<file name="catalog/controller/checkout/confirm.php">
 		<operation>
-			<search position="after" offset="1"><![CDATA[
-				$data['comment']
-			]]></search>
-			<add><![CDATA[
-				if(is_array($this->session->data['comment'])) {
-					$data['comment'] = end($this->session->data['comment']);
-				}
-			]]></add>
-		</operation>
-
-		<operation>
 			<search position="replace"><![CDATA[
 			$data['comment'] = $this->session->data['comment'];
 			]]></search>
