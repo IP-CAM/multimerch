@@ -53,7 +53,7 @@
 				<br /><br />
 				<?php foreach($this->session->data['sellers'] as $seller) { ?>
 					<div><?php echo $this->language->get('ms_seller_forseller'); ?>: <b><?php echo $seller['ms.nickname'] ?></b></div>
-					<textarea name="comment[<?php echo $seller['seller_id'] ?>]" rows="8" style="width: 98%;"><?php echo is_array($comment) ? $comment[$seller['seller_id']]  : $comment; ?></textarea>
+					<textarea name="comment[<?php echo $seller['seller_id'] ?>]" rows="8" style="width: 98%;"><?php echo is_array($comment) ? (isset($comment[$seller['seller_id']]) ? $comment[$seller['seller_id']] : '')  : $comment; ?></textarea>
 					<br /><br />
 				<?php } ?>
 			]]></add>
