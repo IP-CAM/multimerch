@@ -26,8 +26,6 @@
 				if (in_array($order_status_id, $this->config->get('msconf_credit_order_statuses'))) {
 					$sendmail = false;
 					foreach ($ms_order_product_query->rows as $order_product) {
-						// increment sold counter
-						$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold + " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
 						$seller_id = $this->MsLoader->MsProduct->getSellerId($order_product['product_id']);
 						if (!$seller_id) continue;
 						
@@ -41,6 +39,7 @@
 						));
 						
 						if ($payment) {
+							$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold + " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
 							$sendmail = true;
 							continue;
 						}
@@ -85,6 +84,8 @@
 								);
 							}
 							
+							$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold + " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
+							
 							$this->MsLoader->MsBalance->addBalanceEntry(
 								$seller_id,
 								array(
@@ -95,6 +96,7 @@
 									'description' => sprintf($this->language->get('ms_transaction_sale'),  ($order_product['quantity'] > 1 ? $order_product['quantity'] . ' x ' : '')  . $order_product['name'], $this->currency->format($store_commission_flat + $store_commission_pct, $this->config->get('config_currency')))
 								)
 							);
+							
 							$sendmail = true;
 						} else {
 							// send order status change mails
@@ -104,9 +106,6 @@
 				} else if (in_array($order_status_id, $this->config->get('msconf_debit_order_statuses'))) {
 				$sendmail = false;
 				foreach ($ms_order_product_query->rows as $order_product) {
-					// decrement sold counter
-					$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold - " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
-				
 					$seller_id = $this->MsLoader->MsProduct->getSellerId($order_product['product_id']);
 					if (!$seller_id) continue;
 					$refund_balance_entry = $this->MsLoader->MsBalance->getBalanceEntry(
@@ -129,6 +128,8 @@
 						);
 				
 						if ($balance_entry) {
+							$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold - " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
+						
 							$this->MsLoader->MsBalance->addBalanceEntry(
 								$balance_entry['seller_id'],
 								array(
@@ -145,7 +146,6 @@
 						} else {
 							// send order status change mails
 						}
-						
 					}
 				}
 				}
@@ -174,9 +174,6 @@
 			if (in_array($data['order_status_id'], $this->config->get('msconf_credit_order_statuses'))) {
 				$sendmail = false;
 				foreach ($ms_order_product_query->rows as $order_product) {
-					// increment sold counter
-					$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold + " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
-				
 					$seller_id = $this->MsLoader->MsProduct->getSellerId($order_product['product_id']);
 					if (!$seller_id) continue;
 					
@@ -220,6 +217,8 @@
 							);
 						}
 						
+						$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold + " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
+						
 						$this->MsLoader->MsBalance->addBalanceEntry(
 							$seller_id,
 							array(
@@ -240,9 +239,6 @@
 			} else if (in_array($data['order_status_id'], $this->config->get('msconf_debit_order_statuses'))) {
 			$sendmail = false;
 			foreach ($ms_order_product_query->rows as $order_product) {
-				// decrement sold counter
-				$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold - " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
-				
 				$seller_id = $this->MsLoader->MsProduct->getSellerId($order_product['product_id']);
 				if (!$seller_id) continue;
 							
@@ -266,6 +262,8 @@
 					);
 			
 					if ($balance_entry) {
+						$this->db->query("UPDATE " . DB_PREFIX . "ms_product SET number_sold  = (number_sold - " . (int)$order_product['quantity'] . ") WHERE product_id = '" . (int)$order_product['product_id'] . "'");
+					
 						$this->MsLoader->MsBalance->addBalanceEntry(
 							$balance_entry['seller_id'],
 							array(
