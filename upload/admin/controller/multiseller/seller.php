@@ -352,8 +352,10 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('seller');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/seller.tpl', $this->data));
 	}
 	
 	public function create() {
@@ -385,8 +387,10 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			)
 		));		
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('seller-form');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/seller-form.tpl', $this->data));
 	}	
 	
 	public function update() {

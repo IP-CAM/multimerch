@@ -2,6 +2,7 @@
 
 class ControllerMultisellerBase extends Controller {
 	private $error = array();
+	public  $data = array();
 	
 	public function __construct($registry) {
 		parent::__construct($registry);
@@ -10,6 +11,7 @@ class ControllerMultisellerBase extends Controller {
 		if (!isset($parts[2]) || !in_array($parts[2], array('install','uninstall'))) {
 		}
 		
+		//$data = array();
 		$this->data = array_merge($this->data, $this->load->language('multiseller/multiseller'));
 		$this->data['token'] = $this->session->data['token'];
 		$this->document->addStyle('view/stylesheet/multimerch/multiseller.css');

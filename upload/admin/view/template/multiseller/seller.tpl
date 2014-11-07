@@ -1,55 +1,66 @@
-<?php echo $header; ?>
+<?php echo $header; ?><?php echo $column_left; ?>
 <div id="content">
-  <div class="breadcrumb">
-	<?php foreach ($breadcrumbs as $breadcrumb) { ?>
-	<?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-	<?php } ?>
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right"><a href="<?php echo $link_create_seller; ?>" data-toggle="tooltip" title="<?php echo $ms_catalog_sellers_create; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+      </div>
+      <h1><?php echo $ms_catalog_sellers_heading; ?></h1>
+      <ul class="breadcrumb">
+        <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+        <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+        <?php } ?>
+      </ul>
+    </div>
   </div>
-  <?php if ($error_warning) { ?>
-  <div class="warning"><?php echo $error_warning; ?></div>
-  <?php } ?>
-  <?php if (isset($success) && $success) { ?>
-  <div class="success"><?php echo $success; ?></div>
-  <?php } ?>
-  <div class="box">
-	<div class="heading">
-	  <h1><img src="view/image/multiseller/ms-profile.png" alt="" /> <?php echo $ms_catalog_sellers_heading; ?></h1>
-		<div class="buttons" style="margin-top: -2px;">
-			<a onclick="location = '<?php echo $link_create_seller; ?>'" class="ms-button ms-button-profile-plus v-top" title="<?php echo $ms_catalog_sellers_create; ?>"></a>
+  <div class="container-fluid">
+    <?php if ($error_warning) { ?>
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <?php } ?>
+   <?php if (isset($success) && $success) { ?>
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> <?php echo $success; ?>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <?php } ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> <?php echo $ms_catalog_sellers_heading; ?></h3>
+      </div>
+      <div class="panel-body">
+		<?php echo $total_balance; ?><br /><br />
+		<div class="table-responsive">
+		<table class="list mmTable" style="text-align: center" id="list-sellers">
+			<thead>
+				<tr>
+					<td class="tiny"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+					<td><?php echo $ms_seller; ?></td>
+					<td><?php echo $ms_catalog_sellers_email; ?></td>
+					<td class="tiny"><?php echo $ms_catalog_sellers_total_products; ?></td>
+					<td class="tiny"><?php echo $ms_catalog_sellers_total_sales; ?></td>
+					<td class="small"><?php echo $ms_catalog_sellers_total_earnings; ?></td>
+					<td class="medium"><?php echo $ms_catalog_sellers_current_balance; ?></td>
+					<td class="medium"><?php echo $ms_catalog_sellers_status; ?></td>
+					<td class="medium"><?php echo $ms_catalog_sellers_date_created; ?></td>
+					<td class="medium"><?php echo $ms_action; ?></td>
+				</tr>
+				<tr class="filter">
+					<td></td>
+					<td><input type="text" name="search_seller" class="search_init" /></td>
+					<td><input type="text" name="filter_email" /></td>
+					<td><input type="text" name="filter_total_products" /></td>
+					<td><input type="text" name="filter_total_sales" /></td>
+					<td><input type="text" name="filter_total_earnings" /></td>
+					<td><input type="text" name="filter_balance" /></td>
+					<td></td>
+					<td><input type="text" name="filter_date_created" /></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 		</div>
-	</div>
-	<div class="content">
-	<?php echo $total_balance; ?><br /><br />
-	<table class="list mmTable" style="text-align: center" id="list-sellers">
-		<thead>
-			<tr>
-				<td class="tiny"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
-				<td><?php echo $ms_seller; ?></td>
-				<td><?php echo $ms_catalog_sellers_email; ?></td>
-				<td class="tiny"><?php echo $ms_catalog_sellers_total_products; ?></td>
-				<td class="tiny"><?php echo $ms_catalog_sellers_total_sales; ?></td>
-				<td class="small"><?php echo $ms_catalog_sellers_total_earnings; ?></td>
-				<td class="medium"><?php echo $ms_catalog_sellers_current_balance; ?></td>
-				<td class="medium"><?php echo $ms_catalog_sellers_status; ?></td>
-				<td class="medium"><?php echo $ms_catalog_sellers_date_created; ?></td>
-				<td class="medium"><?php echo $ms_action; ?></td>
-			</tr>
-			<tr class="filter">
-				<td></td>
-				<td><input type="text" name="search_seller" class="search_init" /></td>
-				<td><input type="text" name="filter_email" /></td>
-				<td><input type="text" name="filter_total_products" /></td>
-				<td><input type="text" name="filter_total_sales" /></td>
-				<td><input type="text" name="filter_total_earnings" /></td>
-				<td><input type="text" name="filter_balance" /></td>
-				<td></td>
-				<td><input type="text" name="filter_date_created" /></td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
 	</div>
   </div>
 </div>
