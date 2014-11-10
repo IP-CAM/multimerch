@@ -113,10 +113,10 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 	
 	private function _editSettings() {
 		$this->load->model('setting/setting');
-		$this->load->model('setting/extension');
+		$this->load->model('extension/extension');
 		
 		$set = $this->model_setting_setting->getSetting('multiseller');
-		$installed_extensions = $this->model_setting_extension->getInstalled('module');
+		$installed_extensions = $this->model_extension_extension->getInstalled('module');
 
 		$extensions_to_be_installed = array();
 		foreach ($this->settings as $name=>$value) {
@@ -153,7 +153,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		$this->model_setting_setting->editSetting('multiseller', $set);
 
 		foreach ($extensions_to_be_installed as $ext) {
-			$this->model_setting_extension->install('module',$ext);	
+			$this->model_extension_extension->install('module',$ext);
 		}
 	}
 	public function install() {

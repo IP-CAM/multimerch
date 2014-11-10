@@ -246,8 +246,8 @@ class MsHelper extends Model {
 	}
 	
 	public function isInstalled() {
-		$this->load->model('setting/extension');
-		$installed_extensions = $this->model_setting_extension->getInstalled('module');
+		$this->load->model('extension/extension');
+		$installed_extensions = $this->model_extension_extension->getInstalled('module');
 		return array_search('multiseller', $installed_extensions) !== FALSE;
 	}
 }
