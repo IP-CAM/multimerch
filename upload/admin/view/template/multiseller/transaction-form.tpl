@@ -90,7 +90,7 @@ $("#ms-submit-button").click(function() {
 		success: function(jsonData) {
 			if (!jQuery.isEmptyObject(jsonData.errors)) {
 				for (error in jsonData.errors) {
-					$('[name="'+error+'"]').after('<div class="text-danger">' + jsonData.errors[error] + '</p>');
+					$('[name="'+error+'"]').after('<div class="text-danger">' + jsonData.errors[error] + '</div>');
 				}
 			} else {
 				window.location = 'index.php?route=multiseller/transaction&token=<?php echo $token; ?>';

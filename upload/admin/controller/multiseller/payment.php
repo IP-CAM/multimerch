@@ -143,8 +143,10 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 			)*/
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('payment');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/payment.tpl', $this->data));
 	}
 	
 	public function create() {
@@ -185,16 +187,18 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 			),
 			array(
 				'text' => $this->language->get('ms_payment_breadcrumbs'),
-				'href' => $this->url->link('multiseller/transaction', '', 'SSL'),
+				'href' => $this->url->link('multiseller/payment', '', 'SSL'),
 			),
 			array(
 				'text' => $this->language->get('ms_payment_new'),
-				'href' => $this->url->link('multiseller/transaction', '', 'SSL'),
+				'href' => $this->url->link('multiseller/payment/create', '', 'SSL'),
 			)
 		));
 	
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('payment-form');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/payment-form.tpl', $this->data));
 	}
 	
 	public function jxSave() {

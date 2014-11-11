@@ -231,3 +231,8 @@ table.list thead td.right {
 {
     vertical-align: top;
 }
+
+.msBlack .ui-widget-header {
+    background: url("view/image/ui-bg_gloss-wave_35_000000_500x100.png") repeat-x scroll 50% 50% #F6A828;
+    border: 1px solid #000000;
+}

@@ -1,64 +1,70 @@
-<?php echo $header; ?>
+<?php echo $header; ?><?php echo $column_left; ?>
 <div id="content" class="ms-payout">
-  <div class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-    <?php } ?>
-  </div>
-  <?php if ($error_warning) { ?>
-  <div class="warning"><?php echo $error_warning; ?></div>
-  <?php } ?>
-  <?php if (isset($success) && $success) { ?>
-  <div class="success"><?php echo $success; ?></div>
-  <?php } ?>
-  <div class="box">
-    <div class="heading">
-      <h1><img src="view/image/multiseller/ms-dollar.png" alt="" /> <?php echo $ms_payment_heading; ?></h1>
-      <div class="buttons">
-      	<a onclick="location = '<?php echo $this->url->link('multiseller/payment/create', 'token=' . $this->session->data['token'], 'SSL'); ?>'" class="ms-button ms-button-dollar-plus v-top" title="<?php echo $ms_payment_new; ?>"></a>
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right"><a href="<?php echo $this->url->link('multiseller/payment/create', 'token=' . $this->session->data['token'], 'SSL'); ?>" data-toggle="tooltip" title="<?php echo $ms_payment_new; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
       </div>
+      <h1><?php echo $ms_payment_heading; ?></h1>
+      <ul class="breadcrumb">
+        <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+        <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+        <?php } ?>
+      </ul>
     </div>
-    <div class="content">
-      <style type="text/css">
-      	.msBlack .ui-widget-header {
-		    background: url("view/image/ui-bg_gloss-wave_35_000000_500x100.png") repeat-x scroll 50% 50% #F6A828;
-		    border: 1px solid #000000;
-      	}
-      </style>
-      <p><?php echo $ms_payment_payout_requests; ?>: <b><?php echo $payout_requests['amount_pending'];?></b> <?php echo strtolower($ms_payment_pending); ?> / <b><?php echo $payout_requests['amount_paid'];?></b> <?php echo strtolower($ms_payment_paid); ?></p>
-      <p><?php echo $ms_payment_payouts; ?>: <b><?php echo $payouts['amount_pending'];?></b> <?php echo strtolower($ms_payment_pending); ?> / <b><?php echo $payouts['amount_paid'];?></b> <?php echo strtolower($ms_payment_paid); ?></p>
-	<form action="" method="post" enctype="multipart/form-data" id="form">
-	<table class="list" style="text-align: center" id="list-payments">
-	<thead>
-	<tr>
-		<td class="tiny"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
-		<td class="small"><?php echo $ms_type; ?></td>
-		<td class="medium"><?php echo $ms_seller; ?></td>
-		<td class="small"><?php echo $ms_amount; ?></td>
-		<td><?php echo $ms_description; ?></td>
-		<td class="medium"><?php echo $ms_status; ?></td>
-		<td class="medium"><?php echo $ms_date_created; ?></td>
-		<td class="medium"><?php echo $ms_date_paid; ?></td>
-		<td class="medium"><?php echo $ms_action; ?></td>
-	</tr>
-	<tr class="filter">
-		<td></td>
-		<td></td>
-		<td><input type="text"/></td>
-		<td><input type="text"/></td>
-		<td><input type="text"/></td>
-		<td></td>
-		<td><input type="text"/></td>
-		<td><input type="text"/></td>
-		<td></td>
-	</tr>
-	</thead>
-	
-	<tbody></tbody>
-	</table>
-	</form>
+  </div>
+  <div class="container-fluid">
+    <?php if ($error_warning) { ?>
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <?php } ?>
+   <?php if (isset($success) && $success) { ?>
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> <?php echo $success; ?>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <?php } ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> <?php echo $ms_payment_heading; ?></h3>
+      </div>
+      <div class="panel-body">
+        <p><?php echo $ms_payment_payout_requests; ?>: <b><?php echo $payout_requests['amount_pending'];?></b> <?php echo strtolower($ms_payment_pending); ?> / <b><?php echo $payout_requests['amount_paid'];?></b> <?php echo strtolower($ms_payment_paid); ?></p>
+        <p><?php echo $ms_payment_payouts; ?>: <b><?php echo $payouts['amount_pending'];?></b> <?php echo strtolower($ms_payment_pending); ?> / <b><?php echo $payouts['amount_paid'];?></b> <?php echo strtolower($ms_payment_paid); ?></p>
+		<div class="table-responsive">
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+		<table class="list table table-bordered table-hover" style="text-align: center" id="list-payments">
+            <thead>
+            <tr>
+                <td class="tiny"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+                <td class="small"><?php echo $ms_type; ?></td>
+                <td class="medium"><?php echo $ms_seller; ?></td>
+                <td class="small"><?php echo $ms_amount; ?></td>
+                <td><?php echo $ms_description; ?></td>
+                <td class="medium"><?php echo $ms_status; ?></td>
+                <td class="medium"><?php echo $ms_date_created; ?></td>
+                <td class="medium"><?php echo $ms_date_paid; ?></td>
+                <td class="medium"><?php echo $ms_action; ?></td>
+            </tr>
+            <tr class="filter">
+                <td></td>
+                <td></td>
+                <td><input type="text"/></td>
+                <td><input type="text"/></td>
+                <td><input type="text"/></td>
+                <td></td>
+                <td><input type="text"/></td>
+                <td><input type="text"/></td>
+                <td></td>
+            </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+	    </form>
+        </div>
+      </div>
 	</div>
-	</div>
+  </div>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {

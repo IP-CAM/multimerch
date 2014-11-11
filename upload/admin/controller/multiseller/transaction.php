@@ -118,7 +118,7 @@ class ControllerMultisellerTransaction extends ControllerMultisellerBase {
 			),
 			array(
 				'text' => $this->language->get('ms_transactions_new'),
-				'href' => $this->url->link('multiseller/transaction', '', 'SSL'),
+				'href' => $this->url->link('multiseller/transaction/create', '', 'SSL'),
 			)			
 		));
 		
