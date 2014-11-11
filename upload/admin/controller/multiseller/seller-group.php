@@ -101,8 +101,10 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 		
 		$this->document->setTitle($this->language->get('ms_catalog_seller_groups_heading'));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('seller-group'); 
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/seller-group.tpl', $this->data));
 	}
 	
 	// Insert a new seller group
@@ -130,8 +132,10 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 			)
 		));		
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('seller-group-form'); 
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/seller-group-form.tpl', $this->data));
 	}
 	
 	// Update a seller group
@@ -174,8 +178,10 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 			)
 		));		
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('seller-group-form'); 
-		$this->response->setOutput($this->render());		
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/seller-group-form.tpl', $this->data));
 	}
 	
 	// Bulk delete of seller groups
@@ -191,40 +197,6 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 		}
 		
 		$this->response->redirect($this->url->link('multiseller/seller-group', 'token=' . $this->session->data['token'], 'SSL'));
-	}
-	
-	// Get form for adding/editing seller groups
-	private function getEditForm() {
-		$this->data['heading'] = $this->language->get('ms_catalog_insert_seller_group_heading');
-		
-		if (!isset($this->request->get['seller_group_id'])) {
-			$this->data['action'] = $this->url->link('multiseller/seller-group/insert', 'token=' . $this->session->data['token'] . $url, 'SSL');
-		} else {
-			$this->data['action'] = $this->url->link('multiseller/seller-group/update', 'token=' . $this->session->data['token'] . '&seller_group_id=' . $this->request->get['seller_group_id'] . $url, 'SSL');
-		}
-		  
-		$this->data['cancel'] = $this->url->link('multiseller/seller-group', 'token=' . $this->session->data['token'] . $url, 'SSL');
-		
-		if (isset($this->request->get['seller_group_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			//$seller_group_info = $this->MsLoader->MsSellerGroup->getSellerGroup($this->request->get['seller_group_id']);
-		}
-		
-		//$this->MsLoader->MsSellerGroup->getSellerGroupDescriptions($this->request->get['seller_group_id']);
-
-		
-		if (isset($this->request->post['seller_group_description'])) {
-			$this->data['seller_group_description'] = $this->request->post['seller_group_description'];
-		} elseif (isset($this->request->get['seller_group_id'])) {
-			$this->data['seller_group_description'] = 'a';
-		} else {
-			$this->data['seller_group_description'] = array();
-		}
-		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('seller-group-form'); 
-		$this->response->setOutput($this->render());
-	}
-	
-	private function validateForm() {
 	}
 	
 	// Validate delete of the seller group
