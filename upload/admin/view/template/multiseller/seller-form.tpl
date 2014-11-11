@@ -14,7 +14,6 @@
     </div>
   </div>
   <div class="container-fluid">
-
     <div style="display: none" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>
       <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>

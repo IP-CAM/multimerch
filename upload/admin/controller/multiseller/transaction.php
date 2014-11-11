@@ -81,12 +81,13 @@ class ControllerMultisellerTransaction extends ControllerMultisellerBase {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('transaction');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/transaction.tpl', $this->data));
 	}
 	
 	public function create() {
-		
 		$results = $this->MsLoader->MsSeller->getSellers(
 			array(),
 			array(
@@ -121,8 +122,10 @@ class ControllerMultisellerTransaction extends ControllerMultisellerBase {
 			)			
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('transaction-form');
-		$this->response->setOutput($this->render());		
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/transaction-form.tpl', $this->data));
 	}
 	
 	public function jxSave() {
