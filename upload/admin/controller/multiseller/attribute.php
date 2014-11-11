@@ -174,7 +174,7 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 			$this->session->data['success'] = $this->language->get('ms_success');
 		}
 		
-		if (isset($this->request->get['attribute_id'])) $this->redirect($this->url->link('multiseller/attribute', 'token=' . $this->session->data['token'], 'SSL'));
+		if (isset($this->request->get['attribute_id'])) $this->response->redirect($this->url->link('multiseller/attribute', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	public function jxSubmitAttribute() {

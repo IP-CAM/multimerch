@@ -190,7 +190,7 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 			$this->session->data['success'] = $this->language->get('ms_success');
 		}
 		
-		$this->redirect($this->url->link('multiseller/seller-group', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('multiseller/seller-group', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 	
 	// Get form for adding/editing seller groups

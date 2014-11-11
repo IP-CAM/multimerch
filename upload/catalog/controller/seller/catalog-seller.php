@@ -222,7 +222,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		}
 
 		if (!isset($seller) || empty($seller) || $seller['ms.seller_status'] != MsSeller::STATUS_ACTIVE) {
-			$this->redirect($this->url->link('seller/catalog-seller', '', 'SSL'));
+			$this->response->redirect($this->url->link('seller/catalog-seller', '', 'SSL'));
 			return;
 		}
 
@@ -352,7 +352,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		}
 			
 		if (!isset($seller) || empty($seller) || $seller['ms.seller_status'] != MsSeller::STATUS_ACTIVE) {
-			$this->redirect($this->url->link('seller/catalog-seller', '', 'SSL'));
+			$this->response->redirect($this->url->link('seller/catalog-seller', '', 'SSL'));
 			return;
 		}
 

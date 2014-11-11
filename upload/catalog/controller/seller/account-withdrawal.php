@@ -61,7 +61,7 @@ class ControllerSellerAccountWithdrawal extends ControllerSellerAccount {
 	
 	public function index() {
 		if (!$this->config->get('msconf_allow_withdrawal_requests'))
-			$this->redirect($this->url->link('account/account', '', 'SSL'));
+			$this->response->redirect($this->url->link('account/account', '', 'SSL'));
 		
 		$seller_id = $this->customer->getId();
 		

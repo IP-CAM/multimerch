@@ -318,7 +318,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			$this->session->data['ms_db_latest'] = $this->language->get('ms_db_latest');
 		}
 		
-		$this->redirect($this->url->link('module/multiseller', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('module/multiseller', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 }
 ?>

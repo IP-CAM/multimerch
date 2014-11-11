@@ -112,7 +112,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 
 		$this->data['redirect'] = $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order_id, 'SSL');
 		if (!$this->customer->isLogged()) {
-			$this->redirect($this->url->link('account/login', '', 'SSL'));
+			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
 		}
 
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->setBreadcrumbs(array(
@@ -137,7 +137,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 
 		if (isset($this->request->post['order_status_edit'])) {
 			$this->model_localisation_order_status->editSuborderStatus($suborder_id, $this->request->post['order_status_edit']);
-			$this->redirect($this->data['redirect']);
+			$this->response->redirect($this->data['redirect']);
 		}
 
 		$this->load->model('account/order');
@@ -238,7 +238,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 
 			$this->response->setOutput($this->render());
 		} else {
-			$this->redirect($this->url->link('seller/account-order', '', 'SSL'));
+			$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 		}
 	}
 		

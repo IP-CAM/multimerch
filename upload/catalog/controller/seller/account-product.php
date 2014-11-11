@@ -1229,7 +1229,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		}
 
 		if (!$product)
-			return $this->redirect($this->url->link('seller/account-product', '', 'SSL'));
+			return $this->response->redirect($this->url->link('seller/account-product', '', 'SSL'));
 			
 		// Fees for re-listing
 		if ($relist) {
@@ -1423,7 +1423,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$this->session->data['success'] = $this->language->get('ms_success_product_deleted');			
 		}
 		
-		$this->redirect($this->url->link('seller/account-product', '', 'SSL'));		
+		$this->response->redirect($this->url->link('seller/account-product', '', 'SSL'));
 	}
 	
 	public function publish() {
@@ -1436,7 +1436,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$this->session->data['success'] = $this->language->get('ms_success_product_published');
 		}
 		
-		$this->redirect($this->url->link('seller/account-product', '', 'SSL'));		
+		$this->response->redirect($this->url->link('seller/account-product', '', 'SSL'));
 	}	
 	
 	public function unpublish() {
@@ -1449,12 +1449,12 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$this->session->data['success'] = $this->language->get('ms_success_product_unpublished');
 		}
 		
-		$this->redirect($this->url->link('seller/account-product', '', 'SSL'));		
+		$this->response->redirect($this->url->link('seller/account-product', '', 'SSL'));
 	}	
 	
 	public function download() {
 		if (!$this->customer->isLogged()) {
-			$this->redirect($this->url->link('account/login', '', 'SSL'));
+			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
 		}
 
 		if (isset($this->request->get['download_id'])) {
@@ -1470,7 +1470,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		}
 		
 		if (!$this->MsLoader->MsProduct->hasDownload($product_id,$download_id) || !$this->MsLoader->MsProduct->productOwnedBySeller($product_id,$this->customer->getId()))
-			$this->redirect($this->url->link('seller/account-product', '', 'SSL'));
+			$this->response->redirect($this->url->link('seller/account-product', '', 'SSL'));
 			
 		$download_info = $this->MsLoader->MsProduct->getDownload($download_id);
 		
@@ -1498,7 +1498,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-			$this->redirect($this->url->link('seller/account-product', '', 'SSL'));
+			$this->response->redirect($this->url->link('seller/account-product', '', 'SSL'));
 		}
 	}	
 }

@@ -34,10 +34,10 @@ class ControllerSellerAccount extends Controller {
 		
 	  	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/account', '', 'SSL');
-	  		$this->redirect($this->url->link('account/login', '', 'SSL')); 
+	  		$this->response->redirect($this->url->link('account/login', '', 'SSL'));
     	} else if (!$this->MsLoader->MsSeller->isSeller()) {
     		if (!array_intersect($parts, array('account-profile', 'jxsavesellerinfo', 'jxUploadSellerAvatar'))) {
-    			$this->redirect($this->url->link('seller/account-profile', '', 'SSL'));
+    			$this->response->redirect($this->url->link('seller/account-profile', '', 'SSL'));
     		}
     	} else if ($this->MsLoader->MsSeller->getStatus() != MsSeller::STATUS_ACTIVE) {
 			$allowed_routes = array('account-profile', 'jxsavesellerinfo', 'jxUploadSellerAvatar');
@@ -50,7 +50,7 @@ class ControllerSellerAccount extends Controller {
 				$allowed_routes[] = 'tab-shipping';
 			}
     		if (!array_intersect($parts, $allowed_routes)) {
-				$this->redirect($this->url->link('seller/account-profile', '', 'SSL'));
+				$this->response->redirect($this->url->link('seller/account-profile', '', 'SSL'));
     		}
     	}
 		

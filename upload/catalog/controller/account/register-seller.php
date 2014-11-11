@@ -10,7 +10,7 @@ class ControllerAccountRegisterSeller extends Controller {
   	public function index() {
 		// ***** Buyer account part *****
 		if ($this->customer->isLogged()) {
-	  		$this->redirect($this->url->link('account/account', '', 'SSL'));
+	  		$this->response->redirect($this->url->link('account/account', '', 'SSL'));
     	}
 		
     	$this->language->load('account/register');
@@ -176,7 +176,7 @@ class ControllerAccountRegisterSeller extends Controller {
 				}
 			} else {
 				$this->MsLoader->MsMail->sendMails($mails);
-				$this->redirect($this->url->link('account/seller-success'));
+				$this->response->redirect($this->url->link('account/seller-success'));
 			}
     	}
 

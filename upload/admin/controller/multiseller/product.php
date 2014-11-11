@@ -51,7 +51,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 
 			// actions
 			$actions = "";
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('catalog/product/update', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('text_edit')."'></a>";
+			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('text_edit')."'></a>";
 			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'></a>";
 
 			// seller select
@@ -123,8 +123,10 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('product');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/product.tpl', $this->data));
 	}	
 	
 	public function jxProductStatus() {
@@ -224,7 +226,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	public function delete() {
 		$product_id = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : 0;
 		$this->MsLoader->MsProduct->deleteProduct($product_id);
-		$this->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
 	}	
 }
 ?>

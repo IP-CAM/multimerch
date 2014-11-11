@@ -91,13 +91,13 @@
 	<file name="catalog/controller/account/login.php">
 		<operation error="log">
 			<search position="replace"><![CDATA[
-				$this->redirect($this->url->link('account/account', '', 'SSL'));
+				$this->response->redirect($this->url->link('account/account', '', 'SSL'));
 			]]></search>
 			<add><![CDATA[
 				if ($this->MsLoader->MsSeller->isCustomerSeller($this->customer->getId())) {
-					$this->redirect($this->url->link('seller/account-dashboard', '', 'SSL'));
+					$this->response->redirect($this->url->link('seller/account-dashboard', '', 'SSL'));
 				} else {
-					$this->redirect($this->url->link('account/account', '', 'SSL'));
+					$this->response->redirect($this->url->link('account/account', '', 'SSL'));
 				}
 			]]></add>
 		</operation>

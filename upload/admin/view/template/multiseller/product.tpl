@@ -1,25 +1,37 @@
-<?php echo $header; ?>
+<?php echo $header; ?><?php echo $column_left; ?>
 <div id="content">
-  <div class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-    <?php } ?>
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1><?php echo $ms_catalog_products_heading; ?></h1>
+      <ul class="breadcrumb">
+        <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+        <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+        <?php } ?>
+      </ul>
+    </div>
   </div>
-  <?php if ($error_warning) { ?>
-  <div class="warning"><?php echo $error_warning; ?></div>
-  <?php } ?>
-  <?php if ($success) { ?>
-  <div class="success"><?php echo $success; ?></div>
-  <?php } ?>
-  
-  <?php $msProduct = new ReflectionClass('MsProduct'); ?>
-  <div class="box">
-    <div class="heading">
-      <h1><img src="view/image/multiseller/ms-bag.png" alt="" /> <?php echo $ms_catalog_products_heading; ?></h1>
-      <div class="buttons">
-      	<form id="bulk" method="post" enctype="multipart/form-data">
+
+  <div class="container-fluid">
+    <?php if ($error_warning) { ?>
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <?php } ?>
+   <?php if (isset($success) && $success) { ?>
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> <?php echo $success; ?>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <?php } ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> <?php echo $ms_catalog_products_heading; ?></h3>
+      </div>
+      <div class="panel-body">
+      <div class="pull-right">
+        <form id="bulk" method="post" enctype="multipart/form-data">
       	<select name="bulk_product_status">
       		<option><?php echo $ms_catalog_products_bulk; ?></option>
+            <?php $msProduct = new ReflectionClass('MsProduct'); ?>
 			<?php foreach ($msProduct->getConstants() as $cname => $cval) { ?>
 				<?php if (strpos($cname, 'STATUS_') !== FALSE) { ?>
 					<option value="<?php echo $cval; ?>"><?php echo $this->language->get('ms_product_status_' . $cval); ?></option>
@@ -29,17 +41,10 @@
       	<input type="checkbox" name="bulk_mail" id="bulk_mail"><?php echo $ms_catalog_products_notify_sellers; ?></input>
       	<a class="ms-action button" id="ms-bulk-apply"><?php echo $ms_apply; ?></a>
       	</form>
-	  </div>
-    </div>
-    <div class="content">
-      <style type="text/css">
-      	.msBlack .ui-widget-header {
-		    background: url("view/image/ui-bg_gloss-wave_35_000000_500x100.png") repeat-x scroll 50% 50% #F6A828;
-		    border: 1px solid #000000;
-      	}
-      </style>    
-      <form action="" method="post" enctype="multipart/form-data" id="form">
-        <table class="list" style="text-align: center" id="list-products">
+      </div>
+		<div class="table-responsive">
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+		<table class="list mmTable table table-bordered table-hover" style="text-align: center" id="list-products">
           <thead>
             <tr>
               	<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
@@ -65,7 +70,9 @@
           <tbody>
           </tbody>
         </table>
-      </form>
+        </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -82,10 +89,8 @@ $(document).ready(function() {
 			{ "mData": "date_created" },
 			{ "mData": "date_modified" },
 			{ "mData": "actions", "bSortable": false, "sClass": "right" }
-		],
+		]
 	});
-
-	$('#date').datepicker({dateFormat: 'yy-mm-dd'});
 
 	$(document).on( 'click', '.ms-assign-seller', function() {
 		var button = $(this);

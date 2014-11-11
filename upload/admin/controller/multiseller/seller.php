@@ -312,7 +312,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 	public function delete() {
 		$seller_id = isset($this->request->get['seller_id']) ? $this->request->get['seller_id'] : 0;
 		$this->MsLoader->MsSeller->deleteSeller($seller_id);
-		$this->redirect($this->url->link('multiseller/seller', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('multiseller/seller', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 	
 	public function index() {
