@@ -30,7 +30,7 @@
       <div class="panel-body">
 		<?php echo $total_balance; ?><br /><br />
 		<div class="table-responsive">
-		<table class="list mmTable" style="text-align: center" id="list-sellers">
+		<table class="list mmTable table table-bordered table-hover" style="text-align: center" id="list-sellers">
 			<thead>
 				<tr>
 					<td class="tiny"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
