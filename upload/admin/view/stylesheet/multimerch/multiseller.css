@@ -2,8 +2,20 @@
     overflow-x: initial;
 }
 
+.control-inline input {
+    width: auto;
+    display: inline;
+}
 
+.control-inline .col-sm-2 {
+    height:35px;
+    line-height: 35px;
+}
 
+.control-inline .col-sm-3 {
+    text-align: center;
+    margin:5px 0;
+}
 
 .ms-settings .content form table tr h2 {
 	border-bottom: none;

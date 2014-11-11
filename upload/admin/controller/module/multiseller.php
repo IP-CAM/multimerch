@@ -115,7 +115,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		$this->load->model('setting/setting');
 		$this->load->model('extension/extension');
 		
-		$set = $this->model_setting_setting->getSetting('multiseller');
+		$set = $this->model_setting_setting->getSetting('msconf');
 		$installed_extensions = $this->model_extension_extension->getInstalled('module');
 
 		$extensions_to_be_installed = array();
@@ -149,8 +149,8 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 					$this->data[$s] = $this->settings[$s];
 			}
 		}
-		
-		$this->model_setting_setting->editSetting('multiseller', $set);
+
+		$this->model_setting_setting->editSetting('msconf', $set);
 
 		foreach ($extensions_to_be_installed as $ext) {
 			$this->model_extension_extension->install('module',$ext);
@@ -163,7 +163,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		
 		$this->model_multiseller_install->createSchema();
 		$this->model_multiseller_install->createData();
-		$this->model_setting_setting->editSetting('multiseller', $this->settings);
+		$this->model_setting_setting->editSetting('msconf', $this->settings);
 		
 		$this->load->model('user/user_group');
 		
@@ -303,8 +303,10 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('settings');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/settings.tpl', $this->data));
 	}
 	
 	public function upgradeDb() {

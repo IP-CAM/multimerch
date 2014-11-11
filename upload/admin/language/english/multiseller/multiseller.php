@@ -230,25 +230,26 @@ $_['ms_config_rte_whitelist'] = 'Tag whitelist';
 $_['ms_config_rte_whitelist_note'] = 'Permitted tags in RTE (empty = all tags permitted)';
 
 $_['ms_config_image_sizes'] = 'Image sizes';
-$_['ms_config_seller_avatar_image_size'] = 'Seller avatar image size';
+$_['ms_config_seller_avatar_image_size'] = 'Avatar image size';
 $_['ms_config_seller_avatar_image_size_seller_profile'] = 'Seller profile';
 $_['ms_config_seller_avatar_image_size_seller_list'] = 'Seller list';
 $_['ms_config_seller_avatar_image_size_product_page'] = 'Product page';
 $_['ms_config_seller_avatar_image_size_seller_dashboard'] = 'Seller dashboard';
 
-$_['ms_config_image_preview_size'] = 'Uploaded preview image size';
+$_['ms_config_image_preview_size'] = 'Image preview size';
 $_['ms_config_image_preview_size_seller_avatar'] = 'Seller avatar';
 $_['ms_config_image_preview_size_product_image'] = 'Product image';
 
 $_['ms_config_product_image_size'] = 'Product image size';
 $_['ms_config_product_image_size_seller_profile'] = 'Seller profile';
-$_['ms_config_product_image_size_seller_products_list'] = 'Seller products list in catalog';
-$_['ms_config_product_image_size_seller_products_list_account'] = 'Seller products list in seller account area';
+$_['ms_config_product_image_size_seller_products_list'] = 'Catalog products';
+$_['ms_config_product_image_size_seller_products_list_account'] = 'Account products';
 
-$_['ms_config_minimum_uploaded_image_size'] = 'Minimum uploaded image size (Width x Height)';
-$_['ms_config_minimum_uploaded_image_size_note'] = 'Define minimum image dimensions allowed for uploaded images. Set 0 for no limits.';
-$_['ms_config_maximum_uploaded_image_size'] = 'Maximum uploaded image size (Width x Height)';
-$_['ms_config_maximum_uploaded_image_size_note'] = 'Define maximum image dimensions allowed for uploaded images. Set 0 for no limits.';
+
+$_['ms_config_uploaded_image_size'] = 'Image size limits';
+$_['ms_config_uploaded_image_size_note'] = 'Define uploaded image dimension limits (W x H). Set 0 for no limits.';
+$_['ms_config_max'] = 'Max.';
+$_['ms_config_min'] = 'Min.';
 
 $_['ms_config_seo'] = 'SEO';
 $_['ms_config_enable_seo_urls_seller'] = 'Generate SEO URLs for new sellers';
