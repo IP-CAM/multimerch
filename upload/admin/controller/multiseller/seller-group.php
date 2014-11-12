@@ -227,7 +227,7 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 
 		foreach ($data['description'] as $language_id => $value) {
 			if ((utf8_strlen($value['name']) < 3) || (utf8_strlen($value['name']) > 32)) {
-				$json['errors']['name_' . $language_id] = $this->language->get('ms_error_seller_group_name');
+				$json['errors']['seller_group[description]['.$language_id.'][name]'] = $this->language->get('ms_error_seller_group_name');
 			}
 		}
 
