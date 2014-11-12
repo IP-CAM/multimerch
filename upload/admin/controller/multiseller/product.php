@@ -46,7 +46,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 			if ($result['p.image'] && file_exists(DIR_IMAGE . $result['p.image'])) {
 				$image = $this->MsLoader->MsFile->resizeImage($result['p.image'], 40, 40);
 			} else {
-				$image = $this->MsLoader->MsFile->resizeImage('no_image.jpg', 40, 40);
+				$image = $this->MsLoader->MsFile->resizeImage('no_image.png', 40, 40);
 			}
 
 			// actions

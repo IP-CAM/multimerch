@@ -86,8 +86,10 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('attribute');
-		$this->response->setOutput($this->render());
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/attribute.tpl', $this->data));
 	}
 	
 	public function create() {
@@ -98,8 +100,8 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 		$this->data['attribute'] = FALSE;
 		$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
-		$this->data['no_image'] = $this->model_tool_image->resize('no_image.jpg', 100, 100);
-		
+		$this->data['no_image'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+
 		$this->data['cancel'] = $this->url->link('multiseller/attribute', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['token'] = $this->session->data['token'];
 		$this->data['heading'] = $this->language->get('ms_attribute_create');
@@ -113,11 +115,17 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 			array(
 				'text' => $this->language->get('ms_attribute_breadcrumbs'),
 				'href' => $this->url->link('multiseller/attribute', '', 'SSL'),
+			),
+			array(
+				'text' => $this->language->get('ms_attribute_create'),
+				'href' => $this->url->link('multiseller/seller/create', 'SSL'),
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('attribute-form');
-		$this->response->setOutput($this->render());		
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/attribute-form.tpl', $this->data));
 	}
 
 	public function update() {
@@ -136,12 +144,12 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 			
 			foreach ($this->data['attribute']['attribute_values'] as  &$value) {
 				$value['attribute_value_description'] = $this->MsLoader->MsAttribute->getAttributeValueDescriptions($value['attribute_value_id']);
-				$value['thumb'] = (!empty($value['image']) ? $this->model_tool_image->resize($value['image'], 100, 100) : $this->model_tool_image->resize('no_image.jpg', 100, 100));
+				$value['thumb'] = (!empty($value['image']) ? $this->model_tool_image->resize($value['image'], 100, 100) : $this->model_tool_image->resize('no_image.png', 100, 100));
 			}			
 		}
 		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
-		$this->data['no_image'] = $this->model_tool_image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		
 		$this->data['cancel'] = $this->url->link('multiseller/attribute', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['token'] = $this->session->data['token'];
@@ -156,11 +164,17 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 			array(
 				'text' => $this->language->get('ms_attribute_breadcrumbs'),
 				'href' => $this->url->link('multiseller/attribute', '', 'SSL'),
+			),
+			array(
+				'text' => $this->language->get('ms_attribute_edit'),
+				'href' => $this->url->link('multiseller/attribute/update', '&attribute_id=' . $attribute_id, 'SSL'),
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->admLoadTemplate('attribute-form');
-		$this->response->setOutput($this->render());		
+		$this->data['column_left'] = $this->load->controller('common/column_left');
+		$this->data['footer'] = $this->load->controller('common/footer');
+		$this->data['header'] = $this->load->controller('common/header');
+		$this->response->setOutput($this->load->view('multiseller/attribute-form.tpl', $this->data));
 	}
 
 	public function delete() { 

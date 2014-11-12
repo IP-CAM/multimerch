@@ -1,5 +1,5 @@
 <?php echo $header; ?><?php echo $column_left; ?>
-<div id="content" class="ms-transaction-page">
+<div id="content">
   <div class="page-header">
     <div class="container-fluid">
       <div class="pull-right">
