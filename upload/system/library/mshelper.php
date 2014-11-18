@@ -82,7 +82,7 @@ class MsHelper extends Model {
 		
 		return $breadcrumbs;
 	}	
-	
+
 	public function loadTemplate($templateName, $children = FALSE) {
 		// ugly
 		if(strpos($templateName, '/') == false) {
@@ -94,18 +94,18 @@ class MsHelper extends Model {
 		} else {
 			$template = "default/template/$templateName.tpl";
 		}
-		
-		if ($children === FALSE) {
+
+		if ($children == FALSE) {
 			$children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
-				'common/footer',
-				'common/header'
+				'column_left' => $this->load->controller('common/column_left'),
+				'column_right' => $this->load->controller('common/column_right'),
+				'content_top' => $this->load->controller('common/content_top'),
+				'content_bottom' => $this->load->controller('common/content_bottom'),
+				'footer' => $this->load->controller('common/footer'),
+				'header' => $this->load->controller('common/header')
 			);
 		}
-	
+
 		return array($template, $children);
 	}
 

@@ -1,6 +1,8 @@
 <?php
 
 class ControllerSellerAccount extends Controller {
+	public  $data = array();
+
 	public function __construct($registry) {
 		parent::__construct($registry);
 
@@ -31,7 +33,7 @@ class ControllerSellerAccount extends Controller {
 				}
 			}
 		}
-		
+
 	  	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/account', '', 'SSL');
 	  		$this->response->redirect($this->url->link('account/login', '', 'SSL'));
@@ -53,7 +55,7 @@ class ControllerSellerAccount extends Controller {
 				$this->response->redirect($this->url->link('seller/account-profile', '', 'SSL'));
     		}
     	}
-		
+
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
     		unset($this->session->data['success']);

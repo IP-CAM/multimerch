@@ -728,7 +728,7 @@ ul.ms-sellermenu.graphical li {
 	width: 16.5%;
 	height: 128px;
 	display: inline-block;
-	float: left;
+	/* float: left; */
 }
 
 ul.ms-sellermenu.graphical li img {

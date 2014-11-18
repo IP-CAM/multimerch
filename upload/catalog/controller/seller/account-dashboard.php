@@ -96,8 +96,8 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('account-dashboard');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-dashboard');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 }
 

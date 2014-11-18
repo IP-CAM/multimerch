@@ -10,7 +10,7 @@
 	<file name="catalog/controller/checkout/cart.php">
 		<operation error="log">
 			<search position="after"><![CDATA[
-				$this->data['products'][] = array(
+				$data['products'][] = array(
 			]]></search>
 			<add><![CDATA[
 				'product_id' => $product['product_id'],
@@ -58,7 +58,7 @@
 	<file name="catalog/controller/common/cart.php">
 		<operation error="log">
 			<search position="after"><![CDATA[
-			$this->data['products'][] = array(
+			$data['products'][] = array(
 			]]></search>
 			<add><![CDATA[
 				'product_id' => $product['product_id'],
@@ -121,7 +121,7 @@
 	<file name="catalog/controller/account/order.php">
 		<operation error="log">
 			<search position="after"><![CDATA[
-			$this->data['products'][] = array(
+			$data['products'][] = array(
 			]]></search>
 			<add><![CDATA[
 				'product_id' => $product['product_id'],

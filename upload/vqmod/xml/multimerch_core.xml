@@ -43,35 +43,21 @@
 			]]></add>
 		</operation>	
 	</file>
-	
-	<!-- number of sellers/products in store -->
-	<file name="catalog/view/theme/&themeFolder;/template/common/header.tpl">
-		<operation error="log">
-			<search position="after"><![CDATA[
-				<div class="links"><a href="<?php echo $home; ?>"><?php echo $text_home; ?></a><a href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a><a href="<?php echo $account; ?>"><?php echo $text_account; ?></a><a href="<?php echo $shopping_cart; ?>"><?php echo $text_shopping_cart; ?></a><a href="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></a></div>
-			]]></search>
-			<add><![CDATA[
-				<?php if (!$this->config->get('msconf_hide_sellers_product_count') == 1) { ?>
-					<div class="ms-totals"><?php echo sprintf($ms_totals_line, $ms_total_sellers, $ms_total_products); ?></div>
-				<?php } ?>
-			]]></add>
-		</operation>	
-	</file>
 
 	<!-- load common multimerch files -->
 	<file name="catalog/controller/common/header.php">
 		<operation error="log">
 			<search position="after"><![CDATA[
-				protected function index() {
+				public function index() {
 			]]></search>
 			<add><![CDATA[
-				$this->data = array_merge($this->data, $this->load->language('multiseller/multiseller'));
-				$this->data['ms_total_products'] = $this->MsLoader->MsProduct->getTotalProducts(array(
+				$data = array_merge($this->load->language('multiseller/multiseller'), isset($data) ? $data : array());
+				$data['ms_total_products'] = $this->MsLoader->MsProduct->getTotalProducts(array(
 					'enabled' => 1,
 					//'product_status' => array(MsProduct::STATUS_ACTIVE),
 				));
 				
-				$this->data['ms_total_sellers'] = $this->MsLoader->MsSeller->getTotalSellers(array(
+				$data['ms_total_sellers'] = $this->MsLoader->MsSeller->getTotalSellers(array(
 					'seller_status' => array(MsSeller::STATUS_ACTIVE) 
 				));
 				
@@ -79,7 +65,7 @@
 				
 				// note: renamed catalog
 				$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_language') . ".txt";
-				$this->data['dt_language'] = file_exists(DIR_APPLICATION . $lang) ? "'catalog/$lang'" : "undefined";
+				$data['dt_language'] = file_exists(DIR_APPLICATION . $lang) ? "'catalog/$lang'" : "undefined";
 
 				// Add complemented common.js
 				$this->document->addScript('catalog/view/javascript/ms-common.js');
@@ -142,7 +128,7 @@
 			]]></search>
 			<add><![CDATA[
 				$this->load->model('localisation/order_status');
-				$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+				$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 			]]></add>
 		</operation>
 
@@ -157,7 +143,7 @@
 
 		<operation error="log">
 			<search position="after"><![CDATA[
-				$this->data['products'][] = array(
+				$data['products'][] = array(
 			]]></search>
 			<add><![CDATA[
 				'order_status_id' => $this->model_localisation_order_status->getSuborderStatusId($order_id, $seller_id),
@@ -168,10 +154,10 @@
 	<file name="catalog/controller/common/footer.php">
 		<operation>
 			<search position="after"><![CDATA[
-				protected function index() {
+				public function index() {
 			]]></search>
 			<add><![CDATA[
-				$this->data = array_merge($this->data, $this->load->language('multiseller/multiseller'));
+				$data = array_merge($this->load->language('multiseller/multiseller'), isset($data) ? $data : array());
 			]]></add>
 		</operation>
 	</file>

@@ -262,8 +262,8 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('account-order');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-order');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 }
 

@@ -1,20 +1,26 @@
-<?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
+<?php echo $header; ?>
+<div class="container">
+  <ul class="breadcrumb">
+    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+    <?php } ?>
+  </ul>
 
-<div id="content" class="ms-account-dashboard">
-	<?php echo $content_top; ?>
-	
-	<div class="breadcrumb">
-		<?php foreach ($breadcrumbs as $breadcrumb) { ?>
-		<?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-		<?php } ?>
-	</div>
-	
-	<h1><?php echo $ms_account_dashboard_heading; ?></h1>
-	
-	<?php if (isset($success) && ($success)) { ?>
-		<div class="success"><?php echo $success; ?></div>
-	<?php } ?>
-	
+  <?php if (isset($success) && $success) { ?>
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> <?php echo $success; ?>
+  <?php } ?>
+
+  <div class="row"><?php echo $column_left; ?>
+    <?php if ($column_left && $column_right) { ?>
+    <?php $class = 'col-sm-6'; ?>
+    <?php } elseif ($column_left || $column_right) { ?>
+    <?php $class = 'col-sm-9'; ?>
+    <?php } else { ?>
+    <?php $class = 'col-sm-12'; ?>
+    <?php } ?>
+    <div id="content" class="<?php echo $class; ?> ms-account-dashboard"><?php echo $content_top; ?>
+    <h1><?php echo $ms_account_dashboard_heading; ?></h1>
+
 	<div class="overview">
 		<h3><?php echo $ms_account_dashboard_overview; ?></h3>
 		<img src="<?php echo $seller['avatar']; ?>" /><br />
@@ -99,7 +105,7 @@
 	</div>
 	
 	<h2><?php echo $ms_account_dashboard_orders; ?></h2>
-	<table class="list">
+	<table class="list table table-bordered">
 		<thead>
 			<tr>
 				<td><?php echo $ms_account_orders_id; ?></td>
@@ -146,15 +152,10 @@
 		</tbody>
 	</table>
 	
-	<div class="buttons">
-		<div class="left">
-			<a href="<?php echo $link_back; ?>" class="button">
-				<span><?php echo $button_back; ?></span>
-			</a>
-		</div>
-	</div>
-	
-	<?php echo $content_bottom; ?>
+      <div class="buttons clearfix">
+        <div class="pull-left"><a href="<?php echo $back; ?>" class="btn btn-default"><?php echo $button_back; ?></a></div>
+      </div>
+      <?php echo $content_bottom; ?></div>
+    <?php echo $column_right; ?></div>
 </div>
-
 <?php echo $footer; ?>
