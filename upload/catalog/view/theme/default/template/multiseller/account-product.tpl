@@ -1,25 +1,32 @@
-<?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
+<?php echo $header; ?>
+<div class="container" class="ms-account-product">
+  <ul class="breadcrumb">
+    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+    <?php } ?>
+  </ul>
 
-<div id="content" class="ms-account-product">
-	<?php echo $content_top; ?>
-	
-	<div class="breadcrumb">
-		<?php foreach ($breadcrumbs as $breadcrumb) { ?>
-		<?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-		<?php } ?>
-	</div>
-
-	<h1><?php echo $ms_account_products_heading; ?></h1>
-
-	<?php if (isset($error_warning) && ($error_warning)) { ?>
-		<div class="warning"><?php echo $error_warning; ?></div>
-	<?php } ?>
-	
-	<?php if (isset($success) && ($success)) { ?>
+  <?php if (isset($success) && ($success)) { ?>
 		<div class="success"><?php echo $success; ?></div>
-	<?php } ?>
-	
-	<table class="list" id="list-products">
+  <?php } ?>
+
+  <?php if (isset($error_warning) && $error_warning) { ?>
+  	<div class="alert alert-danger warning main"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?></div>
+  <?php } ?>
+
+  <div class="row"><?php echo $column_left; ?>
+    <?php if ($column_left && $column_right) { ?>
+    <?php $class = 'col-sm-6'; ?>
+    <?php } elseif ($column_left || $column_right) { ?>
+    <?php $class = 'col-sm-9'; ?>
+    <?php } else { ?>
+    <?php $class = 'col-sm-12'; ?>
+    <?php } ?>
+    <div id="content" class="ms-account-transaction <?php echo $class; ?>"><?php echo $content_top; ?>
+    <h1><?php echo $ms_account_products_heading; ?></h1>
+
+	<div class="table-responsive">
+	<table class="list table table-bordered table-hover" id="list-products">
 	<thead>
 	<tr>
 		<td><?php echo $ms_account_products_image; ?></td>
@@ -35,21 +42,14 @@
 	</thead>
 	<tbody></tbody>
 	</table>
-
-	<div class="buttons">
-		<div class="left">
-			<a href="<?php echo $link_back; ?>" class="button">
-				<span><?php echo $button_back; ?></span>
-			</a>
-		</div>
-		<div class="right">
-			<a href="<?php echo $link_create_product; ?>" class="button">
-				<span><?php echo $ms_create_product; ?></span>
-			</a>
-		</div>
 	</div>
 
-	<?php echo $content_bottom; ?>
+	  <div class="buttons clearfix">
+		<div class="pull-left"><a href="<?php echo $link_back; ?>" class="btn btn-default"><?php echo $button_back; ?></a></div>
+		<div class="pull-right"><a href="<?php echo $link_create_product; ?>" class="btn btn-primary"><?php echo $ms_create_product; ?></a></div>
+	  </div>
+	  <?php echo $content_bottom; ?></div>
+	<?php echo $column_right; ?></div>
 </div>
 
 <script>

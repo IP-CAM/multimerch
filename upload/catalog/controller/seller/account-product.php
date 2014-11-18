@@ -1070,8 +1070,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('account-product');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-product');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
 	private function _initForm() {
@@ -1212,8 +1212,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$this->data['list_until'] = NULL;
 		}
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('account-product-form');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-product-form');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
 	public function update() {
@@ -1410,8 +1410,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->setBreadcrumbs($breadcrumbs);
 	
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('account-product-form');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-product-form');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
 	public function delete() {
