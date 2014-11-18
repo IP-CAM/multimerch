@@ -5,8 +5,7 @@ class ControllerSellerAccountStats extends ControllerSellerAccount {
 		$this->data['link_back'] = $this->url->link('account/account', '', 'SSL');
 
 		$this->document->setTitle($this->language->get('ms_account_stats_heading'));
-		$this->document->addScript('catalog/view/javascript/jquery/tabs.js');
-		
+
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->setBreadcrumbs(array(
 			array(
 				'text' => $this->language->get('text_account'),
@@ -88,8 +87,8 @@ class ControllerSellerAccountStats extends ControllerSellerAccount {
 		$this->data['grand_total'] = $grand_total;
 
 
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('account-stats');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-stats');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 
 	public function getSalesByYear(){

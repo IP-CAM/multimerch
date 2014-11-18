@@ -1,28 +1,31 @@
-<?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
+<?php echo $header; ?>
+<div class="container">
+  <ul class="breadcrumb">
+    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+    <?php } ?>
+  </ul>
+  <div class="row"><?php echo $column_left; ?>
+    <?php if ($column_left && $column_right) { ?>
+    <?php $class = 'col-sm-6'; ?>
+    <?php } elseif ($column_left || $column_right) { ?>
+    <?php $class = 'col-sm-9'; ?>
+    <?php } else { ?>
+    <?php $class = 'col-sm-12'; ?>
+    <?php } ?>
+    <div id="content" class="<?php echo $class; ?>"><?php echo $content_top; ?>
+    <h1><?php echo $ms_account_stats_heading; ?></h1>
 
-<div id="content" class="ms-account-order">
-	<?php echo $content_top; ?>
-	
-	<div class="breadcrumb">
-		<?php foreach ($breadcrumbs as $breadcrumb) { ?>
-		<?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-		<?php } ?>
-	</div>
-	
-	<h1><?php echo $ms_account_stats_heading; ?></h1>
-	
-
-	<div id="tabs" class="htabs">
-		<a href="#tab-summary"><?php echo $ms_account_stats_tab_summary; ?></a>
-		<a href="#tab-by-product"><?php echo $ms_account_stats_tab_by_product; ?></a>
-		<a href="#tab-by-year"><?php echo $ms_account_stats_tab_by_year; ?></a>
-	</div>
-
-	<div id="tab-summary" class="tab-content">
-
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-summary" data-toggle="tab"><?php echo $ms_account_stats_tab_summary; ?></a></li>
+		<li><a href="#tab-by-product" data-toggle="tab"><?php echo $ms_account_stats_tab_by_product; ?></a></li>
+		<li><a href="#tab-by-year" data-toggle="tab"><?php echo $ms_account_stats_tab_by_year; ?></a></li>
+	</ul>
+	<div class="tab-content">
+	<div id="tab-summary" class="tab-pane active">
 		<p><?php echo $ms_account_stats_summary_comment; ?></p>
 
-		<table class="list" id="table-summary-1">
+		<table class="list table table-bordered table-hover" id="table-summary-1">
 			<thead>
 				<tr>
 					<td class="large"><?php echo $ms_account_stats_sales_data ?></td>
@@ -59,7 +62,7 @@
 			</tbody>
 		</table>
 
-		<table class="list" id="table-summary-2">
+		<table class="list table table-bordered table-hover" id="table-summary-2">
 			<thead>
 				<tr>
 					<td class="left" colspan="2"><?php echo $ms_account_stats_statistics; ?></td>
@@ -72,12 +75,10 @@
 				</tr>
 			</tbody>
 		</table>
-
 	</div>
 
-	<div id="tab-by-product" class="tab-content">
-
-		<table class="list" id="table-by-products">
+	<div id="tab-by-product" class="tab-pane">
+		<table class="list table table-bordered table-hover" id="table-by-products">
 			<thead>
 				<tr>
 					<td class="tiny"><?php echo $ms_id; ?></td>
@@ -95,11 +96,9 @@
 
 			<tbody></tbody>
 		</table>
-
 	</div>
 
-	<div id="tab-by-year" class="tab-content">
-
+	<div id="tab-by-year" class="tab-pane">
 	<div>
 		<div style="float: right; margin: 5px;">
 			<?php echo $ms_account_stats_show_orders; ?>
@@ -114,7 +113,7 @@
 		</div>
 	</div>
 
-	<table class="list" id="table-by-year">
+	<table class="list table table-bordered table-hover" id="table-by-year">
 		<thead>
 			<tr>
 				<td class="medium"><?php echo $ms_account_stats_month; ?></td>
@@ -127,7 +126,7 @@
 		<tbody></tbody>
 	</table>
 
-	<table class="list" id="table-by-year-total">
+	<table class="list table table-bordered table-hover" id="table-by-year-total">
 		<thead>
 			<tr>
 				<td class="medium"></td>
@@ -139,24 +138,18 @@
 
 		<tbody></tbody>
 	</table>
-
+	</div>
 	</div>
 
-	<div class="buttons">
-		<div class="left">
-			<a href="<?php echo $link_back; ?>" class="button">
-				<span><?php echo $button_back; ?></span>
-			</a>
-		</div>
-	</div>
-
-	<?php echo $content_bottom; ?>
+	  <div class="buttons clearfix">
+		<div class="pull-left"><a href="<?php echo $link_back; ?>" class="btn btn-primary"><?php echo $button_back; ?></a></div>
+	  </div>
+	  <?php echo $content_bottom; ?></div>
+	<?php echo $column_right; ?></div>
 </div>
 
 <script>
 	$(function() {
-		$('#tabs a').tabs();
-
 		$('#table-summary-1').dataTable( {
 			"aoColumns": [
 				{ "sClass": "left" },
