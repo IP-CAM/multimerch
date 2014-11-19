@@ -50,7 +50,7 @@
 			<?php } ?>
 		</div>
 
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_description; ?></label>
 			<div class="col-sm-10">
 				<!-- todo strip tags if rte disabled -->
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_company; ?></label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control"  name="seller[company]" value="<?php echo $seller['ms.company']; ?>" />
@@ -67,7 +67,7 @@
 			</div>
 		</div>
 
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_country; ?></label>
 			<div class="col-sm-10">
 				<select name="seller[country]" class="form-control">
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_zone; ?></label>
 			<div class="col-sm-10">
 				<select name="seller[zone]" class="form-control"></select>
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_paypal; ?></label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control"  name="seller[paypal]" value="<?php echo $seller['ms.paypal']; ?>" />
@@ -96,7 +96,7 @@
 			</div>
 		</div>
 
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_avatar; ?></label>
 			<div class="col-sm-10">
 				<!--<input type="file" name="ms-file-selleravatar" id="ms-file-selleravatar" />-->
@@ -134,7 +134,7 @@
 		<?php } ?>
 
 		<?php if (!isset($seller['seller_id']) &&$seller_validation != MsSeller::MS_SELLER_VALIDATION_NONE) { ?>
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_reviewer_message; ?></label>
 			<div class="col-sm-10">
 				<textarea name="seller[reviewer_message]" id="message_textarea" class="form-control"></textarea>
