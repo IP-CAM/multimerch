@@ -541,8 +541,6 @@
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_avatars_for_sellers_note; ?>"><?php echo $ms_config_avatars_for_sellers; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_avatars_for_sellers" value="0" <?php if ($msconf_avatars_for_sellers == 0) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_avatars_manually; ?></label>
-							<label class="radio-inline"><input type="radio" name="msconf_avatars_for_sellers" value="1" <?php if ($msconf_avatars_for_sellers == 1) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_avatars_both; ?></label>
-							<label class="radio-inline"><input type="radio" name="msconf_avatars_for_sellers" value="2" <?php if ($msconf_avatars_for_sellers == 2) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_avatars_predefined; ?></label>
 						</div>
 					</div>
                     </fieldset>
