@@ -115,48 +115,43 @@ $(function() {
 		}
 	}).init();
 	
-	$('.colorbox').colorbox({
-		width: 640,
-		height: 480
-	});
-	
 	if (msGlobals.config_enable_rte == 1) {
 		CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
 		CKEDITOR.replaceClass = 'ckeditor';
 	}
-	
-	$("select[name='seller[country]']").bind('change', function() {
-		$.ajax({
-			url: $('base').attr('href') + 'index.php?route=account/register-seller/country&country_id=' + this.value,
-			dataType: 'json',
-			beforeSend: function() {
-				$("select[name='seller[country]']").after('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
-			},
-			complete: function() {
-				$('.wait').remove();
-			},
-			success: function(json) {
-				html = '<option value="">' + msGlobals.zoneSelectError + '</option>';
 
-				if (json['zone']) {
-					for (i = 0; i < json['zone'].length; i++) {
-						html += '<option value="' + json['zone'][i]['zone_id'] + '"';
-						
-						if (json['zone'][i]['zone_id'] == msGlobals.zone_id) {
-							html += ' selected="selected"';
-						}
-		
-						html += '>' + json['zone'][i]['name'] + '</option>';
-					}
-				} else {
-					html += '<option value="0" selected="selected">' + msGlobals.zoneNotSelectedError + '</option>';
-				}
-				
-				$("select[name='seller[zone]']").html(html);
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
-	}).trigger('change');
+    $("select[name='seller[country]']").on('change', function() {
+        $.ajax({
+            url: 'index.php?route=account/account/country&country_id=' + this.value,
+            dataType: 'json',
+            beforeSend: function() {
+               $("select[name='seller[country]']").after(' <i class="fa fa-circle-o-notch fa-spin"></i>');
+            },
+            complete: function() {
+                $('.fa-spin').remove();
+            },
+            success: function(json) {
+                html = '<option value="">' + msGlobals.zoneSelectError + '</option>';
+
+                if (json['zone']) {
+                    for (i = 0; i < json['zone'].length; i++) {
+                        html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+                        if (json['zone'][i]['zone_id'] == msGlobals.zone_id) {
+                            html += ' selected="selected"';
+                        }
+
+                    html += '>' + json['zone'][i]['name'] + '</option>';
+                }
+                } else {
+                    html += '<option value="0" selected="selected">' + msGlobals.zoneNotSelectedError + '</option>';
+                }
+
+                $("select[name='seller[zone]']").html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }).trigger('change');
 });
