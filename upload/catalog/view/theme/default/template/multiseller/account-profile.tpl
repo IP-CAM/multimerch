@@ -1,164 +1,165 @@
-<?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
+<?php echo $header; ?>
+<div class="container">
+  <ul class="breadcrumb">
+    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+    <?php } ?>
+  </ul>
+  <?php if (isset($error_warning) && $error_warning) { ?>
+  <div class="alert alert-danger warning main"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?></div>
+  <?php } ?>
 
-<div id="content" class="ms-account-profile">
-	<?php echo $content_top; ?>
-	
-	<div class="breadcrumb">
-		<?php foreach ($breadcrumbs as $breadcrumb) { ?>
-		<?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-		<?php } ?>
-	</div>
-	
-	<h1><?php echo $ms_account_sellerinfo_heading; ?></h1>
-	
-	<?php if (isset($success) && ($success)) { ?>
+  <?php if (isset($success) && ($success)) { ?>
 		<div class="success"><?php echo $success; ?></div>
-	<?php } ?>
-	
-	<?php if (isset($statustext) && ($statustext)) { ?>
-		<div class="<?php echo $statusclass; ?>"><?php echo $statustext; ?></div>
-	<?php } ?>
+  <?php } ?>
 
-	<p class="warning main"></p>
-	
-	<form id="ms-sellerinfo" class="ms-form">
+    <?php if (isset($statustext) && ($statustext)) { ?>
+        <div class="alert alert-<?php echo $statusclass; ?>"><?php echo $statustext; ?></div>
+    <?php } ?>
+
+  <div class="row"><?php echo $column_left; ?>
+    <?php if ($column_left && $column_right) { ?>
+    <?php $class = 'col-sm-6'; ?>
+    <?php } elseif ($column_left || $column_right) { ?>
+    <?php $class = 'col-sm-9'; ?>
+    <?php } else { ?>
+    <?php $class = 'col-sm-12'; ?>
+    <?php } ?>
+    <div id="content" class="ms-product <?php echo $class; ?> ms-account-profile"><?php echo $content_top; ?>
+    <h1><?php echo $ms_account_sellerinfo_heading; ?></h1>
+
+	<form id="ms-sellerinfo" class="ms-form" class="form-horizontal">
 		<input type="hidden" name="action" id="ms_action" />
-		
-		<div class="content">
-			<!-- todo status check update -->
-			<?php if ($seller['ms.seller_status'] == MsSeller::STATUS_DISABLED || $seller['ms.seller_status'] == MsSeller::STATUS_DELETED) { ?>
-			<div class="ms-overlay"></div>
-			<?php } ?>
-			<table class="ms-product">
-				<tr>
-					<?php if (!$this->config->get('msconf_change_seller_nickname') && !empty($seller['ms.nickname'])) { ?>
-						<td><?php echo $ms_account_sellerinfo_nickname; ?></td>
-						<td style="padding-top: 5px">
-							<b><?php echo $seller['ms.nickname']; ?></b>
-						</td>
-					<?php } else { ?>
-						<td><span class="required">*</span> <?php echo $ms_account_sellerinfo_nickname; ?></td>
-						<td>
-							<input type="text" name="seller[nickname]" value="<?php echo $seller['ms.nickname']; ?>" />
-							<p class="ms-note"><?php echo $ms_account_sellerinfo_nickname_note; ?></p>
-						</td>
-					<?php } ?>
-				</tr>
-				
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_description; ?></td>
-					<td>
-						<!-- todo strip tags if rte disabled -->
-						<textarea name="seller[description]" id="seller_textarea" class="<?php echo $this->config->get('msconf_enable_rte') ? "ckeditor" : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($seller['ms.description']) : strip_tags(htmlspecialchars_decode($seller['ms.description'])); ?></textarea>
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_description_note; ?></p>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_company; ?></td>
-					<td>
-						<input type="text" name="seller[company]" value="<?php echo $seller['ms.company']; ?>" />
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_company_note; ?></p>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_country; ?></td>
-					<td>
-						<select name="seller[country]">
-							<option value="" selected="selected"><?php echo $ms_account_sellerinfo_country_dont_display; ?></option>
-							<?php foreach ($countries as $country) { ?>
-							<option value="<?php echo $country['country_id']; ?>" <?php if ($seller['ms.country_id'] == $country['country_id'] || $country_id == $country['country_id']) { ?>selected="selected"<?php } ?>><?php echo $country['name']; ?></option>
-							<?php } ?>
-						</select>
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_country_note; ?></p>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_zone; ?></td>
-					<td>
-						<select name="seller[zone]">
-						</select>
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_zone_note; ?></p>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_paypal; ?></td>
-					<td>
-						<input type="text" name="seller[paypal]" value="<?php echo $seller['ms.paypal']; ?>" />
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_paypal_note; ?></p>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_avatar; ?></td>
-					<td>
-						<!--<input type="file" name="ms-file-selleravatar" id="ms-file-selleravatar" />-->
-						<div class="buttons">
-						<?php if ($this->config->get('msconf_avatars_for_sellers') != 2) { ?>
-							<a name="ms-file-selleravatar" id="ms-file-selleravatar" class="button"><span><?php echo $ms_button_select_image; ?></span></a>
-						<?php } ?>
-						<?php if ($this->config->get('msconf_avatars_for_sellers') == 1 || $this->config->get('msconf_avatars_for_sellers') == 2) { ?>
-							<a name="ms-predefined-avatars" id="ms-predefined-avatars" class="button"><span><?php echo $ms_button_select_predefined_avatar; ?></span></a>
+		<!-- todo status check update -->
+		<?php if ($seller['ms.seller_status'] == MsSeller::STATUS_DISABLED || $seller['ms.seller_status'] == MsSeller::STATUS_DELETED) { ?>
+		<div class="ms-overlay"></div>
+		<?php } ?>
 
-							<div style="display: none"><div id="ms-predefined-avatars-container">
-								<?php if ($predefined_avatars) { ?>
-									<?php foreach ($predefined_avatars as $avatar_category_name => $avatars) { ?>
-									<div class="avatars-group">
-										<h4><?php echo $avatar_category_name; ?></h4>
-										<div class="avatars-list">
-										<?php foreach ($avatars as $key => $avatar) { ?>
-											<img src="<?php echo $avatar['image']; ?>" data-value="<?php echo $avatar['dir'] . $avatar['filename']; ?>">
-										<?php } ?>
-										</div>
-									</div>
-									<?php } ?>
-								<?php } ?>
-							</div></div>
-						<?php } ?>
-						</div>
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_avatar_note; ?></p>
-						<p class="error" id="error_sellerinfo_avatar"></p>
-						
-						<div id="sellerinfo_avatar_files">
-						<?php if (!empty($seller['avatar'])) { ?>
-							<div class="ms-image">
-								<input type="hidden" name="seller[avatar_name]" value="<?php echo $seller['avatar']['name']; ?>" />
-								<img src="<?php echo $seller['avatar']['thumb']; ?>" />
-								<span class="ms-remove"></span>
-							</div>
-						<?php } ?>
-						</div>
-					</td>
-				</tr>
-				
-				<?php if ($ms_account_sellerinfo_terms_note) { ?>
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_terms; ?></td>
-					<td>
-						<p style="margin-bottom: 0">
-							<input type="checkbox" name="seller[terms]" value="1" />
-							<?php echo $ms_account_sellerinfo_terms_note; ?>
-						</p>
-					</td>
-				</tr>
-				<?php } ?>
-				
-				<?php if (!isset($seller['seller_id']) &&$seller_validation != MsSeller::MS_SELLER_VALIDATION_NONE) { ?>
-				<tr>
-					<td><?php echo $ms_account_sellerinfo_reviewer_message; ?></td>
-					<td>
-						<textarea name="seller[reviewer_message]" id="message_textarea"></textarea>
-						<p class="ms-note"><?php echo $ms_account_sellerinfo_reviewer_message_note; ?></p>
-					</td>
-				</tr>
-				<?php } ?>
-			</table>
+		<div class="form-group required">
+			<?php if (!$this->config->get('msconf_change_seller_nickname') && !empty($seller['ms.nickname'])) { ?>
+				<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_nickname; ?></label>
+				<div class="col-sm-10">
+					<b><?php echo $seller['ms.nickname']; ?></b>
+				</div>
+			<?php } else { ?>
+				<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_nickname; ?></label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control"  name="seller[nickname]" value="<?php echo $seller['ms.nickname']; ?>" />
+					<p class="ms-note"><?php echo $ms_account_sellerinfo_nickname_note; ?></p>
+				</div>
+			<?php } ?>
 		</div>
-		</form>
-		
+
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_description; ?></label>
+			<div class="col-sm-10">
+				<!-- todo strip tags if rte disabled -->
+				<textarea name="seller[description]" id="seller_textarea" class="form-control" <?php echo $this->config->get('msconf_enable_rte') ? "ckeditor" : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($seller['ms.description']) : strip_tags(htmlspecialchars_decode($seller['ms.description'])); ?></textarea>
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_description_note; ?></p>
+			</div>
+		</div>
+
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_company; ?></label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"  name="seller[company]" value="<?php echo $seller['ms.company']; ?>" />
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_company_note; ?></p>
+			</div>
+		</div>
+
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_country; ?></label>
+			<div class="col-sm-10">
+				<select name="seller[country]" class="form-control">
+					<option value="" selected="selected"><?php echo $ms_account_sellerinfo_country_dont_display; ?></option>
+					<?php foreach ($countries as $country) { ?>
+					<option value="<?php echo $country['country_id']; ?>" <?php if ($seller['ms.country_id'] == $country['country_id'] || $country_id == $country['country_id']) { ?>selected="selected"<?php } ?>><?php echo $country['name']; ?></option>
+					<?php } ?>
+				</select>
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_country_note; ?></p>
+			</div>
+		</div>
+
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_zone; ?></label>
+			<div class="col-sm-10">
+				<select name="seller[zone]" class="form-control"></select>
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_zone_note; ?></p>
+			</div>
+		</div>
+
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_paypal; ?></label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"  name="seller[paypal]" value="<?php echo $seller['ms.paypal']; ?>" />
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_paypal_note; ?></p>
+			</div>
+		</div>
+
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_avatar; ?></label>
+			<div class="col-sm-10">
+				<!--<input type="file" name="ms-file-selleravatar" id="ms-file-selleravatar" />-->
+				<div class="buttons">
+				<?php if ($this->config->get('msconf_avatars_for_sellers') != 2) { ?>
+					<a name="ms-file-selleravatar" id="ms-file-selleravatar" class="btn btn-primary"><span><?php echo $ms_button_select_image; ?></span></a>
+				<?php } ?>
+				<?php if ($this->config->get('msconf_avatars_for_sellers') == 1 || $this->config->get('msconf_avatars_for_sellers') == 2) { ?>
+					<a name="ms-predefined-avatars" id="ms-predefined-avatars" class="btn btn-primary"><span><?php echo $ms_button_select_predefined_avatar; ?></span></a>
+
+					<div style="display: none"><div id="ms-predefined-avatars-container">
+						<?php if ($predefined_avatars) { ?>
+							<?php foreach ($predefined_avatars as $avatar_category_name => $avatars) { ?>
+							<div class="avatars-group">
+								<h4><?php echo $avatar_category_name; ?></h4>
+								<div class="avatars-list">
+								<?php foreach ($avatars as $key => $avatar) { ?>
+									<img src="<?php echo $avatar['image']; ?>" data-value="<?php echo $avatar['dir'] . $avatar['filename']; ?>">
+								<?php } ?>
+								</div>
+							</div>
+							<?php } ?>
+						<?php } ?>
+					</div></div>
+				<?php } ?>
+				</div>
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_avatar_note; ?></p>
+				<p class="error" id="error_sellerinfo_avatar"></p>
+
+				<div id="sellerinfo_avatar_files">
+				<?php if (!empty($seller['avatar'])) { ?>
+					<div class="ms-image">
+						<input type="hidden" name="seller[avatar_name]" value="<?php echo $seller['avatar']['name']; ?>" />
+						<img src="<?php echo $seller['avatar']['thumb']; ?>" />
+						<span class="ms-remove"></span>
+					</div>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+
+		<?php if ($ms_account_sellerinfo_terms_note) { ?>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_terms; ?></label>
+			<div class="col-sm-10">
+				<p style="margin-bottom: 0">
+					<input type="checkbox" name="seller[terms]" value="1" />
+					<?php echo $ms_account_sellerinfo_terms_note; ?>
+				</p>
+			</div>
+		</div>
+		<?php } ?>
+
+		<?php if (!isset($seller['seller_id']) &&$seller_validation != MsSeller::MS_SELLER_VALIDATION_NONE) { ?>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_reviewer_message; ?></label>
+			<div class="col-sm-10">
+				<textarea name="seller[reviewer_message]" id="message_textarea" class="form-control"></textarea>
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_reviewer_message_note; ?></p>
+			</div>
+		</div>
+		<?php } ?>
+
 		<?php if (isset($group_commissions) && $group_commissions[MsCommission::RATE_SIGNUP]['flat'] > 0) { ?>
 			<p class="attention ms-commission">
 				<?php echo sprintf($this->language->get('ms_account_sellerinfo_fee_flat'),$this->currency->format($group_commissions[MsCommission::RATE_SIGNUP]['flat'], $this->config->get('config_currency')), $this->config->get('config_name')); ?>
@@ -169,22 +170,16 @@
 		<?php } ?>
 		
 		<div class="buttons">
-			<div class="left">
-				<a href="<?php echo $link_back; ?>" class="button">
-					<span><?php echo $button_back; ?></span>
-				</a>
-			</div>
-			
+			<div class="pull-left"><a href="<?php echo $link_back; ?>" class="btn btn-default"><span><?php echo $button_back; ?></span></a></div>
 			<?php if ($seller['ms.seller_status'] != MsSeller::STATUS_DISABLED && $seller['ms.seller_status'] != MsSeller::STATUS_DELETED) { ?>
-			<div class="right">
-				<a class="button" id="ms-submit-button">
-					<span><?php echo $ms_button_save; ?></span>
-				</a>
-			</div>
+			<div class="pull-right"><a class="btn btn-primary" id="ms-submit-button"><span><?php echo $ms_button_save; ?></span></a></div>
 			<?php } ?>
 		</div>
-	<?php echo $content_bottom; ?>
+	</form>
+    <?php echo $content_bottom; ?></div>
+    <?php echo $column_right; ?></div>
 </div>
+
 
 <?php $timestamp = time(); ?>
 <script>
