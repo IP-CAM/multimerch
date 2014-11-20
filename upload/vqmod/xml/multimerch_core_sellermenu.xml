@@ -113,28 +113,30 @@
 	<!-- account sidebar menu -->
 	<file name="catalog/view/theme/&themeFolder;/template/module/account.tpl">
 		<operation error="skip">
-			<search position="before"><![CDATA[
-			</ul>
+			<search position="after" index="1"><![CDATA[
+			</div>
 			]]></search>
 			<add><![CDATA[
-				<br />
-				<li style="list-style-type: none"><b><?php echo $ms_account_seller_account; ?></b></li>
-				<?php if ($ms_seller_created && $this->MsLoader->MsSeller->getStatus($this->customer->getId()) == MsSeller::STATUS_ACTIVE) { ?>
-					<li><a href="<?php echo $this->url->link('seller/account-dashboard', '', 'SSL'); ?>"><?php echo $ms_account_dashboard; ?></a></li>
-				<?php } ?>
+			    <div class="list-group">
+			        <span class="list-group-item"><b><?php echo $ms_account_seller_account; ?></b></span>
+
+                    <?php if ($ms_seller_created && $this->MsLoader->MsSeller->getStatus($this->customer->getId()) == MsSeller::STATUS_ACTIVE) { ?>
+                        <a class="list-group-item" href="<?php echo $this->url->link('seller/account-dashboard', '', 'SSL'); ?>"><?php echo $ms_account_dashboard; ?></a>
+                    <?php } ?>
+
+				    <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-profile', '', 'SSL'); ?>"><?php echo $ms_seller_created ? $ms_account_sellerinfo : $ms_account_sellerinfo; ?></a>
 				
-				<li><a href="<?php echo $this->url->link('seller/account-profile', '', 'SSL'); ?>"><?php echo $ms_seller_created ? $ms_account_sellerinfo : $ms_account_sellerinfo; ?></a></li>
-				
-				<?php if ($ms_seller_created && $this->MsLoader->MsSeller->getStatus($this->customer->getId()) == MsSeller::STATUS_ACTIVE) { ?>
-					<li><a href="<?php echo $this->url->link('seller/account-product/create', '', 'SSL'); ?>"><?php echo $ms_account_newproduct; ?></a></li>
-					<li><a href="<?php echo $this->url->link('seller/account-product', '', 'SSL'); ?>"><?php echo $ms_account_products; ?></a></li>
-					<li><a href="<?php echo $this->url->link('seller/account-order', '', 'SSL'); ?>"><?php echo $ms_account_orders; ?></a></li>
-					<li><a href="<?php echo $this->url->link('seller/account-transaction', '', 'SSL'); ?>"><?php echo $ms_account_transactions; ?></a></li>
-					<?php if ($this->config->get('msconf_allow_withdrawal_requests')) { ?>
-					<li><a href="<?php echo $this->url->link('seller/account-withdrawal', '', 'SSL'); ?>"><?php echo $ms_account_withdraw; ?></a></li>
-					<?php } ?>
-					<li><a href="<?php echo $this->url->link('seller/account-stats', '', 'SSL'); ?>"><?php echo $ms_account_stats; ?></a></li>
-				<?php } ?>
+                    <?php if ($ms_seller_created && $this->MsLoader->MsSeller->getStatus($this->customer->getId()) == MsSeller::STATUS_ACTIVE) { ?>
+                        <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-product/create', '', 'SSL'); ?>"><?php echo $ms_account_newproduct; ?></a>
+                        <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-product', '', 'SSL'); ?>"><?php echo $ms_account_products; ?></a>
+                        <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-order', '', 'SSL'); ?>"><?php echo $ms_account_orders; ?></a>
+                        <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-transaction', '', 'SSL'); ?>"><?php echo $ms_account_transactions; ?></a>
+                        <?php if ($this->config->get('msconf_allow_withdrawal_requests')) { ?>
+                        <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-withdrawal', '', 'SSL'); ?>"><?php echo $ms_account_withdraw; ?></a>
+                        <?php } ?>
+                        <a class="list-group-item" href= "<?php echo $this->url->link('seller/account-stats', '', 'SSL'); ?>"><?php echo $ms_account_stats; ?></a>
+                    <?php } ?>
+				</div>
 			]]></add>
 		</operation>
 	</file>

@@ -143,6 +143,10 @@ table.list tbody td, table.list thead td  {
 	width: 200px;
 }
 
+.ms-product select {
+	width: 200px;
+}
+
 .ms-product textarea {
 	width: 400px;
 	height: 100px;
