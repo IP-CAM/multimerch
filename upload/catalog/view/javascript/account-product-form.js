@@ -1,16 +1,16 @@
 $(function() {
-	$('#language-tabs a.lang').tabs();
-	$('#general-tabs a').tabs();
 	$( ".product_image_files" ).sortable();
 
 	$("body").delegate(".ms-price-dynamic", "propertychange input paste focusout", function(){
 		$(".attention.ms-commission span").load($('base').attr('href') + "index.php?route=seller/account-product/jxGetFee&price=" + $(".ms-price-dynamic").val());
 	});
 	$(".attention.ms-commission span").load($('base').attr('href') + "index.php?route=seller/account-product/jxGetFee&price=" + $(".ms-price-dynamic").val());
-	
+
+    /*
 	$("body").delegate(".date", "focusin", function(){
 		$(this).datepicker({dateFormat: 'yy-mm-dd'});
 	});
+
 
 	$("body").delegate(".datetime", "focusin", function(){
 		$(this).datetimepicker({
@@ -22,7 +22,7 @@ $(function() {
 	$("body").delegate(".time", "focusin", function(){
 		$(this).timepicker({timeFormat: 'h:m'});
 	});
-	
+	*/
 	$('body').delegate("a.ms-button-delete", "click", function() {
 		$(this).parents('tr').remove();
 	});
@@ -43,7 +43,7 @@ $(function() {
 		$(this).closest('table').find('tbody').append(newRow.removeAttr('class'));
 	});
 	
-	$("input[name='product_enable_shipping']").live('change', function() {
+	$('body').on('change', "input[name='product_enable_shipping']", function() {
 		if ($(this).val() == 1) {
             ProductShippingCategories(1)
 			if (!$("input[name='product_quantity']").hasClass("ffUnchangeable")) {
@@ -138,35 +138,39 @@ $(function() {
 			url: $('base').attr('href') + 'index.php?route=seller/account-product/'+url,
 			data: $("form#ms-new-product").serialize(),
 			beforeSend: function() {
-				button.hide().before('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
+                $('.error').html('');
+			    $('.alert-danger').hide().find('i').text('');
+                button.hide().before('<span class="wait"></span>');
 			},
 			complete: function(jqXHR, textStatus) {
+                button.show().prev('span.wait').remove();
 				if (textStatus != 'success') {
 					button.show().prev('span.wait').remove();
-					$(".warning.main").text(msGlobals.formError).show();
+					$('.alert-danger').text(msGlobals.formError).show();
 					window.scrollTo(0,0);
 				}
 			},
 			success: function(jsonData) {
-				$('.error').text('');
-				$('.warning.main').text('').hide();
-
 				if (jsonData.fail) {
-					$(".warning.main").text(msGlobals.formError).show();
+                    $('.alert-danger').show().find('i').text(msGlobals.formError);
 					window.scrollTo(0,0);
 				} else 	if (!jQuery.isEmptyObject(jsonData.errors)) {
 					button.show().prev('span.wait').remove();
 					for (error in jsonData.errors) {
-						if (!jsonData.errors.hasOwnProperty(error)) {
-							continue;
-						}
-						
-						if ($('#error_'+error).length > 0)
-							$('#error_'+error).text(jsonData.errors[error]);
-						else
-							$('[name^="'+error+'"]').nextAll('.error:first').text(jsonData.errors[error]);
+                        if (!jsonData.errors.hasOwnProperty(error)) {
+                            continue;
+                        }
+
+                        if ($('#error_' + error).length > 0) {
+                            $('#error_' + error).text(jsonData.errors[error]);
+                            $('#error_' + error).parents('.form-group').addClass('has-error');
+                        } else {
+                            $('[name^="' + error + '"]').nextAll('.error:first').text(jsonData.errors[error]);
+                            $('[name^="' + error + '"]').parents('.form-group').addClass('has-error');
+                        }
+
 					}
-					$(".warning.main").text(msGlobals.formNotice).show();
+                    $('.alert-danger').show().find('i').text(msGlobals.formNotice);
 					window.scrollTo(0,0);
 				} else if (!jQuery.isEmptyObject(jsonData.data) && jsonData.data.amount) {
 					$(".ms-payment-form form input[name='custom']").val(jsonData.data.custom);

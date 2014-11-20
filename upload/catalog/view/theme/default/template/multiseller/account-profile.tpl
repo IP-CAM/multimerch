@@ -28,7 +28,7 @@
     <div id="content" class="ms-product <?php echo $class; ?> ms-account-profile"><?php echo $content_top; ?>
     <h1><?php echo $ms_account_sellerinfo_heading; ?></h1>
 
-	<form id="ms-sellerinfo" class="ms-form" class="form-horizontal">
+	<form id="ms-sellerinfo" class="ms-form form-horizontal">
 		<input type="hidden" name="action" id="ms_action" />
 		<!-- todo status check update -->
 		<?php if ($seller['ms.seller_status'] == MsSeller::STATUS_DISABLED || $seller['ms.seller_status'] == MsSeller::STATUS_DELETED) { ?>

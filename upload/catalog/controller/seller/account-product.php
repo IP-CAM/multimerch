@@ -923,8 +923,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		} else {
 			$this->template = 'default/template/multiseller/account-product-form-options.tpl';
 		}
-		
-		$this->response->setOutput($this->render(TRUE), $this->config->get('config_compression'));
+
+		$this->response->setOutput($this->load->view($this->template, $this->data));
 	}
 	
 	public function jxRenderOptionValues() {
@@ -944,7 +944,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$this->template = 'default/template/multiseller/account-product-form-options-values.tpl';
 		}
 	
-		$this->response->setOutput($this->render(TRUE), $this->config->get('config_compression'));
+		$this->response->setOutput($this->load->view($this->template, $this->data));
 	}
 	
 	public function jxRenderProductOptions() {
@@ -956,7 +956,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$this->data['option_index'] = 0;
 			foreach ($options as $o) {
 				$this->data['option'] = $o;
-				$this->data['product_option_values'] = $o['option_value'];
+				$this->data['product_option_values'] = $o['product_option_value'];
 				$this->data['values'] = $this->MsLoader->MsOption->getOptionValues($o['option_id']);
 				
 				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/multiseller/account-product-form-options-values.tpl')) {
@@ -965,7 +965,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					$this->template = 'default/template/multiseller/account-product-form-options-values.tpl';
 				}
 				
-				$output .= $this->render();
+				$output .= $this->load->view($this->template, $this->data);
 				$this->data['option_index']++;
 			}
 		}
@@ -1082,11 +1082,11 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		
 		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
-		$this->document->addScript('catalog/view/javascript/jquery/ui/jquery-ui-timepicker-addon.js');
 		$this->document->addScript('catalog/view/javascript/account-product-form.js');
 		$this->document->addScript('catalog/view/javascript/multimerch/account-product-form-options.js');
-		$this->document->addScript('catalog/view/javascript/jquery/tabs.js');
-		
+		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
+
+
 		// ckeditor
 		if($this->config->get('msconf_enable_rte'))
 			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');

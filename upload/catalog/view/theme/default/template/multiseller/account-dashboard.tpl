@@ -21,7 +21,7 @@
     <div id="content" class="<?php echo $class; ?> ms-account-dashboard"><?php echo $content_top; ?>
     <h1><?php echo $ms_account_dashboard_heading; ?></h1>
 
-	<div class="overview">
+	<div class="overview col-md-4">
 		<h3><?php echo $ms_account_dashboard_overview; ?></h3>
 		<img src="<?php echo $seller['avatar']; ?>" /><br />
 		<span class="nickname"><?php echo $seller['ms.nickname']; ?></span>
@@ -55,16 +55,18 @@
 		</p>
 	</div>
 	
-	<div class="stats">
+	<div class="stats col-md-4">
+		<div class="container">
 		<h3><?php echo $ms_account_dashboard_stats; ?></h3>
 		<p><span><?php echo $ms_account_dashboard_balance; ?>:</span> <span><?php echo $seller['balance']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_total_sales; ?>:</span> <span><?php echo $seller['total_sales']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_total_earnings; ?>:</span> <span><?php echo $seller['total_earnings']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_sales_month; ?>:</span> <span><?php echo $seller['sales_month']; ?></span></p>
-		<p><span><?php echo $ms_account_dashboard_earnings_month; ?>:</span> <span><?php echo $seller['earnings_month']; ?></span></p>	
+		<p><span><?php echo $ms_account_dashboard_earnings_month; ?>:</span> <span><?php echo $seller['earnings_month']; ?></span></p>
+		</div>
 	</div>
 	
-	<div class="nav">
+	<div class="nav col-md-4">
 		<h3><?php echo $ms_account_dashboard_nav; ?></h3>
 		<a href="<?php echo $this->url->link('seller/account-profile', '', 'SSL'); ?>">
 			<img src="catalog/view/theme/<?php echo $this->config->get('config_template'); ?>/image/ms-profile.png" />

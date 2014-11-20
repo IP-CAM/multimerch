@@ -16,14 +16,14 @@
 	display: inline-block;
 }
 
-.ms-account-dashboard table.list tbody td,
-.ms-account-orders table.list tbody td {
-	vertical-align: middle;
-}
-
 table.list tbody td, table.list thead td  {
 	text-align: center;
 	padding: 7px;
+    vertical-align: middle;
+}
+
+.dataTables_wrapper .pagination {
+    display: block;
 }
 
 .ms-totals {
@@ -134,11 +134,6 @@ table.list tbody td, table.list thead td  {
 	vertical-align: top;
 }
 
-.ms-product tr td:first-child {
-	padding-top: 5px;
-	width: 150px;	
-}
-
 .ms-product input[type='text'] {
 	width: 200px;
 }
@@ -241,6 +236,14 @@ table.list tbody td, table.list thead td  {
 	border-top: none;
 }
 
+.option_value {
+    margin-bottom: 5px;
+}
+
+.select_option_value {
+    margin-top: 15px;
+}
+
 .option_name {
 	display: inline-block;
 	width: 125px;
@@ -327,9 +330,9 @@ input.option_quantity {
 	position: absolute;
 	bottom: 3px;
 	right: 3px;
-	width: 16px;
-	height: 16px;
-	background: url('../image/remove.png');
+	width: 32px;
+	height: 32px;
+	background: url('../image/ms-cross.png');
 	cursor: pointer;
 }
 
@@ -343,8 +346,6 @@ input.option_quantity {
 }
 
 .ms-language-div {
-	border: 1px solid #EEEEEE;
-	border-top: none;
 }
 
 .ms-note {
@@ -757,14 +758,6 @@ ul.ms-sellermenu.graphical li a {
 	margin: 10px;
 }
 
-.ms-account-dashboard .overview,
-.ms-account-dashboard .stats,
-.ms-account-dashboard .nav {
-  position: relative;
-  float: left;
-  width: 33%;	
-}
-
 .ms-account-dashboard .stats p, .ms-account-dashboard .stats h3,
 .ms-account-dashboard .nav a, .ms-account-dashboard .nav h3 {
 	padding-left: 40px;
@@ -922,4 +915,12 @@ table.list thead td.right {
 }
 .comment-ratings tr td {
     padding-right: 10px;
+}
+
+.has-error .error, .error {
+    color: #a94442;
+}
+
+.inline {
+    display:inline;
 }
