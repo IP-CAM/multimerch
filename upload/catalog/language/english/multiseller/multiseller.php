@@ -634,18 +634,21 @@ $_['ms_sort_nickname_asc'] = 'Name (A - Z)';
 // Catalog - Seller profile page
 $_['ms_catalog_sellers'] = 'Sellers';
 $_['ms_catalog_sellers_empty'] = 'There are no sellers yet.';
+$_['ms_catalog_seller_profile'] = 'View profile';
 $_['ms_catalog_seller_profile_heading'] = '%s\'s profile';
 $_['ms_catalog_seller_profile_breadcrumbs'] = '%s\'s profile';
 $_['ms_catalog_seller_profile_about_seller'] = 'About the seller';
 $_['ms_catalog_seller_profile_products'] = 'Some of seller\'s products';
 $_['ms_catalog_seller_profile_tab_products'] = 'Products';
 
+$_['ms_catalog_seller_profile_social'] = 'Social profiles';
 $_['ms_catalog_seller_profile_country'] = 'Country:';
 $_['ms_catalog_seller_profile_zone'] = 'Region/State:';
 $_['ms_catalog_seller_profile_website'] = 'Website:';
 $_['ms_catalog_seller_profile_company'] = 'Company:';
 $_['ms_catalog_seller_profile_totalsales'] = 'Total sales:';
 $_['ms_catalog_seller_profile_totalproducts'] = 'Total products:';
+$_['ms_catalog_seller_profile_view_products'] = 'View products';
 $_['ms_catalog_seller_profile_view'] = 'View all %s\'s products';
 
 // Catalog - Seller's products list

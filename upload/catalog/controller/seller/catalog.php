@@ -1,5 +1,7 @@
 <?php
 class ControllerSellerCatalog extends Controller {
+	public  $data = array();
+
 	public function __construct($registry) {
 		parent::__construct($registry);
 		$this->MsLoader->MsHelper->addStyle('multiseller');

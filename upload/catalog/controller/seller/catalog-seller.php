@@ -210,8 +210,8 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('catalog-seller');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('catalog-seller');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 		
 	public function profile() {
@@ -285,27 +285,33 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 
 		if (!empty($products)) {
 			foreach ($products as $product) {
-				$product_data = $this->model_catalog_product->getProduct($product['product_id']);
-				if ($product_data['image'] && file_exists(DIR_IMAGE . $product_data['image'])) {
-					$image = $this->MsLoader->MsFile->resizeImage($product_data['image'], $this->config->get('msconf_product_seller_profile_image_width'), $this->config->get('msconf_product_seller_profile_image_height'));
+				$product_info = $this->model_catalog_product->getProduct($product['product_id']);
+				if ($product_info['image'] && file_exists(DIR_IMAGE . $product_info['image'])) {
+					$image = $this->MsLoader->MsFile->resizeImage($product_info['image'], $this->config->get('msconf_product_seller_profile_image_width'), $this->config->get('msconf_product_seller_profile_image_height'));
 				} else {
 					$image = $this->MsLoader->MsFile->resizeImage('no_image.jpg', $this->config->get('msconf_product_seller_profile_image_width'), $this->config->get('msconf_product_seller_profile_image_height'));
 				}
 
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($product_data['price'], $product_data['tax_class_id'], $this->config->get('config_tax')));
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
 				} else {
 					$price = false;
 				}
-						
-				if ((float)$product_data['special']) {
-					$special = $this->currency->format($this->tax->calculate($product_data['special'], $product_data['tax_class_id'], $this->config->get('config_tax')));
+
+				if ((float)$product_info['special']) {
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')));
 				} else {
 					$special = false;
 				}
-				
+
+				if ($this->config->get('config_tax')) {
+					$tax = $this->currency->format((float)$product_info['special'] ? $product_info['special'] : $product_info['price']);
+				} else {
+					$tax = false;
+				}
+
 				if ($this->config->get('config_review_status')) {
-					$rating = $product_data['rating'];
+					$rating = $product_info['rating'];
 				} else {
 					$rating = false;
 				}
@@ -313,12 +319,14 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 				$this->data['seller']['products'][] = array(
 					'product_id' => $product['product_id'],				
 					'thumb' => $image,
-					'name' => $product_data['name'],
+					'description' => $product_info['description'],
+					'tax' => $tax,
+					'name' => $product_info['name'],
 					'price' => $price,
 					'special' => $special,
 					'rating' => $rating,
-					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$product_data['reviews']),
-					'href'    	 => $this->url->link('product/product', 'product_id=' . $product_data['product_id']),						
+					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$product_info['reviews']),
+					'href'    	 => $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
 				);				
 			}
 		} else {
@@ -342,8 +350,8 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('catalog-seller-profile');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('catalog-seller-profile');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 
 	public function products() {
@@ -366,7 +374,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		}
 		
 		$this->data['seller']['nickname'] = $seller['ms.nickname'];
-		$this->data['seller']['description'] = $seller['ms.description'];
+		$this->data['seller']['description'] = html_entity_decode($seller['ms.description'], ENT_QUOTES, 'UTF-8');
 		$this->data['seller']['thumb'] = $image;
 		$this->data['seller']['href'] = $this->url->link('seller/catalog-seller/profile', 'seller_id=' . $seller['seller_id']);
 		
@@ -491,7 +499,6 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 					'tax' => $tax,
 					'special' => $special,
 					'rating' => $rating,
-					'description' => utf8_substr(strip_tags(html_entity_decode($product_data['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..',					
 					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$product_data['reviews']),
 					'href'    	 => $this->url->link('product/product', 'product_id=' . $product_data['product_id']),						
 				);				
@@ -618,8 +625,8 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 			)
 		));
 		
-		list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('catalog-seller-products');
-		$this->response->setOutput($this->render());
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('catalog-seller-products');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 
 	public function jxSubmitContactDialog() {

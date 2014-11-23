@@ -406,16 +406,11 @@ input.option_quantity {
 }
 
 .ms-sellerprofile .seller-data div.info-box {
-	margin: 20px 0 0 20px;
+	margin: 0 0 0 20px;
 }
 
-.ms-sellerprofile .seller-data div.info-box p {
-	margin: 5px 0;
-}
-
-.ms-sellerprofile .seller-data div.info-box a {
+.ms-sellerprofile .seller-data div.info-box a.nickname {
 	color: #38B0E3;
-	text-decoration: underline;
 }
 
 .ms-sellerprofile .seller-description {
@@ -425,6 +420,42 @@ input.option_quantity {
 
 .ms-sellerprofile .seller-data div.ms-badges img {
 	border: 0;
+}
+
+
+.ms-catalog-seller-profile .seller-banner img {
+}
+
+
+.ms-catalog-seller-profile .seller-description {
+    white-space: pre-wrap;
+}
+.ms-catalog-seller-profile .avatar-box {
+    display: inline-block;
+    margin: 0;
+    float: left;
+}
+
+.ms-catalog-seller-profile .avatar-box>img {
+    margin: 0;
+}
+
+.ms-catalog-seller-profile .info-box h3 {
+    margin: 0;
+}
+
+.ms-catalog-seller-profile .info-box>div {
+    display:inline-block;
+    margin-left: 20px;
+}
+
+.ms-catalog-seller-profile .product-thumb .caption {
+    min-height: 0;
+    text-align: center;
+}
+
+.ms-catalog-seller-profile .product-thumb .button-group button {
+    width: 100%
 }
 
 
