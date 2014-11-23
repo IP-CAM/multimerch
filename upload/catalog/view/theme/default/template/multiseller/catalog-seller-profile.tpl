@@ -73,7 +73,7 @@
 					<li><?php echo $ms_catalog_seller_profile_totalsales; ?> <?php echo $seller['total_sales']; ?></li>
 					<li><?php echo $ms_catalog_seller_profile_totalproducts; ?> <?php echo $seller['total_products']; ?></li>
 				</ul>
-				<a href="<?php echo $link_back; ?>" class="btn btn-default btn-block"><span><?php echo $ms_catalog_seller_profile_view_products; ?></span></a>
+				<a href="<?php echo $seller['href']; ?>" class="btn btn-default btn-block"><span><?php echo $ms_catalog_seller_profile_view_products; ?></span></a>
 				</div>
 			</div>
 

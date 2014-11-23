@@ -36,7 +36,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		if (isset($this->request->get['limit'])) {
 			$limit = $this->request->get['limit'];
 		} else {
-			$limit = $this->config->get('config_catalog_limit');
+			$limit = $this->config->get('config_product_limit');
 		}
 		
 		$this->data['products'] = array();
@@ -143,9 +143,9 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		$this->data['limits'] = array();
 		
 		$this->data['limits'][] = array(
-			'text'  => $this->config->get('config_catalog_limit'),
-			'value' => $this->config->get('config_catalog_limit'),
-			'href'  => $this->url->link('seller/catalog-seller', $url . '&limit=' . $this->config->get('config_catalog_limit'))
+			'text'  => $this->config->get('config_product_limit'),
+			'value' => $this->config->get('config_product_limit'),
+			'href'  => $this->url->link('seller/catalog-seller', $url . '&limit=' . $this->config->get('config_product_limit'))
 		);
 					
 		$this->data['limits'][] = array(
@@ -432,9 +432,9 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		if (isset($this->request->get['limit'])) {
 			$limit = $this->request->get['limit'];
 		} else {
-			$limit = $this->config->get('config_catalog_limit');
+			$limit = $this->config->get('config_product_limit');
 		}
-		
+
 		$this->data['products'] = array();
 		
 		$sort = array(
@@ -457,7 +457,9 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 			),
 			$sort
 		);
-		
+
+		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
+
 		if (!empty($products)) {
 			foreach ($products as $product) {
 				$product_data = $this->model_catalog_product->getProduct($product['product_id']);
@@ -497,6 +499,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 					'name' => $product_data['name'],
 					'price' => $price,
 					'tax' => $tax,
+					'description' => utf8_substr(strip_tags(html_entity_decode($product['pd.description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get('config_product_description_length')) . '..',
 					'special' => $special,
 					'rating' => $rating,
 					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$product_data['reviews']),
@@ -551,13 +554,12 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 		
-		
 		$this->data['limits'] = array();
 		
 		$this->data['limits'][] = array(
-			'text'  => $this->config->get('config_catalog_limit'),
-			'value' => $this->config->get('config_catalog_limit'),
-			'href'  => $this->url->link('seller/catalog-seller/products', $url . '&limit=' . $this->config->get('config_catalog_limit') . '&seller_id=' . $seller['seller_id'])
+			'text'  => $this->config->get('config_product_limit'),
+			'value' => $this->config->get('config_product_limit'),
+			'href'  => $this->url->link('seller/catalog-seller/products', $url . '&limit=' . $this->config->get('config_product_limit') . '&seller_id=' . $seller['seller_id'])
 		);
 					
 		$this->data['limits'][] = array(
@@ -597,16 +599,27 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		if (isset($this->request->get['limit'])) {
 			$url .= '&limit=' . $this->request->get['limit'];
 		}
-		
+
 		$pagination = new Pagination();
 		$pagination->total = $total_products;
 		$pagination->page = $page;
 		$pagination->limit = $limit;
-		$pagination->text = $this->language->get('text_pagination');
-		$pagination->url = $this->url->link('seller/catalog-seller/products', $url . '&page={page}&seller_id=' . $seller['seller_id']);
-	
+		$pagination->url = $this->url->link('seller/catalog-seller/products', 'seller_id=' . $seller['seller_id'] .  $url . '&page={page}');
+
 		$this->data['pagination'] = $pagination->render();
-		
+
+		$this->document->addLink($this->url->link('seller/catalog-seller/products', 'seller_id=' . $this->request->get['seller_id'] . $url . '&page=' . $pagination->page), 'canonical');
+
+		if ($pagination->limit && ceil($pagination->total / $pagination->limit) > $pagination->page) {
+			$this->document->addLink($this->url->link('seller/catalog-seller/products', 'seller_id=' . $this->request->get['seller_id'] . $url . '&page=' . ($pagination->page + 1)), 'next');
+		}
+
+		if ($pagination->page > 1) {
+			$this->document->addLink($this->url->link('seller/catalog-seller/products', 'seller_id=' . $this->request->get['seller_id'] . $url . '&page=' . ($pagination->page - 1)), 'prev');
+		}
+
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($total_products) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($total_products - $limit)) ? $total_products : ((($page - 1) * $limit) + $limit), $total_products, ceil($total_products / $limit));
+
 		$this->data['sort'] = $order_by;
 		$this->data['order'] = $order_way;
 		$this->data['limit'] = $limit;		
