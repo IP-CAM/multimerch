@@ -80,7 +80,8 @@
 										'seller_id' => $seller_id,
 										'store_commission_flat' => $store_commission_flat,
 										'store_commission_pct' => $store_commission_pct,
-										'seller_net_amt' => $seller_net_amt
+										'seller_net_amt' => $seller_net_amt,
+										'order_status_id' => $order_status_id
 									)
 								);
 							}

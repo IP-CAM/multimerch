@@ -151,12 +151,12 @@
 	
 	<file name="&adminFolder;/controller/sale/order.php">
 		<operation>
-			<search position="before"><![CDATA[
-			$product_data = array(
+			<search position="after"><![CDATA[
+			foreach ($products as $product) {
 			]]></search>
 			<add><![CDATA[
 			$this->language->load('multiseller/multiseller');
-			$this->data['column_seller'] = $this->language->get('ms_seller');
+			$data['column_seller'] = $this->language->get('ms_seller');
 			// todo check
 			$seller = $this->MsLoader->MsSeller->getSeller(
 				$this->MsLoader->MsProduct->getSellerId($product['product_id']),
@@ -195,28 +195,28 @@
 	<file name="&adminFolder;/view/template/sale/order_info.tpl">
 		<operation>
 			<search position="before"><![CDATA[
-			<td class="left"><?php echo $column_product; ?></td>
+			<td class="text-left"><?php echo $column_product; ?>
 			]]></search>
 			<add><![CDATA[
-			<td class="left"><?php echo $column_seller; ?></td>
+			<td class="text-left"><?php echo $column_seller; ?></td>
 			]]></add>
 		</operation>	
 	
 		<operation>
 			<search position="before"><![CDATA[
-			<td class="left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
+			<td class="text-left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
 			]]></search>
 			<add><![CDATA[
-			<td class="left"><?php if (!empty($product['seller']['seller_id'])) { ?><a href="<?php echo $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $product['seller']['seller_id'], 'SSL');?>"><?php echo $product['seller']['nickname']; ?></a> <?php } ?></td>
+			<td class="text-left"><?php if (!empty($product['seller']['seller_id'])) { ?><a href="<?php echo $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $product['seller']['seller_id'], 'SSL');?>"><?php echo $product['seller']['nickname']; ?></a> <?php } ?></td>
 			]]></add>
 		</operation>
 		
 		<operation>
 			<search position="replace"><![CDATA[
-			<td colspan="4" class="right"><?php echo $totals['title']; ?>:</td>
+			<td colspan="4" class="text-right"><?php echo $totals['title']; ?>:</td>
 			]]></search>
 			<add><![CDATA[
-			<td colspan="5" class="right"><?php echo $totals['title']; ?>:</td>
+			<td colspan="5" class="text-right"><?php echo $totals['title']; ?>:</td>
 			]]></add>
 		</operation>		
 	</file>

@@ -1,16 +1,34 @@
-<?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>
+<?php echo $header; ?>
+<div class="container">
+  <ul class="breadcrumb">
+    <?php foreach ($breadcrumbs as $breadcrumb) { ?>
+    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+    <?php } ?>
+  </ul>
+  <?php if (isset($error_warning) && $error_warning) { ?>
+  <div class="alert alert-danger warning main"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?></div>
+  <?php } ?>
 
-<div id="content"><?php echo $content_top; ?>
+  <?php if (isset($success) && ($success)) { ?>
+		<div class="success"><?php echo $success; ?></div>
+  <?php } ?>
 
-	<div class="breadcrumb">
-		<?php foreach ($breadcrumbs as $breadcrumb) { ?>
-		<?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-		<?php } ?>
-	</div>
+    <?php if (isset($statustext) && ($statustext)) { ?>
+        <div class="alert alert-<?php echo $statusclass; ?>"><?php echo $statustext; ?></div>
+    <?php } ?>
 
-	<h1><?php echo $heading_title; ?></h1>
-	
-	<table class="list">
+  <div class="row"><?php echo $column_left; ?>
+    <?php if ($column_left && $column_right) { ?>
+    <?php $class = 'col-sm-6'; ?>
+    <?php } elseif ($column_left || $column_right) { ?>
+    <?php $class = 'col-sm-9'; ?>
+    <?php } else { ?>
+    <?php $class = 'col-sm-12'; ?>
+    <?php } ?>
+    <div id="content" class="ms-product <?php echo $class; ?> ms-account-profile"><?php echo $content_top; ?>
+    <h1><?php echo $heading_title; ?></h1>
+
+	<table class="list table table-responsive table-bordered">
 		<thead>
 			<tr>
 				<td class="left" colspan="2"><?php echo $text_order_detail; ?></td>
@@ -32,7 +50,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<table class="list">
+	<table class="list table table-responsive table-bordered">
 		<thead>
 			<tr>
 				<td class="left"><?php echo $text_payment_address; ?></td>
@@ -50,7 +68,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<table class="list">
+	<table class="list table table-responsive table-bordered">
 		<thead>
 			<tr>
 				<td class="left"><?php echo $column_name; ?></td>
@@ -71,21 +89,21 @@
 			</tr>
 			<?php } ?>
 		</tbody>
-		<tfoot>
+		<tfoot style="text-align: center;">
 			<?php foreach ($totals as $total) { ?>
 			<tr>
 				<td colspan="3"></td>
-				<td class="right"><b><?php echo $total['title']; ?>:</b></td>
-				<td class="right"><?php echo $total['text']; ?></td>
+				<td><b><?php echo $total['title']; ?>:</b></td>
+				<td><?php echo $total['text']; ?></td>
 			</tr>
 			<?php } ?>
 		</tfoot>
 	</table>
-	<table class="list">
+	<table class="list table table-responsive table-bordered">
 		<tr>
-			<td><?php echo $ms_account_orders_change_status ?></td>
 			<td>
 				<form method="POST" action="<?= $redirect ?>">
+					<?php echo $ms_account_orders_change_status ?>:
 					<select name="order_status_edit">
 							<?php foreach ($order_statuses as $order_statuses) { ?>
 							 <?php if ($order_statuses['order_status_id'] == $order_status_id) { ?>
@@ -100,5 +118,10 @@
 		</td>
 		</tr>
 	</table>
-	<?php echo $content_bottom; ?></div>
-<?php echo $footer; ?> 
+
+	<div class="buttons">
+		<div class="pull-left"><a href="<?php echo $link_back; ?>" class="btn btn-default"><span><?php echo $button_back; ?></span></a></div>
+	</div>
+    <?php echo $content_bottom; ?></div>
+    <?php echo $column_right; ?></div>
+</div>

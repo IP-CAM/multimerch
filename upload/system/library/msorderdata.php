@@ -136,7 +136,7 @@ class MsOrderData extends Model {
 
 		$res = $this->db->query($sql);
 
-		return $res->row['comment'];
+		return isset($res->row['comment']) ? $res->row['comment'] : '';
 	}
 
 	public function getOrderProducts($data) {
@@ -191,8 +191,10 @@ class MsOrderData extends Model {
 		$this->db->query($sql);
 		
 		$order_product_data_id = $this->db->getLastId();
+		$log = new Log('error.txt');
+		$log->write("INSERT INTO " . DB_PREFIX . "ms_suborder (order_id, seller_id, order_status_id) VALUES (" . (int)$order_id . ", " . (int)$data['seller_id'] . ", " . (isset($data['order_status_id']) ? (int)$data['order_status_id'] : 1) . ")");
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "ms_suborder (order_id, seller_id, order_status_id) VALUES (" . (int)$order_id . ", " . (int)$data['seller_id'] . ", 1)");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "ms_suborder (order_id, seller_id, order_status_id) VALUES (" . (int)$order_id . ", " . (int)$data['seller_id'] . ", " . (isset($data['order_status_id']) ? (int)$data['order_status_id'] : 1) . ")");
 
 		return $order_product_data_id;
 	}

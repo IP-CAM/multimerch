@@ -33,7 +33,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 				'products' => 1,
 			)
 		);
-		
+
 		$total_orders = isset($orders[0]) ? $orders[0]['total_rows'] : 0;
 
 		$columns = array();
@@ -74,7 +74,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			$this->load->model('localisation/order_status');
 			$order_statuses = $this->model_localisation_order_status->getOrderStatuses();
 			$order_status_id = $this->model_localisation_order_status->getSuborderStatusId($order['order_id'], $this->customer->getId());			
-			
+
 			$order_status_name = '';
 			foreach ($order_statuses as $order_status) {
 				if ($order_status['order_status_id'] == $order_status_id) {
@@ -103,7 +103,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		)));
 	}
 
-	public function viewOrder() { 
+	public function viewOrder() {
 		if (isset($this->request->get['order_id'])) {
 			$order_id = $this->request->get['order_id'];
 		} else {
@@ -217,28 +217,14 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId() )));
 			//$this->data['totals'] = $this->model_account_order->getOrderTotals($this->request->get['order_id']);
 			$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
-
+			$this->data['link_back'] = $this->url->link('seller/account-order', '', 'SSL');
 			$this->data['continue'] = $this->url->link('account/order', '', 'SSL');
 
+			list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-order-info');
+			$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/multiseller/account-order-info.tpl')) {
-				$this->template = $this->config->get('config_template') . '/template/multiseller/account-order-info.tpl';
-			} else {
-				$this->template = 'default/template/multiseller/account-order-info.tpl';
-			}
-
-			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
-				'common/footer',
-				'common/header'	
-			);
-
-			$this->response->setOutput($this->render());
 		} else {
-			$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+			$this->response->redirect($this->url->link('seller/account-order-info', '', 'SSL'));
 		}
 	}
 		

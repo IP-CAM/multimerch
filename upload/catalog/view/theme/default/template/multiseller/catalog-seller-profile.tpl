@@ -34,7 +34,8 @@
 
 			<?php if ($seller['products']) { ?>
 			<hr />
-			<h3>Featured products</h3>
+			<!--<h3>$ms_catalog_seller_profile_featured</h3>-->
+			<h3><?php echo $ms_catalog_seller_profile_products; ?></h3>
 			<div class="row">
 			  <?php foreach ($seller['products'] as $product) { ?>
 			  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -77,23 +78,26 @@
 				</div>
 			</div>
 
+			<!--
 			<hr />
 			<div class="social">
 				<h3><?php echo $ms_catalog_seller_profile_social; ?></h3>
 			</div>
+			-->
 
-			<hr />
-			<div class="contact">
-				<h3><?php echo $ms_sellercontact_title ?></h3>
-				<?php if ($this->customer->getId()) { ?>
-					<?php if (($this->customer->getId() != $seller['seller_id']) && ($this->config->get('mmess_conf_enable') || $this->config->get('msconf_enable_private_messaging') == 2)) { ?>
-						<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&seller_id=<?php echo $seller_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></a></li>
-					<?php } ?>
-					Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
-				<?php } else { ?>
-					Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
+			<?php if ($this->config->get('mmess_conf_enable') || $this->config->get('msconf_enable_private_messaging') == 2) { ?>
+				<?php if ((!$this->customer->getId()) || ($this->customer->getId() != $seller['seller_id'])) { ?>
+					<hr />
+					<div class="contact">
+						<h3><?php echo $ms_sellercontact_title ?></h3>
+						<?php if ($this->customer->getId()) { ?>
+							<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&seller_id=<?php echo $seller_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></a></li>
+						<?php } else { ?>
+							Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
+						<?php } ?>
+					</div>
 				<?php } ?>
-			</div>
+			<?php } ?>
 		</div>
 	  </div>
 	  <?php echo $content_bottom; ?>
