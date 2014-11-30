@@ -134,7 +134,7 @@ table.list tbody td, table.list thead td  {
 	vertical-align: top;
 }
 
-.ms-product input[type='text'] {
+.ms-product input[type='text'], .ms-product .input-group.date {
 	width: 200px;
 }
 

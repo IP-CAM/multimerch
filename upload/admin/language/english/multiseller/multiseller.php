@@ -183,7 +183,7 @@ $_['ms_config_product_included_fields'] = 'Include fields for products';
 $_['ms_config_product_included_fields_note'] = 'Fields to be added in the product form';
 
 $_['ms_config_provide_buyerinfo'] = 'Mail buyer information';
-$_['ms_config_provide_buyerinfo_note'] = 'Include buyer address in the "Product purchased" email';
+$_['ms_config_provide_buyerinfo_note'] = 'Include buyer address in the Product purchased email';
 
 $_['ms_config_enable_shipping'] = 'Enable shipping';
 $_['ms_config_enable_shipping_note'] = 'New products will be created to require shipping';

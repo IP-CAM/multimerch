@@ -291,17 +291,32 @@
 						<?php } ?>
 
 						<?php if ($attr['attribute_type'] == MsAttribute::TYPE_DATE) { ?>
-							<input type="text" class="form-control" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" class="date" />
+							<div class="input-group date">
+							<input type="text" class="form-control inline" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" data-date-format="YYYY-MM-DD" />
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+							</span>
+							</div>
 							<input type="hidden" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value_id]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo key($normal_attribute_values[$attr['attribute_id']]); } ?>" />
 						<?php } ?>
 
 						<?php if ($attr['attribute_type'] == MsAttribute::TYPE_DATETIME) { ?>
-							<input type="text" class="form-control" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" class="datetime" />
+							<div class="input-group datetime">
+							<input type="text" class="form-control inline" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" data-date-format="YYYY-MM-DD HH:mm" />
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+							</span>
+							</div>
 							<input type="hidden" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value_id]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo key($normal_attribute_values[$attr['attribute_id']]); } ?>" />
 						<?php } ?>
 
 						<?php if ($attr['attribute_type'] == MsAttribute::TYPE_TIME) { ?>
-							<input type="text" class="form-control" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" class="time" />
+							<div class="input-group time">
+							<input type="text" class="form-control inline" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" data-date-format="HH:mm" />
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+							</span>
+							</div>
 							<input type="hidden" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value_id]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo key($normal_attribute_values[$attr['attribute_id']]); } ?>" />
 						<?php } ?>
 
@@ -551,8 +566,22 @@
 				<tr class="ffSample">
 					<td><input type="text" class="form-control inline" name="product_specials[0][priority]" value="" size="2" /></td>
 					<td><input type="text" class="form-control inline" name="product_specials[0][price]" value="" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[0][date_start]" value="" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[0][date_end]" value="" class="date" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[0][date_start]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[0][date_end]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 
@@ -562,8 +591,22 @@
 				<tr>
 					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][priority]" value="<?php echo $product_special['priority']; ?>" size="2" /></td>
 					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']); ?>" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_start]" value="<?php echo $product_special['date_start']; ?>" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_end]" value="<?php echo $product_special['date_end']; ?>" class="date" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_start]" value="<?php echo $product_special['date_start']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_end]" value="<?php echo $product_special['date_end']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 				<?php $special_row++; ?>
@@ -605,8 +648,22 @@
 					<td><input type="text" class="form-control inline" name="product_discounts[0][priority]" value="" size="2" /></td>
 					<td><input type="text" class="form-control inline" name="product_discounts[0][quantity]" value="" size="2" /></td>
 					<td><input type="text" class="form-control inline" name="product_discounts[0][price]" value="" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][date_start]" value="" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][date_end]" value="" class="date" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[0][date_start]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[0][date_end]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 				
@@ -617,8 +674,22 @@
 					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][priority]" value="<?php echo $product_discount['priority']; ?>" size="2" /></td>
 					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][quantity]" value="<?php echo $product_discount['quantity']; ?>" size="2" /></td>
 					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']); ?>" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_start]" value="<?php echo $product_discount['date_start']; ?>" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_end]" value="<?php echo $product_discount['date_end']; ?>" class="date" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_start]" value="<?php echo $product_discount['date_start']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_end]" value="<?php echo $product_discount['date_end']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 				<?php $discount_row++; ?>

@@ -6,23 +6,18 @@ $(function() {
 	});
 	$(".attention.ms-commission span").load($('base').attr('href') + "index.php?route=seller/account-product/jxGetFee&price=" + $(".ms-price-dynamic").val());
 
-    /*
 	$("body").delegate(".date", "focusin", function(){
-		$(this).datepicker({dateFormat: 'yy-mm-dd'});
+		$(this).datetimepicker({pickTime: false});
 	});
-
 
 	$("body").delegate(".datetime", "focusin", function(){
-		$(this).datetimepicker({
-			dateFormat: 'yy-mm-dd',
-			timeFormat: 'h:m'
-		});
+		$(this).datetimepicker({pickTime: true, pickDate: true});
 	});
-	
-	$("body").delegate(".time", "focusin", function(){
-		$(this).timepicker({timeFormat: 'h:m'});
+
+    $("body").delegate(".time", "focusin", function(){
+		$(this).datetimepicker({pickDate: false});
 	});
-	*/
+
 	$('body').delegate("a.ms-button-delete", "click", function() {
 		$(this).parents('tr').remove();
 	});
