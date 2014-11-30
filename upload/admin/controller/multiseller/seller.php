@@ -51,8 +51,8 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 					$actions .= "<a class='ms-button ms-button-paypal-bw' title='".$this->language->get('ms_payment_payout_paypal_invalid') . "'></a>";
 				}
 			}
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' title='".$this->language->get('text_edit')."'></a>";
-			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' title='".$this->language->get('text_delete')."'></a>";
+			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'></a>";
+			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' title='".$this->language->get('button_delete')."'></a>";
 
 			$available = $this->MsLoader->MsBalance->getSellerBalance($result['seller_id']) - $this->MsLoader->MsBalance->getReservedSellerFunds($result['seller_id']);
 			

@@ -7,7 +7,7 @@
     "sInfoThousands":  ",",
     "sLengthMenu":     "Show _MENU_ entries",
     "sLoadingRecords": "Loading...",
-    "sProcessing":     "Processing...",
+    "sProcessing":     "<i class='fa fa-spin fa-spinner'></i>",
     "sSearch":         "Search:",
     "sZeroRecords":    "No matching records found",
     "oPaginate": {

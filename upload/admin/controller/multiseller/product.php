@@ -51,13 +51,13 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 
 			// actions
 			$actions = "";
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('text_edit')."'></a>";
+			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'></a>";
 			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'></a>";
 
 			// seller select
 			$sellerselect = "";
 			$sellerselect .= "
-			<select>
+			<select class='form-control'>
 				<option value='0'>" . $this->language->get('ms_catalog_products_noseller') . "</option>";
 				
 				foreach($sellers as $s) {
@@ -65,8 +65,9 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 				}
 
 			$sellerselect .= "
+			</optgroup>
 			</select>
-			<span class='ms-assign-seller' style='background-image: url(view/image/success.png); width: 16px; height: 16px; display: inline-block; cursor: pointer; vertical-align: middle' title='Save' />
+			<button type='button' data-toggle='tooltip' title='' class='ms-assign-seller btn btn-primary' data-original-title='" . $this->language->get('ms_apply') . "'><i class='fa fa-fw fa-check'></i></button>
 			";
 			
 			$columns[] = array_merge(
@@ -220,6 +221,8 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 				$json['product_status'] = $this->language->get('ms_product_status_' . $product['mp.product_status']);
 				break;
 		}
+
+		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
 	

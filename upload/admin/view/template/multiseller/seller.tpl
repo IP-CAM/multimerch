@@ -78,7 +78,7 @@ $(document).ready(function() {
 			{ "mData": "balance" },
 			{ "mData": "status" },
 			{ "mData": "date_created" },
-			{ "mData": "actions", "bSortable": false, "sClass": "right" }
+			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 		]
 	} );
 

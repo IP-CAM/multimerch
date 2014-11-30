@@ -63,7 +63,7 @@ $(function() {
 			{ "mData": "type" },
 			{ "mData": "sort_order" },
 			{ "mData": "status" },
-			{ "mData": "actions", "bSortable": false, "sClass": "right" }
+			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 		]
 	});
 });

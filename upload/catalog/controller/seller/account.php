@@ -9,6 +9,9 @@ class ControllerSellerAccount extends Controller {
 		$this->document->addStyle('catalog/view/javascript/multimerch/datatables/css/jquery.dataTables.css');
 		$this->document->addScript('catalog/view/javascript/multimerch/datatables/js/jquery.dataTables.min.js');
 		$this->document->addScript('catalog/view/javascript/multimerch/common.js');
+		$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
+		$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+		$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
 		$this->data = array_merge($this->data, $this->load->language('multiseller/multiseller'),$this->load->language('account/account'));
 		$parts = explode('/', $this->request->request['route']);

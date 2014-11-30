@@ -152,10 +152,10 @@
 	$(function() {
 		$('#table-summary-1').dataTable( {
 			"aoColumns": [
-				{ "sClass": "left" },
-				{ "sClass": "left" },
-				{ "sClass": "left" },
-				{ "sClass": "left" }
+				{ "sClass": "text-left" },
+				{ "sClass": "text-left" },
+				{ "sClass": "text-left" },
+				{ "sClass": "text-left" }
 			],
 			"bPaginate": false,
 			"bInfo": false,
@@ -167,7 +167,7 @@
 			"sAjaxSource": $('base').attr('href') + "index.php?route=seller/account-stats/getByProductData",
 			"aoColumns": [
 				{ "mData": "product_id" },
-				{ "mData": "product_html", "bSortable": false, "sClass": "left" },
+				{ "mData": "product_html", "bSortable": false, "sClass": "text-left" },
 				{ "mData": "sold" },
 				{ "mData": "total_formatted" }
 			]
@@ -177,10 +177,10 @@
 		window.table_year = $('#table-by-year').dataTable( {
 			"sAjaxSource": $('base').attr('href') + "index.php?route=seller/account-stats/getByYearData",
 			"aoColumns": [
-				{ "mData": "date_added", "sClass": "left" },
-				{ "mData": "order_num", "sClass": "left" },
-				{ "mData": "total_revenue", "sClass": "left" },
-				{ "mData": "average_revenue", "sClass": "left" }
+				{ "mData": "date_added", "sClass": "text-left" },
+				{ "mData": "order_num", "sClass": "text-left" },
+				{ "mData": "total_revenue", "sClass": "text-left" },
+				{ "mData": "average_revenue", "sClass": "text-left" }
 			],
 			"bPaginate": false,
 			"bInfo": false,
@@ -192,10 +192,10 @@
 		window.table_year_total = $('#table-by-year-total').dataTable( {
 			"sAjaxSource": $('base').attr('href') + "index.php?route=seller/account-stats/getTotalByYear&year=" + year,
 			"aoColumns": [
-				{ "mData": "total_text", "sClass": "left" },
-				{ "mData": "order_num", "sClass": "left" },
-				{ "mData": "total_revenue", "sClass": "left" },
-				{ "mData": "average_revenue", "sClass": "left" }
+				{ "mData": "total_text", "sClass": "text-left" },
+				{ "mData": "order_num", "sClass": "text-left" },
+				{ "mData": "total_revenue", "sClass": "text-left" },
+				{ "mData": "average_revenue", "sClass": "text-left" }
 			],
 			"bPaginate": false,
 			"bInfo": false,

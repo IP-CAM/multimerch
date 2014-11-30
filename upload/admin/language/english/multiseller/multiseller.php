@@ -319,6 +319,7 @@ $_['ms_catalog_sellers_status'] = 'Status';
 $_['ms_catalog_sellers_date_created'] = 'Date created';
 $_['ms_catalog_sellers_balance_paypal'] = 'Balance payout via PayPal';
 
+$_['ms_seller_change'] = 'Change seller';
 $_['ms_seller_status_' . MsSeller::STATUS_ACTIVE] = 'Active';
 $_['ms_seller_status_' . MsSeller::STATUS_INACTIVE] = 'Inactive';
 $_['ms_seller_status_' . MsSeller::STATUS_DISABLED] = 'Disabled';

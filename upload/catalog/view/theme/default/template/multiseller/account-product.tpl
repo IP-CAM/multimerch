@@ -65,7 +65,7 @@
 				{ "mData": "product_status" },
 				{ "mData": "date_created" },
 				{ "mData": "list_until" },
-				{ "mData": "actions", "bSortable": false, "sClass": "right" }
+				{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 			],
 		});
 	
