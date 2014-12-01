@@ -458,122 +458,22 @@ input.option_quantity {
     width: 100%
 }
 
-
 /* seller list */
-.seller-filter {
-	margin-bottom: 5px;
+.catalog-seller .caption {
+    min-height: 150px;
 }
 
-.ms-sellerlist {
-	width: 100%;
+.catalog-seller .caption p {
+    margin: 0
 }
 
-.ms-sellerlist > div + div {
-    border-top: 1px solid #EEEEEE;
-    padding-top: 16px;
-}
-
-.ms-sellerlist > div {
-    margin-bottom: 15px;
-    overflow: auto;
+.catalog-seller .product-grid .seller-description {
+    display: none;
 }
 
 
-.ms-sellerlist .seller-data {
-	width: 100%;
-	clear: both;
-	margin-bottom: 15px;
-	display: inline-block;
-}
+.catalog-seller .product-list {
 
-.ms-sellerlist .seller-data > div {
-	display: inline;
-	float: left;
-}
-
-.ms-sellerlist .seller-data div.avatar-box {
-	width: 10%;
-	text-align: center
-}
-
-.ms-sellerlist .seller-data div.avatar-box .name {
-	margin-bottom: 3px;
-}
-
-.ms-sellerlist .seller-data div.avatar-box .name a {
-    color: #38B0E3;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.ms-sellerlist .seller-data div.info-box {
-	width: 20%;	
-	margin: 15px 0 0 15px;
-}
-
-.ms-sellerlist .seller-data div.info-box p {
-	margin: 5px 0;
-}
-
-.ms-sellerlist .seller-description {
-	width: 60%;
-	margin: 15px 0 0 15px;
-	text-align: justify;
-}
-
-
-/* seller grid */
-.ms-sellergrid {
-	width: 100%;
-}
-
-.ms-sellergrid > div {
-    margin-bottom: 15px;
-    overflow: auto;
-}
-
-.ms-sellergrid .seller-data {
-    display: inline-block;
-    margin-bottom: 15px;
-    margin-right: 20px;
-    vertical-align: top;
-    width: 130px;
-}
-
-
-.ms-sellergrid .seller-data > div {
-	display: inline;
-	float: left;
-}
-
-.ms-sellergrid .seller-data div.avatar-box {
-	width: 100%;
-	text-align: left;
-}
-
-.ms-sellergrid .seller-data div.avatar-box .name {
-	margin-bottom: 3px;
-}
-
-.ms-sellergrid .seller-data div.avatar-box .name a {
-    color: #38B0E3;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.ms-sellergrid .seller-data div.info-box {
-	width: 100%;	
-	margin: 15px 0 0 0;
-}
-
-.ms-sellergrid .seller-data div.info-box p {
-	margin: 5px 0;
-}
-
-.ms-sellergrid .seller-description {
-	width: 60%;
-	margin: 15px 0 0 15px;
-	text-align: justify;
 }
 
 .ms-carousel ul li a {

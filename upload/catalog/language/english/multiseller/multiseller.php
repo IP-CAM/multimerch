@@ -657,6 +657,7 @@ $_['ms_catalog_seller_products_breadcrumbs'] = '%s\'s products';
 $_['ms_catalog_seller_products_empty'] = 'This seller doesn\'t have any products yet!';
 
 // Catalog - Seller contact dialog
+$_['ms_sellercontact_signin'] = 'Please <a href="%s">sign in</a> to contact %s';
 $_['ms_sellercontact_title'] = 'Contact seller';
 $_['ms_sellercontact_name'] = 'Your name';
 $_['ms_sellercontact_email'] = 'Your email';

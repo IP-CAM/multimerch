@@ -70,8 +70,8 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		
 		"msconf_seller_avatar_seller_profile_image_width" => 100,
 		"msconf_seller_avatar_seller_profile_image_height" => 100,
-		"msconf_seller_avatar_seller_list_image_width" => 100,
-		"msconf_seller_avatar_seller_list_image_height" => 100,
+		"msconf_seller_avatar_seller_list_image_width" => 228,
+		"msconf_seller_avatar_seller_list_image_height" => 228,
 		"msconf_seller_avatar_product_page_image_width" => 100,
 		"msconf_seller_avatar_product_page_image_height" => 100,
 		"msconf_seller_avatar_dashboard_image_width" => 100,
@@ -102,7 +102,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"msconf_avatars_for_sellers" => 0, // 0 - Uploaded manually by seller, 1 - Both, uploaded by seller and pre-defined, 2 - Only pre-defined
 		"msconf_change_seller_nickname" => 1,
 
-		"msconf_enable_private_messaging" => 1, // 0 - no, 2 - yes (email only)
+		"msconf_enable_private_messaging" => 2, // 0 - no, 2 - yes (email only)
 		"msconf_enable_one_page_seller_registration" => 0 // 0 - no, 1 - yes
 	);
 	

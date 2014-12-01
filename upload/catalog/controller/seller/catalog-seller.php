@@ -40,63 +40,50 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		}
 		
 		$this->data['products'] = array();
-		
-		if(!$this->cache->get('catalog_seller_total')) {
 
-			$total_sellers = $this->MsLoader->MsSeller->getTotalSellers(array(
-				'seller_status' => array(MsSeller::STATUS_ACTIVE) 
-			));
+		$total_sellers = $this->MsLoader->MsSeller->getTotalSellers(array(
+			'seller_status' => array(MsSeller::STATUS_ACTIVE)
+		));
 
-			$this->cache->set('catalog_seller_total', $total_sellers);
-		} else {
-			$total_sellers = $this->cache->get('catalog_seller_total');
-		}
-			
-		if(!$this->cache->get('catalog_seller')) {
-			$results = $this->MsLoader->MsSeller->getSellers(
-				array(
-					'seller_status' => array(MsSeller::STATUS_ACTIVE)
-				),
-				array(
-					'order_by'	=> $order_by,
-					'order_way'	=> $order_way,
-					'offset'	=> ($page - 1) * $limit,
-					'limit'		=> $limit
-				)
-			);
-			
-			foreach ($results as $result) {
-				if ($result['ms.avatar'] && file_exists(DIR_IMAGE . $result['ms.avatar'])) {
-					$image = $this->MsLoader->MsFile->resizeImage($result['ms.avatar'], $this->config->get('msconf_seller_avatar_seller_list_image_width'), $this->config->get('msconf_seller_avatar_seller_list_image_height'));
-				} else {
-					$image = $this->MsLoader->MsFile->resizeImage('ms_no_image.jpg', $this->config->get('msconf_seller_avatar_seller_list_image_width'), $this->config->get('msconf_seller_avatar_seller_list_image_height'));
-				}
+		$results = $this->MsLoader->MsSeller->getSellers(
+			array(
+				'seller_status' => array(MsSeller::STATUS_ACTIVE)
+			),
+			array(
+				'order_by'	=> $order_by,
+				'order_way'	=> $order_way,
+				'offset'	=> ($page - 1) * $limit,
+				'limit'		=> $limit
+			)
+		);
 
-				$country = $this->model_localisation_country->getCountry($result['ms.country_id']);
-				$this->data['sellers'][] = array(
-					'seller_id'  => $result['seller_id'],
-					'thumb'       => $image,
-					'nickname'        => $result['ms.nickname'],
-					'description' => utf8_substr(strip_tags(html_entity_decode($result['ms.description'], ENT_QUOTES, 'UTF-8')), 0, 200) . '..',
-					//'rating'      => $result['rating'],
-					'country' => ($country ? $country['name'] : NULL),
-					'company' => ($result['ms.company'] ? $result['ms.company'] : NULL),
-					'website' => ($result['ms.website'] ? $result['ms.website'] : NULL),
-					'country_flag' => ($country ? 'image/flags/' . strtolower($country['iso_code_2']) . '.png' : NULL),
-					'total_sales' => $this->MsLoader->MsSeller->getSalesForSeller($result['seller_id']),
-					'total_products' => $this->MsLoader->MsProduct->getTotalProducts(array(
-						'seller_id' => $result['seller_id'],
-						'product_status' => array(MsProduct::STATUS_ACTIVE)
-					)),
-					'href'        => $this->url->link('seller/catalog-seller/profile', '&seller_id=' . $result['seller_id'])
-				);
+		foreach ($results as $result) {
+			if ($result['ms.avatar'] && file_exists(DIR_IMAGE . $result['ms.avatar'])) {
+				$image = $this->MsLoader->MsFile->resizeImage($result['ms.avatar'], $this->config->get('msconf_seller_avatar_seller_list_image_width'), $this->config->get('msconf_seller_avatar_seller_list_image_height'));
+			} else {
+				$image = $this->MsLoader->MsFile->resizeImage('ms_no_image.jpg', $this->config->get('msconf_seller_avatar_seller_list_image_width'), $this->config->get('msconf_seller_avatar_seller_list_image_height'));
 			}
-		
-			$this->cache->set('catalog_seller', $this->data['sellers']);
-		} else {
-			$this->data['sellers'] = $this->cache->get('catalog_seller');
-		}
 
+			$country = $this->model_localisation_country->getCountry($result['ms.country_id']);
+			$this->data['sellers'][] = array(
+				'seller_id'  => $result['seller_id'],
+				'thumb'       => $image,
+				'nickname'        => $result['ms.nickname'],
+				'description' => utf8_substr(strip_tags(html_entity_decode($result['ms.description'], ENT_QUOTES, 'UTF-8')), 0, 200) . '..',
+				//'rating'      => $result['rating'],
+				'country' => ($country ? $country['name'] : NULL),
+				'company' => ($result['ms.company'] ? $result['ms.company'] : NULL),
+				'website' => ($result['ms.website'] ? $result['ms.website'] : NULL),
+				'country_flag' => ($country ? 'image/flags/' . strtolower($country['iso_code_2']) . '.png' : NULL),
+				'total_sales' => $this->MsLoader->MsSeller->getSalesForSeller($result['seller_id']),
+				'total_products' => $this->MsLoader->MsProduct->getTotalProducts(array(
+					'seller_id' => $result['seller_id'],
+					'product_status' => array(MsProduct::STATUS_ACTIVE)
+				)),
+				'href'        => $this->url->link('seller/catalog-seller/profile', '&seller_id=' . $result['seller_id'])
+			);
+		}
+		
 		$url = '';
 
 		if (isset($this->request->get['limit'])) {
@@ -194,6 +181,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 		$pagination->url = $this->url->link('seller/catalog-seller', $url . '&page={page}');
 	
 		$this->data['pagination'] = $pagination->render();
+		$this->data['results'] = sprintf($this->language->get('text_pagination'), ($total_sellers) ? (($page - 1) * 5) + 1 : 0, ((($page - 1) * 5) > ($total_sellers - 5)) ? $total_sellers : ((($page - 1) * 5) + 5), $total_sellers, ceil($total_sellers / 5));
 		
 		$this->data['sort'] = $order_by;
 		$this->data['order'] = $order_way;
@@ -215,8 +203,6 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 	}
 		
 	public function profile() {
-		$this->document->addScript('catalog/view/javascript/jquery/tabs.js');
-		
 		if (isset($this->request->get['seller_id'])) {
 			$seller = $this->MsLoader->MsSeller->getSeller($this->request->get['seller_id']);
 		}

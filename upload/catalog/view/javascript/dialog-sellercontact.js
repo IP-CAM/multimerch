@@ -1,5 +1,5 @@
 $(function() {
-	$('.ms-sellercontact').live('click', function() {
+    $('body').on('.ms-sellercontact', 'click', function() {
 		var url = this.href;
 		var title = this.title;
 	    var dialog = $("#ms-sellercontact-dialog-div");

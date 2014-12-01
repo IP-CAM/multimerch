@@ -64,7 +64,7 @@
         <?php } ?>
         <div class="<?php echo $class; ?>">
 			<div class="info-box">
-				<a class="avatar-box thumbnail" href="<?php echo $seller['href']; ?>"><img src="<?php echo $seller['thumb']; ?>" /></a>
+				<a class="avatar-box thumbnail" href="<?php echo $seller['href']; ?>"><img src="<?php echo $seller['thumb']; ?>" /></a><br>
 				<div>
 				<ul class="list-unstyled">
 					<li><h3><?php echo $seller['nickname']; ?></h3></li>
@@ -78,29 +78,35 @@
 				</div>
 			</div>
 
+			<!--
 			<hr />
 			<div class="social">
 				<h3><?php echo $ms_catalog_seller_profile_social; ?></h3>
 				<img src="http://simplesharingbuttons.com/images/flat-web-icon-set-color-alt.png" />
 			</div>
-<hr />
-					<div class="contact">
-						<h3><?php echo $ms_sellercontact_title ?></h3>
-						<?php if ($this->customer->getId()) { ?>
-							<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&seller_id=<?php echo $seller_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></a></li>
-						<?php } else { ?>
-							Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
-						<?php } ?>
-					</div>
+
+			<hr />
+
+			<div class="contact">
+				<h3><?php echo $ms_sellercontact_title ?></h3>
+				<?php if ($this->customer->getId()) { ?>
+					<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&seller_id=<?php echo $seller_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></a></li>
+				<?php } else { ?>
+					Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
+				<?php } ?>
+			</div>
+			-->
 			<?php if ($this->config->get('mmess_conf_enable') || $this->config->get('msconf_enable_private_messaging') == 2) { ?>
 				<?php if ((!$this->customer->getId()) || ($this->customer->getId() != $seller['seller_id'])) { ?>
 					<hr />
 					<div class="contact">
 						<h3><?php echo $ms_sellercontact_title ?></h3>
 						<?php if ($this->customer->getId()) { ?>
-							<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&seller_id=<?php echo $seller_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></a></li>
+						  <div class="button-group">
+							<button type="button" class="btn btn-main btn-block"><span><?php echo $ms_catalog_product_contact; ?></span></button>
+						  </div>
 						<?php } else { ?>
-							Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
+							<?php echo sprintf($this->language->get('ms_sellercontact_signin'), $this->url->link('account/login', '', 'SSL'), $seller['nickname']); ?>
 						<?php } ?>
 					</div>
 				<?php } ?>
