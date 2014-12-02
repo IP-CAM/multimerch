@@ -8,7 +8,7 @@
   <div class="alert alert-danger warning main" style="display: none"><i class="fa fa-exclamation-circle"></i></div>
 
   <?php if (isset($success) && ($success)) { ?>
-		<div class="success"><?php echo $success; ?></div>
+		<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> <?php echo $success; ?></div>
   <?php } ?>
 
   <div class="row"><?php echo $column_left; ?>

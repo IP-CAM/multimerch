@@ -10,7 +10,7 @@
   <?php } ?>
 
   <?php if (isset($success) && ($success)) { ?>
-		<div class="success"><?php echo $success; ?></div>
+		<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> <?php echo $success; ?></div>
   <?php } ?>
 
     <?php if (isset($statustext) && ($statustext)) { ?>

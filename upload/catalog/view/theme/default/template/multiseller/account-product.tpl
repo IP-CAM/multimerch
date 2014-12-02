@@ -7,7 +7,7 @@
   </ul>
 
   <?php if (isset($success) && ($success)) { ?>
-		<div class="success"><?php echo $success; ?></div>
+		<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> <?php echo $success; ?></div>
   <?php } ?>
 
   <?php if (isset($error_warning) && $error_warning) { ?>
@@ -66,7 +66,7 @@
 				{ "mData": "date_created" },
 				{ "mData": "list_until" },
 				{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
-			],
+			]
 		});
 	
 		$(document).on('click', '.ms-button-delete', function() {
