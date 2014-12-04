@@ -42,9 +42,20 @@
 
 						<li><?php echo $ms_catalog_seller_profile_totalsales; ?></b> <?php echo $seller['total_sales']; ?></li>
 						<li><?php echo $ms_catalog_seller_profile_totalproducts; ?></b> <?php echo $seller['total_products']; ?></li>
-						<?php if ((!$this->customer->getId() || ($this->customer->getId() && $this->customer->getId() != $seller['seller_id'])) && ($this->config->get('msconf_enable_private_messaging') == 2 || ($this->config->get('mmess_config_enable') == 1 && $this->customer->getId()))) { ?>
-							<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&product_id=<?php echo $product_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></li>
-						<?php } ?>
+                        <?php if ($this->config->get('mmess_conf_enable') || $this->config->get('msconf_enable_private_messaging') == 2) { ?>
+                            <?php if ((!$this->customer->getId()) || ($this->customer->getId() != $seller['seller_id'])) { ?>
+                                <?php echo $contactForm; ?>
+                                <div class="contact">
+                                    <?php if ($this->customer->getId()) { ?>
+                                      <div class="button-group">
+                                        <button type="button" class="btn btn-default btn-block ms-sellercontact" data-toggle="modal" data-target="#contactDialog"><span><?php echo $ms_catalog_product_contact; ?></span></button>
+                                      </div>
+                                    <?php } else { ?>
+                                        <?php echo sprintf($this->language->get('ms_sellercontact_signin'), $this->url->link('account/login', '', 'SSL'), $seller['nickname']); ?>
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
 					</ul>
 					</div>
 				</div>
@@ -130,7 +141,7 @@
 			$this->load->model('localisation/country');
 			$this->load->model('localisation/zone');
 			$this->load->model('tool/image');
-			
+
 			$seller_id = $this->MsLoader->MsProduct->getSellerId($this->request->get['product_id']);
 			$seller = $this->MsLoader->MsSeller->getSeller($seller_id);
 			
@@ -184,6 +195,7 @@
 				));
 			}
 
+            $data['contactForm'] = $this->MsLoader->MsHelper->renderPmDialog($data);
 			$data['ms_product_attributes'] = $this->MsLoader->MsAttribute->getProductAttributes($this->request->get['product_id'], array('multilang' => 0, 'attribute_type'=> array(MsAttribute::TYPE_TEXT, MsAttribute::TYPE_TEXTAREA, MsAttribute::TYPE_DATE, MsAttribute::TYPE_DATETIME, MsAttribute::TYPE_TIME), 'mavd.language_id' => 0));
 			$data['ms_product_attributes'] = array_merge($data['ms_product_attributes'], $this->MsLoader->MsAttribute->getProductAttributes($this->request->get['product_id'], (array())));
 			]]></add>
