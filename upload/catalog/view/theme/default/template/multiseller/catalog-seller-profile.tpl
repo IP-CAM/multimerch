@@ -64,7 +64,7 @@
         <?php } ?>
         <div class="<?php echo $class; ?>">
 			<div class="info-box">
-				<a class="avatar-box thumbnail" href="<?php echo $seller['href']; ?>"><img src="<?php echo $seller['thumb']; ?>" /></a><br>
+				<a class="avatar-box thumbnail" href="<?php echo $seller['href']; ?>"><img src="<?php echo $seller['thumb']; ?>" /></a>
 				<div>
 				<ul class="list-unstyled">
 					<li><h3><?php echo $seller['nickname']; ?></h3></li>

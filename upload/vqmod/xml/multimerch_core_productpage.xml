@@ -144,7 +144,7 @@
 
 			$seller_id = $this->MsLoader->MsProduct->getSellerId($this->request->get['product_id']);
 			$seller = $this->MsLoader->MsSeller->getSeller($seller_id);
-			
+
 			if (!$seller) {
 				$data['seller'] = NULL;
 			} else {
@@ -193,9 +193,10 @@
 					'seller_id' => $seller['seller_id'],
 					'product_status' => array(MsProduct::STATUS_ACTIVE)
 				));
+
+				$data['contactForm'] = $this->MsLoader->MsHelper->renderPmDialog($data);
 			}
 
-            $data['contactForm'] = $this->MsLoader->MsHelper->renderPmDialog($data);
 			$data['ms_product_attributes'] = $this->MsLoader->MsAttribute->getProductAttributes($this->request->get['product_id'], array('multilang' => 0, 'attribute_type'=> array(MsAttribute::TYPE_TEXT, MsAttribute::TYPE_TEXTAREA, MsAttribute::TYPE_DATE, MsAttribute::TYPE_DATETIME, MsAttribute::TYPE_TIME), 'mavd.language_id' => 0));
 			$data['ms_product_attributes'] = array_merge($data['ms_product_attributes'], $this->MsLoader->MsAttribute->getProductAttributes($this->request->get['product_id'], (array())));
 			]]></add>

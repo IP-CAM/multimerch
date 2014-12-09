@@ -2,7 +2,7 @@
     overflow-x: initial;
 }
 
-.control-inline input, .control-inline select {
+.control-inline input, .control-inline select, .input-auto {
     width: auto;
     display: inline;
 }

@@ -276,8 +276,8 @@
             </div>
             </table>
             </div>
-            </div>
             <!--  end commission tab -->
+			</div>
         </div>
         </form>
       </div>

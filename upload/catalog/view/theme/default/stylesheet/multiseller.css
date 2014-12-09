@@ -860,3 +860,9 @@ table.list thead td.right {
 .inline {
     display:inline;
 }
+
+.module .product-thumb .caption {
+    padding: 0 20px;
+    min-height: 50px;
+    text-align: center;
+}

@@ -250,6 +250,23 @@ class MsHelper extends Model {
 		$installed_extensions = $this->model_extension_extension->getInstalled('module');
 		return array_search('multiseller', $installed_extensions) !== FALSE;
 	}
+
+	public function renderPmDialog(&$data) {
+		if (isset($this->request->get['product_id'])) {
+			$seller_id = $this->MsLoader->MsProduct->getSellerId($this->request->get['product_id']);
+			$data['product_id'] = (int)$this->request->get['product_id'];
+		} else {
+			$seller_id = $this->request->get['seller_id'];
+			$data['product_id'] = 0;
+		}
+
+		$seller = $this->MsLoader->MsSeller->getSeller($seller_id);
+		if (empty($seller)) return false;
+
+		$data['seller_id'] = $seller_id;
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('dialog-sellercontact');
+		return $this->load->view($template, $data);
+	}
 }
 
 ?>

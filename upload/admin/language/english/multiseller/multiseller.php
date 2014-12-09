@@ -79,6 +79,8 @@ $_['ms_commission_actual'] = 'Actual fee rates';
 
 $_['ms_sort_order'] = 'Sort order';
 $_['ms_name'] = 'Name';
+$_['ms_config_width'] = 'Width';
+$_['ms_config_height'] = 'Height';
 $_['ms_description'] = 'Description';
 
 $_['ms_enable'] = 'Enable';
