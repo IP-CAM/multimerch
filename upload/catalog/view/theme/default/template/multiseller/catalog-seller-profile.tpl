@@ -34,7 +34,6 @@
 
 			<?php if ($seller['products']) { ?>
 			<hr />
-			<!--<h3>$ms_catalog_seller_profile_featured</h3>-->
 			<h3><?php echo $ms_catalog_seller_profile_products; ?></h3>
 			<div class="row">
 			  <?php foreach ($seller['products'] as $product) { ?>
@@ -52,6 +51,7 @@
 			  <?php } ?>
 			</div>
 			<?php } ?>
+			<!-- end products -->
 		</div>
 
 		<!-- right column -->
