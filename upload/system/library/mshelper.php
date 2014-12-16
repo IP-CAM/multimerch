@@ -260,6 +260,7 @@ class MsHelper extends Model {
 			$data['product_id'] = 0;
 		}
 
+
 		$seller = $this->MsLoader->MsSeller->getSeller($seller_id);
 		if (empty($seller)) return false;
 

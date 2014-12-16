@@ -1,3 +1,8 @@
+.control-inline input, .control-inline select, .input-auto {
+    width: auto;
+    display: inline;
+}
+
 /* table alignment style override */
 #content .content table.list .left {
 	width: auto;

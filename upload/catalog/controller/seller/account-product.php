@@ -622,9 +622,10 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
         if(!isset($data['product_subtract'])){
             $data['product_subtract'] = 0;
         }
-		if ($this->config->get('msconf_enable_shipping') == 1) { // enable shipping
+
+		if ($this->config->get('msship_enable_shipping') == 1) { // enable shipping
 			$data['product_enable_shipping'] = 1;
-		} else if ($this->config->get('msconf_enable_shipping') == 2) { // seller select
+		} else if ($this->config->get('msship_enable_shipping') == 2) { // seller select
 		 	if  (!isset($data['product_enable_shipping']) || $data['product_enable_shipping'] != 1) {
 		 		$data['product_enable_shipping'] = 0;
 		 	} else {
@@ -644,7 +645,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			}
 			$data['product_subtract'] = 1;
 		} else if ($this->config->get('msconf_enable_quantities') == 2) { // Shipping dependent
-			if ($this->config->get('msconf_enable_shipping') == 1) {
+			if ($this->config->get('msship_enable_shipping') == 1) {
 				$data['product_subtract'] = 1;
 				if (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0) { // Seller group quantity is set
 					$data['product_quantity'] = (int)$seller_group['product_quantity'];
@@ -652,7 +653,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					if (!isset($data['product_quantity']))
 						$data['product_quantity'] = 0;
 				}
-			} else if ($this->config->get('msconf_enable_shipping') == 2) {
+			} else if ($this->config->get('msship_enable_shipping') == 2) {
 				if (!$data['product_enable_shipping']) {
 					$data['product_quantity'] = 999;
 				} else {
@@ -1033,14 +1034,12 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
         $this->data['product']['shipping'] = $this->request->post['type'];
         $this->data['categories'] = $this->MsLoader->MsProduct->getCategories();
         $this->data['msconf_allow_multiple_categories'] = $this->config->get('msconf_allow_multiple_categories');
-        $this->data['msconf_enable_shipping'] = $this->config->get('msconf_enable_shipping');
         $this->data['msconf_enable_categories'] = $this->config->get('msconf_enable_categories');
         $this->data['msconf_physical_product_categories'] = $this->config->get('msconf_physical_product_categories');
         $this->data['msconf_digital_product_categories'] = $this->config->get('msconf_digital_product_categories');
 
-        $this->template = 'default/template/multiseller/account-product-form-shipping-categories.tpl';
-
-        $this->response->setOutput($this->render(TRUE), $this->config->get('config_compression'));
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-product-form-shipping-categories');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
     }
 
     public function index() {
@@ -1167,7 +1166,6 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		$this->data['msconf_allow_multiple_categories'] = $this->config->get('msconf_allow_multiple_categories');
-		$this->data['msconf_enable_shipping'] = $this->config->get('msconf_enable_shipping');
 		$this->data['msconf_images_limits'] = $this->config->get('msconf_images_limits');
 		$this->data['msconf_downloads_limits'] = $this->config->get('msconf_downloads_limits');
 		$this->data['msconf_enable_quantities'] = $this->config->get('msconf_enable_quantities');

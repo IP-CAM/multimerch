@@ -1,5 +1,5 @@
 $(function() {
-	$( ".product_image_files" ).sortable();
+	//$( ".product_image_files" ).sortable();
 
 	$("body").delegate(".ms-price-dynamic", "propertychange input paste focusout", function(){
 		$(".attention.ms-commission span").load($('base').attr('href') + "index.php?route=seller/account-product/jxGetFee&price=" + $(".ms-price-dynamic").val());
@@ -38,46 +38,6 @@ $(function() {
 		$(this).closest('table').find('tbody').append(newRow.removeAttr('class'));
 	});
 	
-	$('body').on('change', "input[name='product_enable_shipping']", function() {
-		if ($(this).val() == 1) {
-            ProductShippingCategories(1)
-			if (!$("input[name='product_quantity']").hasClass("ffUnchangeable")) {
-				$("input[name='product_quantity']").parents("tr").show();
-			}
-			if (typeof msGlobals.downloadsLimitApplication != 'undefined') {
-				if (msGlobals.downloadsLimit > 0 && msGlobals.downloadsLimitApplication == 1) {
-					$("span[name='downloads_required']").hide();
-				}
-			}
-		} else {
-            ProductShippingCategories(0)
-			if (!$("input[name='product_quantity']").hasClass("ffUnchangeable")) {
-				$("input[name='product_quantity']").parents("tr").hide();
-			}
-			if (typeof msGlobals.downloadsLimitApplication != 'undefined') {
-				if (msGlobals.downloadsLimit > 0 && msGlobals.downloadsLimitApplication == 1) {
-					$("span[name='downloads_required']").show();
-				}
-			}
-		}
-	});
-
-
-    function ProductShippingCategories(type)
-    {
-        var product_id  =   $('input[name=product_id]').val();
-
-        $.ajax({
-            type: "POST",
-            url: $('base').attr('href') + 'index.php?route=seller/account-product/jxshippingcategories',
-            data: {'type':type,'product_id':product_id},
-            success: function(out)
-            {
-                $('#product_category_block').html(out);
-            }
-        });
-    }
-
     // Manufacturer
     $('input[name=\'product_manufacturer\']').autocomplete({
         delay: 500,

@@ -166,7 +166,7 @@
 						<select class="form-control" name="product_category">
 							<option value=""><?php echo ''; ?></option>
 							<?php foreach ($categories as $category) { ?>
-                                <?php if($msconf_enable_categories && $msconf_enable_shipping == 2) { ?>
+                                <?php if($msconf_enable_categories && $this->config->get('msship_enable_shipping') == 2) { ?>
                                     <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
                                         <?php if(in_array($category['category_id'],$msconf_physical_product_categories)) { ?>
                                             <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
@@ -184,7 +184,7 @@
 						<div class="scrollbox">
 						<?php $class = 'odd'; ?>
 						<?php foreach ($categories as $category) { ?>
-                            <?php if($msconf_enable_categories && $msconf_enable_shipping == 2) { ?>
+                            <?php if($msconf_enable_categories && $this->config->get('msship_enable_shipping') == 2) { ?>
                                 <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
                                     <?php if(in_array($category['category_id'],$msconf_physical_product_categories)) { ?>
                                         <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
@@ -216,7 +216,7 @@
 					</div>
 				</div>
 
-				<?php if ($msconf_enable_shipping == 2) { ?>
+				<?php if ($this->config->get('msship_enable_shipping') > 0) { ?>
 				<div class="form-group">
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_enable_shipping; ?></label>
 					<div class="col-sm-10">
@@ -230,7 +230,8 @@
 				</div>
 				<?php } ?>
 
-				<div class="form-group" <?php if ($msconf_enable_quantities == 0 || ($msconf_enable_shipping != 1 && $msconf_enable_quantities == 2 && isset($product['shipping']) && $product['shipping'] == 0) || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>style="display: none"<?php } ?>>
+				<?php /* ?>
+				<div class="form-group" <?php if ($msconf_enable_quantities == 0& $msconf_enable_quantities == 2 && isset($product['shipping']) && $product['shipping'] == 0) || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>style="display: none"<?php } ?>>
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_quantity; ?></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" name="product_quantity" value="<?php echo $product['quantity']; ?>" <?php if ($msconf_enable_quantities < 2 || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>class="ffUnchangeable"<?php } ?> />
@@ -238,8 +239,9 @@
 						<p class="error" id="error_product_quantity"></p>
 					</div>
 				</div>
+				<?php */ ?>
 
-
+				<input type="hidden" class="form-control" name="product_quantity" value="5" />
 
 				<?php if (isset($normal_attributes) && !empty($normal_attributes)) { ?>
 				<?php foreach ($normal_attributes as $attr) { ?>
