@@ -29,7 +29,7 @@
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $ms_settings_heading; ?></h3>
       </div>
       <div class="panel-body">
-        <form id="settings" action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-store" class="form-horizontal">
+        <form id="settings" method="post" enctype="multipart/form-data" id="form-store" class="form-horizontal">
                 <ul class="nav nav-tabs" id="tabs">
 			 		<li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
 			 		<li><a href="#tab-productform" data-toggle="tab"><?php echo $ms_config_productform; ?></a></li>

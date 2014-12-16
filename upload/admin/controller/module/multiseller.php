@@ -8,6 +8,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"multiseller/payment",
 		"multiseller/seller",
 		"multiseller/transaction",
+		"multiseller/dashboard",
 		"multiseller/seller-group"
 	);
 	
@@ -299,7 +300,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			),
 			array(
 				'text' => $this->language->get('ms_settings_breadcrumbs'),
-				'href' => $this->url->link('multiseller/settings', '', 'SSL'),
+				'href' => $this->url->link('module/multiseller', '', 'SSL'),
 			)
 		));
 		

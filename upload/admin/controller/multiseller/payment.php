@@ -84,7 +84,9 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 		
 	public function index() {
 		$this->validate(__FUNCTION__);
-		
+
+		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
+
 		// paypal listing payment confirmation
 		if (isset($this->request->post['payment_status']) && strtolower($this->request->post['payment_status']) == 'completed') {
 			$this->data['success'] = $this->language->get('ms_payment_completed');

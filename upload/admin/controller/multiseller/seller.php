@@ -61,7 +61,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 				$result,
 				array(
 					'checkbox' => "<input type='checkbox' name='selected[]' value='{$result['seller_id']}' />",
-					'seller' => "<a href='".$this->url->link('sale/customer/update', 'token=' . $this->session->data['token'] . '&customer_id=' . $result['seller_id'], 'SSL')."'>{$result['c.name']}({$result['ms.nickname']})</a>",
+					'seller' => "<a href='".$this->url->link('sale/customer/edit', 'token=' . $this->session->data['token'] . '&customer_id=' . $result['seller_id'], 'SSL')."'>{$result['c.name']}({$result['ms.nickname']})</a>",
 					'email' => $result['c.email'],
 					'total_earnings' => $this->currency->format($this->MsLoader->MsSeller->getTotalEarnings($result['seller_id']), $this->config->get('config_currency')),
 					'balance' => $this->currency->format($this->MsLoader->MsBalance->getSellerBalance($result['seller_id']), $this->config->get('config_currency')) . '/' . $this->currency->format($available > 0 ? $available : 0, $this->config->get('config_currency')),

@@ -93,6 +93,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	}
 	
 	public function index() {
+		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
 		$this->validate(__FUNCTION__);
 		
 		if (isset($this->session->data['error'])) {
@@ -133,7 +134,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	public function jxProductStatus() {
 		$this->validate(__FUNCTION__);
 		$mails = array();
-		
+
 		if (isset($this->request->post['selected'])) {
 			foreach ($this->request->post['selected'] as $product_id) {
 				$seller = $this->MsLoader->MsSeller->getSeller($this->MsLoader->MsProduct->getSellerId($product_id));

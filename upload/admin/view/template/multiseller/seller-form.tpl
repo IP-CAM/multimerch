@@ -52,7 +52,7 @@
                     <?php } ?>
                 </select>
                 <?php } else { ?>
-                    <a href="<?php echo $this->url->link('sale/customer/update', 'token=' . $this->session->data['token'] . '&customer_id=' . $seller['seller_id'], 'SSL'); ?>"><?php echo $seller['name']; ?></a>
+                    <a href="<?php echo $this->url->link('sale/customer/edit', 'token=' . $this->session->data['token'] . '&customer_id=' . $seller['seller_id'], 'SSL'); ?>"><?php echo $seller['name']; ?></a>
                 <?php } ?>
                 </div>
             </div>

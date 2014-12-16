@@ -39,9 +39,11 @@
 			<?php } ?>
       	</select>
 
+		<!--
 		<div class="checkbox">
     		<label><input type="checkbox" name="bulk_mail" id="bulk_mail"><?php echo $ms_catalog_products_notify_sellers; ?></label>
 		</div>
+		-->
 
 		<button type="button" data-toggle="tooltip" title="" class="btn btn-primary" id="ms-bulk-apply" data-original-title="<?php echo $ms_apply; ?>"><i class="fa fa-fw fa-check"></i></button>
       	</form>
@@ -166,7 +168,7 @@ $(document).ready(function() {
 				dataType: "json",
 				url: 'index.php?route=multiseller/product/jxProductStatus&token=<?php echo $token; ?>',
 				data: data,
-				success: function(jsonData) {
+				complete: function(jsonData) {
 					window.location.reload();
 				}
 			});
