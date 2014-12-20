@@ -36,6 +36,10 @@ class ModelMultisellerUpgrade extends Model {
 			ALTER TABLE `" . DB_PREFIX . "ms_seller` ADD (
 				`banner` VARCHAR(255) DEFAULT NULL)");
 
+			$this->load->model('user/user_group');
+			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'multiseller/addon');
+			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'multiseller/addon');
+
 			$this->_createSchemaEntry('1.0.1.0');
 		}
 

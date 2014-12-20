@@ -98,6 +98,7 @@ $_['ms_menu_attributes'] = 'Attributes';
 $_['ms_menu_products'] = 'Products';
 $_['ms_menu_transactions'] = 'Transactions';
 $_['ms_menu_payment'] = 'Payments';
+$_['ms_menu_addons'] = 'Addons';
 $_['ms_menu_settings'] = 'Settings';
 
 // Settings
