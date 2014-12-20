@@ -25,7 +25,7 @@
 	<form id="ms-new-product" class="form-horizontal" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>" />
 		<input type="hidden" name="action" id="ms_action" />
-		<input type="hidden" name="list_until" value="<?php echo $list_until; ?>" />
+		<input type="hidden" name="list_until" value="<?php echo isset($list_until) ? $list_until : '' ?>" />
 
 		<ul id="general-tabs" class="nav nav-tabs">
 			<li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $ms_account_product_tab_general; ?></a></li>
@@ -216,7 +216,7 @@
 					</div>
 				</div>
 
-				<?php if ($this->config->get('msship_enable_shipping') > 0) { ?>
+				<?php if ($this->config->get('msship_enable_shipping') == 2) { ?>
 				<div class="form-group">
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_enable_shipping; ?></label>
 					<div class="col-sm-10">
@@ -230,8 +230,7 @@
 				</div>
 				<?php } ?>
 
-				<?php /* ?>
-				<div class="form-group" <?php if ($msconf_enable_quantities == 0& $msconf_enable_quantities == 2 && isset($product['shipping']) && $product['shipping'] == 0) || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>style="display: none"<?php } ?>>
+				<div class="form-group" <?php if ($msconf_enable_quantities == 0 || ($this->config->get('msship_enable_shipping') != 1 && $msconf_enable_quantities == 2 && isset($product['shipping']) && $product['shipping'] == 0) || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>style="display: none"<?php } ?>>
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_quantity; ?></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" name="product_quantity" value="<?php echo $product['quantity']; ?>" <?php if ($msconf_enable_quantities < 2 || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>class="ffUnchangeable"<?php } ?> />
@@ -239,7 +238,6 @@
 						<p class="error" id="error_product_quantity"></p>
 					</div>
 				</div>
-				<?php */ ?>
 
 				<input type="hidden" class="form-control" name="product_quantity" value="5" />
 

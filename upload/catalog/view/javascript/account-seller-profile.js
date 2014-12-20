@@ -16,7 +16,7 @@ $(function() {
 			url: $('base').attr('href') + 'index.php?route=seller/account-profile/jxsavesellerinfo',
 			data: $("form#ms-sellerinfo").serialize(),
 			beforeSend: function() {
-				button.hide().before('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
+				button.hide();
 				$('p.error').remove();
 			},
 			complete: function(jqXHR, textStatus) {
@@ -50,7 +50,7 @@ $(function() {
 		});
 	});
 	
-	$("#sellerinfo_avatar_files").delegate(".ms-remove", "click", function() {
+	$("#sellerinfo_avatar_files, #sellerinfo_banner_files").delegate(".ms-remove", "click", function() {
 		$(this).parent().remove();
 	});	
 
@@ -114,7 +114,68 @@ $(function() {
 			}
 		}
 	}).init();
-	
+
+    var bannerUploader = new plupload.Uploader({
+		runtimes : 'gears,html5,flash,silverlight',
+		//runtimes : 'flash',
+		multi_selection:false,
+		browse_button: 'ms-file-sellerbanner',
+		url: $('base').attr('href') + 'index.php?route=seller/account-profile/jxUploadSellerAvatar',
+		flash_swf_url: 'catalog/view/javascript/plupload/plupload.flash.swf',
+		silverlight_xap_url : 'catalog/view/javascript/plupload/plupload.silverlight.xap',
+
+	    multipart_params : {
+			'timestamp' : msGlobals.timestamp,
+			'token'     : msGlobals.token,
+			'session_id': msGlobals.session_id
+	    },
+
+		filters : [
+			//{title : "Image files", extensions : "png,jpg,jpeg"},
+		],
+
+		init : {
+			FilesAdded: function(up, files) {
+				$('#error_sellerinfo_banner').html('');
+				up.start();
+			},
+
+			FileUploaded: function(up, file, info) {
+				try {
+   					data = $.parseJSON(info.response);
+				} catch(e) {
+					data = []; data.errors = []; data.errors.push(msGlobals.uploadError);
+				}
+
+				if (!$.isEmptyObject(data.errors)) {
+					var errorText = '';
+					for (var i = 0; i < data.errors.length; i++) {
+						errorText += data.errors[i] + '<br />';
+					}
+					$('#error_sellerinfo_banner').append(errorText).hide().fadeIn(2000);
+				}
+
+				if (!$.isEmptyObject(data.files)) {
+					for (var i = 0; i < data.files.length; i++) {
+						$("#sellerinfo_banner_files").html(
+						'<div class="ms-image">' +
+						'<input type="hidden" value="'+data.files[i].name+'" name="seller[banner_name]" />' +
+						'<img src="'+data.files[i].thumb+'" />' +
+						'<span class="ms-remove"></span>' +
+						'</div>').children(':last').hide().fadeIn(2000);
+					}
+				}
+
+				up.stop();
+			},
+
+			Error: function(up, args) {
+				$('#error_sellerinfo_banner').append(msGlobals.uploadError).hide().fadeIn(2000);
+				console.log('[error] ', args);
+			}
+		}
+	}).init();
+
 	if (msGlobals.config_enable_rte == 1) {
 		CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
 		CKEDITOR.replaceClass = 'ckeditor';

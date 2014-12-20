@@ -68,6 +68,7 @@ class ModelMultisellerInstall extends Model {
 		`country_id` INT(11) NOT NULL DEFAULT '0',
 		`zone_id` INT(11) NOT NULL DEFAULT '0',
 		`avatar` VARCHAR(255) DEFAULT NULL,
+		`banner` VARCHAR(255) DEFAULT NULL,
 		`paypal` VARCHAR(255) DEFAULT NULL,
 		`date_created` DATETIME NOT NULL,
 		`seller_status` TINYINT NOT NULL,

@@ -75,12 +75,9 @@ final class MsSeller extends Model {
 	}
 		
 	public function createSeller($data) {
-		if (isset($data['avatar_name'])) {
-			$avatar = $this->MsLoader->MsFile->moveImage($data['avatar_name']);
-		} else {
-			$avatar = '';
-		}
-		
+		$avatar = isset($data['avatar_name']) ? $this->MsLoader->MsFile->moveImage($data['avatar_name']) : '';
+		$banner = isset($data['banner_name']) ? $this->MsLoader->MsFile->moveImage($data['banner_name']) : '';
+
 		if (isset($data['commission']))
 			$commission_id = $this->MsLoader->MsCommission->createCommission($data['commission']);
 		
@@ -98,6 +95,7 @@ final class MsSeller extends Model {
 					product_validation = " . (int)$data['product_validation'] . ",
 					paypal = '" . $this->db->escape($data['paypal']) . "',
 					avatar = '" . $this->db->escape($avatar) . "',
+					banner = '" . $this->db->escape($banner) . "',
 					date_created = NOW()";
 
 		$this->db->query($sql);
@@ -143,6 +141,22 @@ final class MsSeller extends Model {
 			$avatar = '';
 		}
 
+		$old_banner = $this->getSellerBanner($seller_id);
+
+		if (!isset($data['banner_name']) || ($old_banner['banner'] != $data['banner_name'])) {
+			$this->MsLoader->MsFile->deleteImage($old_banner['banner']);
+		}
+
+		if (isset($data['banner_name'])) {
+			if ($old_banner['banner'] != $data['banner_name']) {
+				$banner = $this->MsLoader->MsFile->moveImage($data['banner_name']);
+			} else {
+				$banner = $old_banner['banner'];
+			}
+		} else {
+			$banner = '';
+		}
+
 		$sql = "UPDATE " . DB_PREFIX . "ms_seller
 				SET description = '" . $this->db->escape($data['description']) . "',
 					company = '" . $this->db->escape($data['company']) . "',
@@ -152,6 +166,7 @@ final class MsSeller extends Model {
 					. (isset($data['status']) ? "seller_status=  " .  (int)$data['status'] . "," : '')
 					. (isset($data['approved']) ? "seller_approved=  " .  (int)$data['approved'] . "," : '')
 					. "paypal = '" . $this->db->escape($data['paypal']) . "',
+					banner = '" . $this->db->escape($banner) . "',
 					avatar = '" . $this->db->escape($avatar) . "'
 				WHERE seller_id = " . (int)$seller_id;
 		
@@ -174,7 +189,13 @@ final class MsSeller extends Model {
 		$query = $this->db->query("SELECT avatar as avatar FROM " . DB_PREFIX . "ms_seller WHERE seller_id = '" . (int)$seller_id . "'");
 		
 		return $query->row;
-	}		
+	}
+
+	public function getSellerBanner($seller_id) {
+		$query = $this->db->query("SELECT banner as banner FROM " . DB_PREFIX . "ms_seller WHERE seller_id = '" . (int)$seller_id . "'");
+
+		return $query->row;
+	}
 		
   	public function getNickname() {
   		return $this->nickname;
@@ -190,10 +211,6 @@ final class MsSeller extends Model {
 
   	public function getDescription() {
   		return $this->description;
-  	}
-  	
-  	public function getAvatarPath() {
-  		return $this->avatar;
   	}
   	
   	public function getStatus() {
@@ -295,6 +312,7 @@ final class MsSeller extends Model {
 						ms.date_created as 'ms.date_created',
 						ms.product_validation as 'ms.product_validation',
 						ms.avatar as 'ms.avatar',
+						ms.banner as 'banner',
 						ms.country_id as 'ms.country_id',
 						ms.zone_id as 'ms.zone_id',
 						ms.description as 'ms.description',
@@ -378,6 +396,7 @@ final class MsSeller extends Model {
 					ms.seller_approved as 'ms.seller_approved',
 					ms.date_created as 'ms.date_created',
 					ms.avatar as 'ms.avatar',
+					ms.banner as 'banner',
 					ms.country_id as 'ms.country_id',
 					ms.zone_id as 'ms.zone_id',
 					ms.description as 'ms.description',

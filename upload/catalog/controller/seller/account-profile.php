@@ -105,6 +105,14 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 		}
 
+		if ($this->config->get('msconf_enable_seller_banner')) {
+			if (isset($data['seller']['banner_name']) && !empty($data['seller']['banner_name'])) {
+				if ($this->config->get('msconf_banners_for_sellers') == 0 && !$this->MsLoader->MsFile->checkFileAgainstSession($data['seller']['banner_name'])) {
+					$json['errors']['seller[banner]'] = $this->language->get('ms_error_file_upload_error');
+				}
+			}
+		}
+
 		// strip disallowed tags in description
 		if ($this->config->get('msconf_enable_rte')) {
 			if ($this->config->get('msconf_rte_whitelist') != '') {
@@ -374,6 +382,14 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				$this->data['seller']['avatar']['name'] = $seller['ms.avatar'];
 				$this->data['seller']['avatar']['thumb'] = $this->MsLoader->MsFile->resizeImage($seller['ms.avatar'], $this->config->get('msconf_preview_seller_avatar_image_width'), $this->config->get('msconf_preview_seller_avatar_image_height'));
 				$this->session->data['multiseller']['files'][] = $seller['ms.avatar'];
+			}
+
+			if ($this->config->get('msconf_enable_seller_banner')) {
+				if (!empty($seller['banner'])) {
+					$this->data['seller']['banner']['name'] = $seller['banner'];
+					$this->data['seller']['banner']['thumb'] = $this->MsLoader->MsFile->resizeImage($seller['banner'], $this->config->get('msconf_product_seller_banner_width'), $this->config->get('msconf_product_seller_banner_height'));
+					$this->session->data['multiseller']['files'][] = $seller['banner'];
+				}
 			}
 
 			$this->data['statustext'] = $this->language->get('ms_account_status') . $this->language->get('ms_seller_status_' . $seller['ms.seller_status']);

@@ -23,7 +23,7 @@
 
 	<div class="overview col-md-2">
 		<h3><?php echo $ms_account_dashboard_overview; ?></h3>
-		<img src="<?php echo $seller['avatar']; ?>" /><br />
+		<a href="<?php echo $this->url->link('seller/catalog-seller/profile', 'seller_id=' . $seller['seller_id']); ?>"><img src="<?php echo $seller['avatar']; ?>" /></a><br />
 		<span class="nickname"><?php echo $seller['ms.nickname']; ?></span>
 		<p><span><?php echo $ms_date_created; ?>:</span> <span><?php echo $seller['date_created']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_seller_group; ?>:</span> <span><?php echo $seller['seller_group']; ?></span></p>

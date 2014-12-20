@@ -123,6 +123,9 @@ $_['ms_config_disable_product_after_quantity_depleted_note'] = 'The product will
 $_['ms_config_allow_relisting'] = 'Allow re-listing disabled products';
 $_['ms_config_allow_relisting_note'] = 'Sellers will be able to re-list the products, which have been disabled (useful if you use product limitation by period or quantity in combination with listing fees)';
 
+$_['ms_config_enable_banner'] = 'Enable seller banners';
+$_['ms_config_enable_banner_note'] = 'Allow sellers to upload a banner that will be displayed on their profile page';
+
 $_['ms_config_enable_one_page_seller_registration'] = 'One-page registration';
 $_['ms_config_enable_one_page_seller_registration_note'] = 'Enable seller one-page registration';
 

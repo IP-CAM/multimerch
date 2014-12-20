@@ -121,6 +121,30 @@
 			</div>
 		</div>
 
+		<?php if ($this->config->get('msconf_enable_seller_banner')) { ?>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_banner; ?></label>
+			<div class="col-sm-10">
+				<div class="buttons">
+					<a name="ms-file-sellerbanner" id="ms-file-sellerbanner" class="btn btn-primary"><span><?php echo $ms_button_select_image; ?></span></a>
+				</div>
+
+				<p class="ms-note"><?php echo $ms_account_sellerinfo_banner_note; ?></p>
+				<p class="error" id="error_sellerinfo_banner"></p>
+
+				<div id="sellerinfo_banner_files">
+				<?php if (!empty($seller['banner'])) { ?>
+					<div class="ms-image">
+						<input type="hidden" name="seller[banner_name]" value="<?php echo $seller['banner']['name']; ?>" />
+						<img src="<?php echo $seller['banner']['thumb']; ?>" />
+						<span class="ms-remove"></span>
+					</div>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+
 		<?php if ($ms_account_sellerinfo_terms_note) { ?>
 		<div class="form-group required">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_terms; ?></label>
