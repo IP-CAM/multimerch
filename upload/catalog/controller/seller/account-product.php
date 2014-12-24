@@ -1083,12 +1083,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 		$this->document->addScript('catalog/view/javascript/account-product-form.js');
 		$this->document->addScript('catalog/view/javascript/multimerch/account-product-form-options.js');
-		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
+		$this->document->addScript('https://rawgit.com/RubaXa/Sortable/master/Sortable.js');
 
-
-		// ckeditor
-		if($this->config->get('msconf_enable_rte'))
-			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
+		// rte
+		if($this->config->get('msconf_enable_rte')) {
+			$this->document->addScript('catalog/view/javascript/multimerch/summernote/summernote.js');
+			$this->document->addStyle('catalog/view/javascript/multimerch/summernote/summernote.css');
+		}
 
 		$this->data['seller'] = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 		$this->data['seller_group'] = $this->MsLoader->MsSellerGroup->getSellerGroup($this->data['seller']['ms.seller_group']);

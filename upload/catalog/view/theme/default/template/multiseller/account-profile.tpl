@@ -54,7 +54,7 @@
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_description; ?></label>
 			<div class="col-sm-10">
 				<!-- todo strip tags if rte disabled -->
-				<textarea name="seller[description]" id="seller_textarea" class="form-control" <?php echo $this->config->get('msconf_enable_rte') ? "ckeditor" : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($seller['ms.description']) : strip_tags(htmlspecialchars_decode($seller['ms.description'])); ?></textarea>
+				<textarea name="seller[description]" id="seller_textarea" class="form-control <?php echo $this->config->get('msconf_enable_rte') ? 'ckeditor' : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($seller['ms.description']) : strip_tags(htmlspecialchars_decode($seller['ms.description'])); ?></textarea>
 				<p class="ms-note"><?php echo $ms_account_sellerinfo_description_note; ?></p>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 $(function() {
 	//$( ".product_image_files" ).sortable();
+    new Sortable($( ".product_image_files" )[0]);
 
 	$("body").delegate(".ms-price-dynamic", "propertychange input paste focusout", function(){
 		$(".attention.ms-commission span").load($('base').attr('href') + "index.php?route=seller/account-product/jxGetFee&price=" + $(".ms-price-dynamic").val());
@@ -81,12 +82,6 @@ $(function() {
 		var button = $(this);
 		var url = 'jxsubmitproduct';
 		
-		if (msGlobals.config_enable_rte == 1) {
-			for (instance in CKEDITOR.instances) {
-				CKEDITOR.instances[instance].updateElement();
-			}
-		}
-		
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -166,15 +161,14 @@ $(function() {
 			},
 			
 			UploadProgress: function(up, file) {
-				$("#"+file.id).progressbar("value", file.percent);
-				$("#"+file.id + ' div.label').text("Uploading " + file.name + ": " + file.percent + "%");
+				$("#"+file.id).attr("aria-valuenow", file.percent);
+                $("#"+file.id).width(file.percent + '%');
+                $("#"+file.id).html(file.percent + '%');
 			},
 
 			FilesAdded: function(up, files) {
 				plupload.each(files, function(file) {
-					$('<div id="'+file.id+'"><div class="label"></div></div>').appendTo("."+up.id+".progress").progressbar({
-						value: 0
-					});
+                    $('<div id="'+file.id+'" class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>').appendTo("."+up.id+".progress").show();
 				});
 				
 				$("."+up.id+".error").html('');
@@ -200,7 +194,7 @@ $(function() {
 		
 		init : {
 			FileUploaded: function(up, file, info) {
-				$("#"+file.id).fadeOut(500, function() { $(this).progressbar("destroy"); $(this).remove(); });
+				$("#"+file.id).fadeOut(500, function() { $(this).html("").remove(); });
 				
 				try {
 					data = $.parseJSON(info.response);
@@ -347,7 +341,6 @@ $(function() {
 	});
 	
 	if (msGlobals.config_enable_rte == 1) {
-		CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
-		CKEDITOR.replaceClass = 'ckeditor';
+        $('.ckeditor').summernote({height: 300});
 	}
 });

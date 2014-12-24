@@ -4,12 +4,6 @@ $(function() {
 		var button = $(this);
 		var id = $(this).attr('id');
 		
-		if (msGlobals.config_enable_rte == 1) {
-			for (instance in CKEDITOR.instances) {
-				CKEDITOR.instances[instance].updateElement();
-			}
-		}
-		
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -177,8 +171,7 @@ $(function() {
 	}).init();
 
 	if (msGlobals.config_enable_rte == 1) {
-		CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
-		CKEDITOR.replaceClass = 'ckeditor';
+		$('.ckeditor').summernote({height: 300});
 	}
 
     $("select[name='seller[country]']").on('change', function() {

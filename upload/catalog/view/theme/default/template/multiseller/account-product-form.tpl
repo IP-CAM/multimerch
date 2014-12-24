@@ -81,7 +81,7 @@
 						<label class="col-sm-2 control-label"><?php echo $ms_account_product_description; ?></label>
 						<div class="col-sm-10">
 							<!-- todo strip tags if rte disabled -->
-							<textarea class="form-control"  name="languages[<?php echo $langId; ?>][product_description]" class="<?php echo $this->config->get('msconf_enable_rte') ? "ckeditor" : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($product['languages'][$langId]['description']) : strip_tags(htmlspecialchars_decode($product['languages'][$langId]['description'])); ?></textarea>
+							<textarea name="languages[<?php echo $langId; ?>][product_description]" class="form-control <?php echo $this->config->get('msconf_enable_rte') ? 'ckeditor' : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($product['languages'][$langId]['description']) : strip_tags(htmlspecialchars_decode($product['languages'][$langId]['description'])); ?></textarea>
 							<p class="ms-note"><?php echo $ms_account_product_description_note; ?></p>
 							<p class="error" id="error_product_description_<?php echo $langId; ?>"></p>
 						</div>
@@ -338,7 +338,9 @@
 						<a name="ms-file-addimages" id="ms-file-addimages" class="btn btn-primary"><span><?php echo $ms_button_select_images; ?></span></a>
 						<p class="ms-note"><?php echo $ms_account_product_image_note; ?></p>
 						<div class="error" id="error_product_image"></div>
+
 						<div class="image progress"></div>
+
 						<div class="product_image_files">
 						<?php if (isset($product['images'])) { ?>
 						<?php $i = 0; ?>

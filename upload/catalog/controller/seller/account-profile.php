@@ -349,9 +349,11 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 
-		// ckeditor
-		if($this->config->get('msconf_enable_rte'))
-			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
+		// rte
+		if($this->config->get('msconf_enable_rte')) {
+			$this->document->addScript('catalog/view/javascript/multimerch/summernote/summernote.js');
+			$this->document->addStyle('catalog/view/javascript/multimerch/summernote/summernote.css');
+		}
 
 		$this->load->model('localisation/country');
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
