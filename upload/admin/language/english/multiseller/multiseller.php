@@ -241,6 +241,7 @@ $_['ms_config_seller_avatar_image_size_seller_profile'] = 'Seller profile';
 $_['ms_config_seller_avatar_image_size_seller_list'] = 'Seller list';
 $_['ms_config_seller_avatar_image_size_product_page'] = 'Product page';
 $_['ms_config_seller_avatar_image_size_seller_dashboard'] = 'Seller dashboard';
+$_['ms_config_seller_banner_size'] = 'Seller banner size';
 
 $_['ms_config_image_preview_size'] = 'Image preview size';
 $_['ms_config_image_preview_size_seller_avatar'] = 'Seller avatar';

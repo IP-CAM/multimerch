@@ -24,12 +24,11 @@
         <?php $class = 'col-sm-8'; ?>
         <?php } ?>
 		<div class="<?php echo $class; ?> seller-data">
+			<?php if ($this->config->get('msconf_enable_seller_banner') && isset($seller['banner'])) { ?>
 			<ul class="thumbnails seller-banner">
-				<?php if ($seller['thumb']) { ?>
-					<li><a class="thumbnail" title="<?php echo $seller['nickname']; ?>"><img src="<?php echo $seller['thumb']; ?>" title="<?php echo $seller['nickname']; ?>" alt="<?php echo $seller['nickname']; ?>" /></a></li>
-				<?php } ?>
+					<li><a class="thumbnail"><img src="<?php echo $seller['banner']; ?>" title="<?php echo $seller['nickname']; ?>" alt="<?php echo $seller['nickname']; ?>" /></a></li>
 			</ul>
-
+			<?php } ?>
 			<div class="seller-description"><?php echo $seller['description']; ?></div>
 
 			<?php if ($seller['products']) { ?>

@@ -401,6 +401,16 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-2 control-label"><?php echo $ms_config_seller_banner_size; ?></label>
+						<div class="col-sm-10 control-inline control-label">
+                            <div class="row">
+							<span class="col-sm-2"></span>
+							<span class="col-sm-3"><input class="form-control" type="text" name="msconf_product_seller_banner_width" value="<?php echo $msconf_product_seller_banner_width; ?>" size="3" /> x <input class="form-control" type="text" name="msconf_product_seller_banner_height" value="<?php echo $msconf_product_seller_banner_height; ?>" size="3" /></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 control-label"><?php echo $ms_config_image_preview_size; ?></label>
 						<div class="col-sm-10 control-inline control-label">
                             <div class="row">
