@@ -377,7 +377,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 					break;
 			}
 
-			$this->data['seller'] = $seller;
+			$this->data['seller'] = $seller; unset($this->data['seller']['banner']);
 			$this->data['country_id'] = $seller['ms.country_id'];
 
 			if (!empty($seller['ms.avatar'])) {

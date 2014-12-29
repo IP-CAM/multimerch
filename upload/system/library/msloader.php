@@ -22,6 +22,11 @@ class MsLoader {
 	 	$file = DIR_SYSTEM . 'library/' . strtolower($class) . '.php';
 		if (file_exists($file)) {
 			require_once(VQMod::modCheck($file));
+		} else {
+			$file = DIR_SYSTEM . 'library/multimerch/' . strtolower($class) . '.php';
+			if (file_exists($file)) {
+				require_once(VQMod::modCheck($file));
+			}
 		}
 	}
 
