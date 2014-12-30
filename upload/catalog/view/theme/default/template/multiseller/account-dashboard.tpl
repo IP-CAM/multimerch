@@ -20,7 +20,7 @@
     <?php } ?>
     <div id="content" class="<?php echo $class; ?> ms-account-dashboard"><?php echo $content_top; ?>
     <h1><?php echo $ms_account_dashboard_heading; ?></h1>
-
+    <div class="row">
 	<div class="overview col-md-2">
 		<h3><?php echo $ms_account_dashboard_overview; ?></h3>
 		<a href="<?php echo $this->url->link('seller/catalog-seller/profile', 'seller_id=' . $seller['seller_id']); ?>"><img src="<?php echo $seller['avatar']; ?>" /></a><br />
@@ -104,6 +104,7 @@
 			<span><?php echo $ms_account_stats; ?></span>
 		</a>
 	</div>
+    </div>
 
 	<h2><?php echo $ms_account_dashboard_orders; ?></h2>
 	<table class="list table table-bordered">
