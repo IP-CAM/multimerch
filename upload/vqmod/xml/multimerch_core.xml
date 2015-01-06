@@ -64,7 +64,7 @@
 				$this->MsLoader->MsHelper->addStyle('multiseller');
 				
 				// note: renamed catalog
-				$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_language') . ".txt";
+				$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_language') . ".lng";
 				$data['dt_language'] = file_exists(DIR_APPLICATION . $lang) ? "'catalog/$lang'" : "undefined";
 
 				// Add complemented common.js
