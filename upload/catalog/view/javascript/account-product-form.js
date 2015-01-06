@@ -341,6 +341,16 @@ $(function() {
 	});
 	
 	if (msGlobals.config_enable_rte == 1) {
-        $('.ckeditor').summernote({height: 300});
-	}
+        $('.ckeditor').each(function () {
+            var $textArea = $(this);
+
+            $textArea.summernote({
+                onkeyup: function (e) {
+                    $textArea.val($(this).code());
+                    $textArea.change();
+                },
+                height: 300
+            });
+        });
+    }
 });
