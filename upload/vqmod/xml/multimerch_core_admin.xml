@@ -80,7 +80,7 @@
 			]]></search>
 			<add><![CDATA[
 			$data = array_merge(isset($data) ? $data : array(), $this->load->language('multiseller/multiseller'));
-			$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_admin_language') . ".txt";
+			$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_admin_language') . ".lng";
 			$data['dt_language'] = file_exists(DIR_APPLICATION . $lang) ? "'$lang'" : "undefined";
 			]]></add>
 		</operation>
