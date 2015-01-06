@@ -26,6 +26,7 @@ $_['ms_by'] = 'by';
 $_['ms_action'] = 'Action';
 $_['ms_sender'] = 'Sender';
 $_['ms_message'] = 'Message';
+$_['ms_none'] = 'None';
 
 
 $_['ms_date_created'] = 'Date created';

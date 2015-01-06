@@ -41,31 +41,28 @@ $(function() {
 	
     // Manufacturer
     $('input[name=\'product_manufacturer\']').autocomplete({
-        delay: 500,
-        source: function(request, response) {
+        'source': function(request, response) {
             $.ajax({
-                type: "POST",
+                url: $('base').attr('href') + 'index.php?route=seller/account-product/jxautocomplete&filter_name=' +  encodeURIComponent(request),
                 dataType: 'json',
-                url: $('base').attr('href') + 'index.php?route=seller/account-product/jxautocomplete',
-                data: {'type':'manufacturers', 'filter_name': encodeURIComponent(request.term)},
                 success: function(json) {
+                    json.unshift({
+                        manufacturer_id: 0,
+                        name: msGlobals.text_none
+                    });
+
                     response($.map(json, function(item) {
                         return {
-                            label: item.name,
-                            value: item.manufacturer_id
+                            label: item['name'],
+                            value: item['manufacturer_id']
                         }
                     }));
                 }
             });
         },
-        select: function(event, ui) {
-            $('input[name=\'product_manufacturer\']').attr('value', ui.item.label);
-            $('input[name=\'product_manufacturer_id\']').attr('value', ui.item.value);
-
-            return false;
-        },
-        focus: function(event, ui) {
-            return false;
+        'select': function(item) {
+            $('input[name=\'product_manufacturer\']').val(item.label);
+            $('input[name=\'product_manufacturer_id\']').val(item.value);
         }
     });
 

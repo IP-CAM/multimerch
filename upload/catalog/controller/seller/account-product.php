@@ -975,40 +975,38 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 	}	
 	
 	public function jxAutocomplete() {
-        $data = $this->request->post;
-        $json = array();
+		$json = array();
 
-        switch($data['type']){
-            case 'manufacturers':
-                if (isset($data['filter_name'])) {
-                    $data = array(
-                        'filter_name' => $data['filter_name'],
-                        'start'       => 0,
-                        'limit'       => 20
-                    );
-					
-					$this->load->model('catalog/manufacturer');
-					$results = $this->model_catalog_manufacturer->getManufacturers($data);
+		if (isset($this->request->get['filter_name'])) {
+			$this->load->model('catalog/manufacturer');
 
-                    foreach ($results as $result) {
-                        $json[] = array(
-                            'manufacturer_id' => $result['manufacturer_id'],
-                            'name'            => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))
-                        );
-                    }
-                }
-        }
+			$filter_data = array(
+				'filter_name' => $this->request->get['filter_name'],
+				'start' => 0,
+				'limit' => 5
+			);
 
-        $sort_order = array();
+			$results = $this->model_catalog_manufacturer->getManufacturers($filter_data);
 
-        foreach ($json as $key => $value) {
-            $sort_order[$key] = $value['name'];
-        }
+			foreach ($results as $result) {
+				$json[] = array(
+					'manufacturer_id' => $result['manufacturer_id'],
+					'name' => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))
+				);
+			}
+		}
 
-        array_multisort($sort_order, SORT_ASC, $json);
+		$sort_order = array();
 
-        $this->response->setOutput(json_encode($json));
-    }
+		foreach ($json as $key => $value) {
+			$sort_order[$key] = $value['name'];
+		}
+
+		array_multisort($sort_order, SORT_ASC, $json);
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
 
     public function jxShippingCategories()
     {
