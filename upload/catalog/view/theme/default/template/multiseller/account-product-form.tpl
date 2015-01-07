@@ -52,11 +52,11 @@
 		<div class="tab-content ms-product">
      	<div id="tab-general" class="tab-pane active">
      		<?php if (count($languages) > 1) { ?>
-			<div class="nav nav-tabs" id="language-tabs">
+			<ul class="nav nav-tabs" id="language-tabs">
 				<?php foreach ($languages as $language) { ?>
 				<li><a class="lang" data-toggle="tab" href="#language<?php echo $language['language_id']; ?>"><img src="image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
 				<?php } ?>
-			</div>
+			</ul>
 			<?php } ?>
 			
 			<?php
