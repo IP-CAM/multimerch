@@ -406,8 +406,8 @@
 						<p class="error" id="error_product_message"></p>
 					</div>
 				</div>
-				<?php } ?>
 			</fieldset>
+			<?php } ?>
 		</div>
 
         <!-- data tab -->
