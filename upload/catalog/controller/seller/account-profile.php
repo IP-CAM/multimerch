@@ -361,7 +361,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 		$seller = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 
 		$this->data['salt'] = $this->MsLoader->MsSeller->getSalt($this->customer->getId());
-		$this->data['statusclass'] = 'attention';
+		$this->data['statusclass'] = 'warning';
 
 		if ($seller) {
 			switch ($seller['ms.seller_status']) {

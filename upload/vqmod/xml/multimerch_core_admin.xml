@@ -92,6 +92,16 @@
 				</header>
 			]]></search>
 			<add><![CDATA[
+                <?php if (class_exists('ControllerMultisellerBase')) { ?>
+                <div class="alert alert-warning" style="margin: 10px auto; width: 90%;"><i class="fa fa-exclamation-circle"></i> MultiMerch Core Class not found. Before proceeding with the installation, please make sure that:
+                    <ul>
+                        <li>You're <a target="_blank" href="http://multimerch.com/docs/installation/">following the MultiMerch installation guide</a> and all MultiMerch files have been uploaded correctly.</li>
+                        <li>vQmod is <a target="_blank" href="https://github.com/vqmod/vqmod/wiki/Installing-vQmod-on-OpenCart">installed and configured correctly</a> and vQmod installation script at <a target="_blank" href="<?php echo HTTP_CATALOG; ?>vqmod/install/"><?php echo HTTP_CATALOG; ?>vqmod/install/</a> has been run.</li>
+                        <li>Your server has write permissions on vQmod folders.</li>
+                    </ul>
+                </div>
+				<?php } ?>
+
 				<?php $this->load->model('multiseller/upgrade'); ?>
 			
 				<?php if ($this->MsLoader->MsHelper->isInstalled() && !$this->model_multiseller_upgrade->isDbLatest()) { ?>
