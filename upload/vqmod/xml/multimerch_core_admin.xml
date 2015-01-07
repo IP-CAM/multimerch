@@ -92,7 +92,7 @@
 				</header>
 			]]></search>
 			<add><![CDATA[
-                <?php if (class_exists('ControllerMultisellerBase')) { ?>
+                <?php if (!class_exists('ControllerMultisellerBase')) { ?>
                 <div class="alert alert-warning" style="margin: 10px auto; width: 90%;"><i class="fa fa-exclamation-circle"></i> MultiMerch Core Class not found. Before proceeding with the installation, please make sure that:
                     <ul>
                         <li>You're <a target="_blank" href="http://multimerch.com/docs/installation/">following the MultiMerch installation guide</a> and all MultiMerch files have been uploaded correctly.</li>
