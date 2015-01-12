@@ -262,16 +262,16 @@ class ModelMultisellerInstall extends Model {
 		}
 	
 		// multimerch routes
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller Account'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Seller Account Pages'");
 		$layout_id = $this->db->getLastId();
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/account'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller List'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/account-%'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Sellers List'");
 		$layout_id = $this->db->getLastId();
 		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/catalog-seller'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller Profile'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Seller Profile Page'");
 		$layout_id = $this->db->getLastId();
 		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/catalog-seller/profile'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller Products'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Seller Products List'");
 		$layout_id = $this->db->getLastId();
 		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/catalog-seller/products'");
 	}
@@ -308,7 +308,7 @@ class ModelMultisellerInstall extends Model {
 		
 		// remove MultiMerch routes
 		$this->db->query("DELETE FROM " . DB_PREFIX . "layout WHERE name = 'MultiMerch Seller Account'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "layout_route WHERE route = 'seller/account'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "layout_route WHERE route = 'seller/account-%'");
 
 		$this->db->query("DELETE FROM " . DB_PREFIX . "layout WHERE name = 'MultiMerch Seller List'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "layout_route WHERE route = 'seller/catalog-seller'");

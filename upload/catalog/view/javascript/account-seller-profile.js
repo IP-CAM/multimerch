@@ -22,17 +22,19 @@ $(function() {
 			},
 			success: function(jsonData) {
 				if (!jQuery.isEmptyObject(jsonData.errors)) {
-					$('#ms-submit-button').show().prev('span.wait').remove();
-					$('.error').text('');
-					for (error in jsonData.errors) {
-						if ($('[name="'+error+'"]').length > 0)
-							$('[name="'+error+'"]').parents('td').append('<p class="error">' + jsonData.errors[error] + '</p>');
-						else if ($('#error_'+error).length > 0)
-							$('#error_'+error).text(jsonData.errors[error]);
-						else
-							$(".warning.main").text(jsonData.errors[error]).show();
-					}
-					window.scrollTo(0,0);
+                    $('#ms-submit-button').show().prev('span.wait').remove();
+                    $('.error').text('');
+
+                    for (error in jsonData.errors) {
+                        if ($('#error_' + error).length > 0) {
+                            $('#error_' + error).text(jsonData.errors[error]);
+                            $('#error_' + error).parents('.form-group').addClass('has-error');
+                        } else if ($('[name="'+error+'"]').length > 0) {
+                            $('[name="' + error + '"]').parents('.form-group').addClass('has-error');
+                            $('[name="' + error + '"]').parents('div:first').append('<p class="error">' + jsonData.errors[error] + '</p>');
+                        } else $(".warning.main").append("<p>" + jsonData.errors[error] + "</p>").show();
+                    }
+                    window.scrollTo(0,0);
 				} else if (!jQuery.isEmptyObject(jsonData.data) && jsonData.data.amount) {
 					$(".ms-payment-form form input[name='custom']").val(jsonData.data.custom);
 					$(".ms-payment-form form input[name='amount']").val(jsonData.data.amount);

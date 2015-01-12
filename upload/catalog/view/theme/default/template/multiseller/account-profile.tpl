@@ -6,16 +6,18 @@
     <?php } ?>
   </ul>
   <?php if (isset($error_warning) && $error_warning) { ?>
-  <div class="alert alert-danger warning main"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?></div>
+  <div class="alert alert-danger warning main"><?php echo $error_warning; ?></div>
   <?php } ?>
 
   <?php if (isset($success) && ($success)) { ?>
-		<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> <?php echo $success; ?></div>
+		<div class="alert alert-success"><?php echo $success; ?></div>
   <?php } ?>
 
     <?php if (isset($statustext) && ($statustext)) { ?>
         <div class="alert alert-<?php echo $statusclass; ?>"><?php echo $statustext; ?></div>
     <?php } ?>
+
+	<?php if(isset($payment_form)) { ?><div class="ms-payment-form"><?php echo $payment_form; ?></div><?php } ?>
 
   <div class="row"><?php echo $column_left; ?>
     <?php if ($column_left && $column_right) { ?>
@@ -168,14 +170,12 @@
 		<?php } ?>
 
 		<?php if (isset($group_commissions) && $group_commissions[MsCommission::RATE_SIGNUP]['flat'] > 0) { ?>
-			<p class="attention ms-commission">
+			<p class="alert alert-warning ms-commission">
 				<?php echo sprintf($this->language->get('ms_account_sellerinfo_fee_flat'),$this->currency->format($group_commissions[MsCommission::RATE_SIGNUP]['flat'], $this->config->get('config_currency')), $this->config->get('config_name')); ?>
 				<?php echo $ms_commission_payment_type; ?>
 			</p>
-			
-			<?php if(isset($payment_form)) { ?><div class="ms-payment-form"><?php echo $payment_form; ?></div><?php } ?>
 		<?php } ?>
-		
+
 		<div class="buttons">
 			<div class="pull-left"><a href="<?php echo $link_back; ?>" class="btn btn-default"><span><?php echo $button_back; ?></span></a></div>
 			<?php if ($seller['ms.seller_status'] != MsSeller::STATUS_DISABLED && $seller['ms.seller_status'] != MsSeller::STATUS_DELETED) { ?>
