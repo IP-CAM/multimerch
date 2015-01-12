@@ -17,8 +17,6 @@
         <div class="alert alert-<?php echo $statusclass; ?>"><?php echo $statustext; ?></div>
     <?php } ?>
 
-	<?php if(isset($payment_form)) { ?><div class="ms-payment-form"><?php echo $payment_form; ?></div><?php } ?>
-
   <div class="row"><?php echo $column_left; ?>
     <?php if ($column_left && $column_right) { ?>
     <?php $class = 'col-sm-6'; ?>
@@ -168,12 +166,15 @@
 			</div>
 		</div>
 		<?php } ?>
+	</form>
 
 		<?php if (isset($group_commissions) && $group_commissions[MsCommission::RATE_SIGNUP]['flat'] > 0) { ?>
 			<p class="alert alert-warning ms-commission">
 				<?php echo sprintf($this->language->get('ms_account_sellerinfo_fee_flat'),$this->currency->format($group_commissions[MsCommission::RATE_SIGNUP]['flat'], $this->config->get('config_currency')), $this->config->get('config_name')); ?>
 				<?php echo $ms_commission_payment_type; ?>
 			</p>
+
+			<?php if(isset($payment_form)) { ?><div class="ms-payment-form"><?php echo $payment_form; ?></div><?php } ?>
 		<?php } ?>
 
 		<div class="buttons">
@@ -182,7 +183,6 @@
 			<div class="pull-right"><a class="btn btn-primary" id="ms-submit-button"><span><?php echo $ms_button_save; ?></span></a></div>
 			<?php } ?>
 		</div>
-	</form>
     <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
 </div>
