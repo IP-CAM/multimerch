@@ -136,15 +136,8 @@ class MsMail extends Model {
 
 		//$message .= sprintf($this->language->get('ms_mail_regards'), HTTP_SERVER) . "\n" . $this->config->get('config_name');
 
-		$mail = new Mail();
-		$mail->protocol = $this->config->get('config_mail_protocol');
-		$mail->parameter = $this->config->get('config_mail_parameter');
-		$mail->hostname = $this->config->get('config_smtp_host');
-		$mail->username = $this->config->get('config_smtp_username');
-		$mail->password = $this->config->get('config_smtp_password');
-		$mail->port = $this->config->get('config_smtp_port');
-		$mail->timeout = $this->config->get('config_smtp_timeout');
-		
+		$mail = new Mail($this->config->get('config_mail'));
+
 		if (!isset($data['recipients'])) {
 			$mail->setTo($this->_getRecipients($mail_type));
 		} else {
