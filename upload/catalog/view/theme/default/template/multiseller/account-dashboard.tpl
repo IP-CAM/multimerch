@@ -31,7 +31,7 @@
 			<span><?php echo $ms_account_dashboard_listing; ?>:</span>
 			
 			<span>
-			<?php echo $this->currency->getSymbolLeft(); ?><?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_LISTING]['flat'], $this->config->get('config_currency'), '', FALSE) : '0' ?><?php echo $this->currency->getSymbolRight(); ?>
+			<?php echo $this->currency->format(isset($seller['commission_rates'][MsCommission::RATE_LISTING]['flat']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['flat'] : 0, $this->config->get('config_currency')); ?>
 			+ <?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['percent']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['percent'] : '0'; ?>%
 			</span>
 		</p>
@@ -40,7 +40,7 @@
 			<span><?php echo $ms_account_dashboard_sale; ?>:</span>
 			
 			<span>
-			<?php echo $this->currency->getSymbolLeft(); ?><?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_SALE]['flat'], $this->config->get('config_currency'), '', FALSE) : '0' ?><?php echo $this->currency->getSymbolRight(); ?>
+			<?php echo $this->currency->format(isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['flat'] : 0, $this->config->get('config_currency')); ?>
 			+ <?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['percent']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['percent'] : '0'; ?>%
 			</span>
 		</p>
@@ -50,7 +50,7 @@
 			
 			<span>
 			<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['percent']) ? 100 - $seller['commission_rates'][MsCommission::RATE_SALE]['percent'] : '100'; ?>% - 
-			<?php echo $this->currency->getSymbolLeft(); ?><?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_SALE]['flat'], $this->config->get('config_currency'), '', FALSE) : '0' ?><?php echo $this->currency->getSymbolRight(); ?>
+			<?php echo $this->currency->format(isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['flat'] : 0, $this->config->get('config_currency')); ?>
 			</span>
 		</p>
 	</div>

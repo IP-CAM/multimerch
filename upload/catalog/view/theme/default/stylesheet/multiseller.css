@@ -1,4 +1,4 @@
-.control-inline input, .control-inline select, .input-auto {
+.control-inline input, .control-inline select, .input-auto, .ms-product input[type='text'].input-auto {
     width: auto;
     display: inline;
 }
