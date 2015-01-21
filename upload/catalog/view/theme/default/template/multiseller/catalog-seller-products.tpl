@@ -100,7 +100,7 @@
         <div class="col-sm-6 text-right"><?php echo $results; ?></div>
       </div>
       <?php } else { ?>
-      <p><?php echo $text_empty; ?></p>
+      <p><?php echo $ms_catalog_seller_products_empty; ?></p>
       <div class="buttons">
         <div class="pull-right"><a href="<?php echo $continue; ?>" class="btn btn-primary"><?php echo $button_continue; ?></a></div>
       </div>
