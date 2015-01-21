@@ -582,10 +582,6 @@ class MsProduct extends Model {
 						
 						$this->db->query("UPDATE " . DB_PREFIX . "download SET filename = '" . $this->db->escape($newFile) . "', mask = '" . $this->db->escape($fileMask) . "' WHERE download_id = '" . (int)$dl['download_id'] . "'");
 						
-						if (isset($data['push_downloads'])) {
-							$this->db->query("UPDATE " . DB_PREFIX . "order_download SET `filename` = '" . $this->db->escape($newFile) . "', mask = '" . $this->db->escape($fileMask) . "', name = '" . $this->db->escape($fileMask) . "' WHERE `filename` = '" . $this->db->escape($old_downloads[$dl['download_id']]['filename']) . "'");
-						}
-						
 						foreach ($data['languages'] as $language_id => $language) {
 							$this->db->query("UPDATE " . DB_PREFIX . "download_description SET name = '" . $this->db->escape($fileMask) . "' WHERE download_id = '" . (int)$dl['download_id'] . "' AND language_id = '" . (int)$language_id . "'");
 						}
@@ -608,13 +604,6 @@ class MsProduct extends Model {
 					
 					foreach ($data['languages'] as $language_id => $language) {
 						$this->db->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', name = '" . $this->db->escape($fileMask) . "', language_id = '" . (int)$language_id . "'");
-					}
-					
-					if (isset($data['push_downloads'])) {
-						$orders = $this->db->query("SELECT order_product_id, order_id FROM " . DB_PREFIX . "order_product WHERE product_id = '"  . (int)$product_id . "'");
-						foreach ($orders->rows as $row) {
-							$this->db->query("INSERT INTO " . DB_PREFIX . "order_download SET order_id = '" . (int)$row['order_id'] . "', order_product_id = '" . (int)$row['order_product_id'] . "', `filename` = '" . $this->db->escape($newFile) . "', mask = '" . $this->db->escape($fileMask) . "', name = '" . $this->db->escape($fileMask) . "'");
-						}
 					}
 				}
 			}

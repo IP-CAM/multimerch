@@ -275,10 +275,6 @@ $(function() {
 				  			'</div>' +
 				  			'</div>');
 					}
-					
-					if (msGlobals.product_id.length > 0) {
-						$("#push_downloads").parent('div').fadeIn(1000);
-					}
 				}
 				
 				if (data.cancel) {
@@ -329,8 +325,6 @@ $(function() {
 						parentContainer.find('.ms-download-name').text(data.fileMask);
 						parentContainer.find('input:hidden[name$="[filename]"]').val(data.fileName);
 						parentContainer.find('.ms-button-download').replaceWith('<span class="ms-button-download disabled"></span>');
-						
-						$("#push_downloads").parent('div').fadeIn(1000);
 					}
 				}
 			}

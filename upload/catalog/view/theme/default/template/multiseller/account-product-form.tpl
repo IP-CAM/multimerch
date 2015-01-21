@@ -384,12 +384,6 @@
 						<?php } ?>
 						<?php } ?>
 						</div>
-
-						<div style="display: none">
-							<input type="checkbox" name="push_downloads" id="push_downloads" />
-							<label><?php echo $ms_account_product_push; ?></label>
-							<p class="ms-note"><?php echo $ms_account_product_push_note; ?></p>
-						</div>
 					</div>
 				</div>
 			</fieldset>
