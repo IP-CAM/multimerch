@@ -43,7 +43,7 @@
 					<h4><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></h4>
 				  </div>
 				  <div class="button-group">
-					<button type="button" class="btn btn-main btn-block"><span><?php echo $ms_view; ?></span></button>
+					<a href="<?php echo $product['href']; ?>"><button type="button" class="btn btn-main btn-block"><span><?php echo $ms_view; ?></span></button></a>
 				  </div>
 				</div>
 			  </div>
