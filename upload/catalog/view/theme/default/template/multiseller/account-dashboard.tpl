@@ -114,10 +114,11 @@
 				<?php if (!$this->config->get('msconf_hide_customer_email')) { ?>
 					<td><?php echo $ms_account_orders_customer; ?></td>
 				<?php } ?>
+				<td><?php echo $ms_status; ?></td>
 				<td style="width: 40%"><?php echo $ms_account_orders_products; ?></td>
 				<td><?php echo $ms_date_created; ?></td>
 				<td><?php echo $ms_account_orders_total; ?></td>
-				<td><?php echo $ms_account_orders_view; ?></td>
+				<td><?php echo $ms_action; ?></td>
 			</tr>
 		</thead>
 		
@@ -129,6 +130,7 @@
 				<?php if (!$this->config->get('msconf_hide_customer_email')) { ?>
 					<td><?php echo $order['customer']; ?></td>
 				<?php } ?>
+				<td><?php echo $order['status']; ?></td>
 				<td class="left products">
 				<?php foreach ($order['products'] as $p) { ?>
 				<p>
@@ -143,7 +145,7 @@
 				</td>
 				<td><?php echo $order['date_created']; ?></td>
 				<td><?php echo $order['total']; ?></td>
-				<td><a href="<?php echo $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']); ?>" class="ms-button ms-button-view"></a></td>
+				<td><a href="<?php echo $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']); ?>" class="ms-button ms-button-view" title="<?php echo $this->language->get('ms_view_modify') ?>"></a></td>
 			</tr>
 			<?php } ?>
 		<?php } else { ?>

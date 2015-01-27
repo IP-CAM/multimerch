@@ -19,6 +19,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"msconf_nickname_rules" => 0, // 0 - alnum, 1 - latin extended, 2 - utf
 		"msconf_credit_order_statuses" => array(5),
 		"msconf_debit_order_statuses" => array(8),
+		"msconf_display_order_statuses" => array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),
 		"msconf_minimum_withdrawal_amount" => "50",
 		"msconf_allow_partial_withdrawal" => 1,
 		
@@ -218,10 +219,13 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		magic*/
 
 		if (!isset($this->request->post['msconf_credit_order_statuses']))
-			$this->request->post['msconf_credit_order_statuses'] = array();
+			$this->request->post['msconf_credit_order_statuses'] = array(-1);
 		
 		if (!isset($this->request->post['msconf_debit_order_statuses']))
-			$this->request->post['msconf_debit_order_statuses'] = array();
+			$this->request->post['msconf_debit_order_statuses'] = array(-1);
+
+		if (!isset($this->request->post['msconf_display_order_statuses']))
+			$this->request->post['msconf_display_order_statuses'] = array(-1);
 		
 		if (!isset($this->request->post['msconf_product_options']))
 			$this->request->post['msconf_product_options'] = array();

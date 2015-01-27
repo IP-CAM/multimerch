@@ -5,6 +5,7 @@
 // **********
 $_['ms_viewinstore'] = 'View in store';
 $_['ms_view'] = 'View';
+$_['ms_view_modify'] = 'View / Modify';
 $_['ms_publish'] = 'Publish';
 $_['ms_unpublish'] = 'Unpublish';
 $_['ms_edit'] = 'Edit';
@@ -543,6 +544,8 @@ $_['ms_account_orders_total'] = 'Total amount';
 $_['ms_account_orders_view'] = 'View order';
 $_['ms_account_orders_noorders'] = 'You don\'t have any orders yet!';
 $_['ms_account_orders_change_status']    = 'Change order status';
+
+$_['ms_account_order_information'] = 'Order Information';
 
 // Account - Dashboard
 $_['ms_account_dashboard_heading'] = 'Seller Dashboard';

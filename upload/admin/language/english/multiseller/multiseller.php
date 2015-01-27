@@ -151,6 +151,9 @@ $_['ms_config_credit_order_statuses_note'] = 'Seller balance will be funded for 
 $_['ms_config_debit_order_statuses'] = 'Charge statuses';
 $_['ms_config_debit_order_statuses_note'] = 'Seller balance will be charged for orders with charge statuses';
 
+$_['ms_config_display_order_statuses'] = 'Display order statuses';
+$_['ms_config_display_order_statuses_note'] = 'Order statuses that aren\'t selected here will not be visible to sellers';
+
 $_['ms_config_minimum_withdrawal'] = 'Minimum payout amount';
 $_['ms_config_minimum_withdrawal_note'] = 'Minimum balance amount required to request payout';
 

@@ -38,7 +38,7 @@ class MsOrderData extends Model {
 		INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 		USING (order_id)
 		WHERE seller_id = " . (int)$data['seller_id']
-		. (isset($data['order_status']) ? " AND o.order_status_id IN  (" .  $this->db->escape(implode(',', $data['order_status'])) . ")" : '')
+		. (isset($data['order_status']) && $data['order_status'] ? " AND o.order_status_id IN  (" .  $this->db->escape(implode(',', $data['order_status'])) . ")" : '')
 		
 		. $wFilters
 		
@@ -191,9 +191,6 @@ class MsOrderData extends Model {
 		$this->db->query($sql);
 		
 		$order_product_data_id = $this->db->getLastId();
-		$log = new Log('error.txt');
-		$log->write("INSERT INTO " . DB_PREFIX . "ms_suborder (order_id, seller_id, order_status_id) VALUES (" . (int)$order_id . ", " . (int)$data['seller_id'] . ", " . (isset($data['order_status_id']) ? (int)$data['order_status_id'] : 1) . ")");
-
 		$this->db->query("INSERT INTO " . DB_PREFIX . "ms_suborder (order_id, seller_id, order_status_id) VALUES (" . (int)$order_id . ", " . (int)$data['seller_id'] . ", " . (isset($data['order_status_id']) ? (int)$data['order_status_id'] : 1) . ")");
 
 		return $order_product_data_id;

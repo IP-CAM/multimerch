@@ -26,22 +26,23 @@
     <?php $class = 'col-sm-12'; ?>
     <?php } ?>
     <div id="content" class="ms-product <?php echo $class; ?> ms-account-profile"><?php echo $content_top; ?>
-    <h1><?php echo $heading_title; ?></h1>
+    <h2><?php echo $ms_account_order_information; ?></h2>
 
-	<table class="list table table-responsive table-bordered">
+	<!-- order information -->
+	<table class="table table-responsive table-bordered table-hover">
 		<thead>
 			<tr>
-				<td class="left" colspan="2"><?php echo $text_order_detail; ?></td>
+				<td colspan="2"><?php echo $text_order_detail; ?></td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left" style="width: 50%;"><?php if ($invoice_no) { ?>
+				<td style="width: 50%;"><?php if ($invoice_no) { ?>
 					<b><?php echo $text_invoice_no; ?></b> <?php echo $invoice_no; ?><br />
 					<?php } ?>
 					<b><?php echo $text_order_id; ?></b> #<?php echo $order_id; ?><br />
 					<b><?php echo $text_date_added; ?></b> <?php echo $date_added; ?></td>
-				<td class="left" style="width: 50%;"><?php if ($payment_method) { ?>
+				<td style="width: 50%;"><?php if ($payment_method) { ?>
 					<b><?php echo $text_payment_method; ?></b> <?php echo $payment_method; ?><br />
 					<?php } ?>
 					<?php if ($shipping_method) { ?>
@@ -50,7 +51,9 @@
 			</tr>
 		</tbody>
 	</table>
-	<table class="list table table-responsive table-bordered">
+
+	<!-- addresses -->
+	<table class="table table-responsive table-bordered">
 		<thead>
 			<tr>
 				<td class="left"><?php echo $text_payment_address; ?></td>
@@ -68,6 +71,8 @@
 			</tr>
 		</tbody>
 	</table>
+
+	<!-- products -->
 	<table class="list table table-responsive table-bordered">
 		<thead>
 			<tr>
@@ -99,6 +104,11 @@
 			<?php } ?>
 		</tfoot>
 	</table>
+
+	<!-- sub-order history -->
+
+
+	<!-- change -->
 	<table class="list table table-responsive table-bordered">
 		<tr>
 			<td>

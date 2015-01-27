@@ -19,7 +19,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$orders = $this->MsLoader->MsOrderData->getOrders(
 			array(
 				'seller_id' => $seller_id,
-				'order_status' => $this->config->get('msconf_credit_order_statuses')
+				'order_status' => $this->config->get('msconf_display_order_statuses')
 			),
 			array(
 				'order_by'  => $sortCol,
@@ -73,7 +73,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			
 			$this->load->model('localisation/order_status');
 			$order_statuses = $this->model_localisation_order_status->getOrderStatuses();
-			$order_status_id = $this->model_localisation_order_status->getSuborderStatusId($order['order_id'], $this->customer->getId());			
+			$order_status_id = $this->model_localisation_order_status->getSuborderStatusId($order['order_id'], $this->customer->getId());
 
 			$order_status_name = '';
 			foreach ($order_statuses as $order_status) {
@@ -91,7 +91,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'suborder_status' => $order_status_name,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
 					'total_amount' => $this->currency->format($order['total_amount'], $this->config->get('config_currency')),
-					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']) . '" class="ms-button ms-button-view"></a>'
+					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']) . '" class="ms-button ms-button-view" title="' . $this->language->get('ms_view_modify') . '"></a>'
 				)
 			);
 		}
@@ -167,7 +167,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 				if ($order_info[$type . '_address_format']) {
 					$format = $order_info[$type . '_address_format'];
 				} else {
-					$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
+					$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}' . "\n" . '{telephone}';
 				}
 
 				$find = array(
@@ -180,7 +180,8 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'{postcode}',
 					'{zone}',
 					'{zone_code}',
-					'{country}'
+					'{country}',
+					'{telephone}'
 				);
 
 				$replace = array(
@@ -193,7 +194,8 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'postcode'  => $order_info[$type . '_postcode'],
 					'zone'      => $order_info[$type . '_zone'],
 					'zone_code' => $order_info[$type . '_zone_code'],
-					'country'   => $order_info[$type . '_country']
+					'country'   => $order_info[$type . '_country'],
+					'telephone'   => $order_info['telephone']
 				);
 
 				$this->data[$type . '_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
@@ -231,7 +233,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 	public function index() {
 		$this->data['link_back'] = $this->url->link('account/account', '', 'SSL');
 		
-		$this->document->setTitle($this->language->get('ms_account_orders_heading'));
+		$this->document->setTitle($this->language->get('ms_account_order_information'));
 		
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->setBreadcrumbs(array(
 			array(

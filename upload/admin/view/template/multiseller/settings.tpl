@@ -580,6 +580,17 @@
 							<label class="radio-inline"><input type="radio" name="msconf_hide_sellers_product_count" value="0" <?php if($msconf_hide_sellers_product_count == 0) { ?> checked="checked" <?php } ?>  /><?php echo $text_no; ?></label>
 						</div>
 					</div>
+
+					<div class="form-group">
+						  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_display_order_statuses_note; ?>"><?php echo $ms_config_display_order_statuses; ?></span></label>
+						  <div class="col-sm-10">
+                              <div class="well well-sm" style="height: 150px; overflow: auto;">
+                                <?php foreach ($order_statuses as $status) { ?>
+                                  <input type="checkbox" name="msconf_display_order_statuses[]" value="<?php echo $status['order_status_id']; ?>" <?php if (in_array($status['order_status_id'], $msconf_display_order_statuses)) { ?>checked="checked"<?php } ?> /> <?php echo $status['name']; ?><br>
+                                <?php } ?>
+                              </div>
+                          </div>
+					</div>
 				    </fieldset>
 				</div>
 				<!-- END MISCELLANEOUS TAB -->

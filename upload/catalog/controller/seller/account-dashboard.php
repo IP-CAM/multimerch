@@ -55,7 +55,7 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
 		$orders = $this->MsLoader->MsOrderData->getOrders(
 			array(
 				'seller_id' => $seller_id,
-				'order_status' => $this->config->get('msconf_credit_order_statuses')
+				'order_status' => $this->config->get('msconf_display_order_statuses')
 			),
 			array(
 				'order_by'  => 'date_added',
@@ -64,10 +64,20 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
 				'limit' => 5
 			)
 		);		
-		
+
+		$this->load->model('localisation/order_status');
+		$order_statuses = $this->model_localisation_order_status->getOrderStatuses();
+
     	foreach ($orders as $order) {
 
-            $products	=	$this->MsLoader->MsOrderData->getOrderProducts(array('order_id' => $order['order_id'], 'seller_id' => $seller_id));
+			$suborder_status_id = $this->model_localisation_order_status->getSuborderStatusId($order['order_id'], $this->customer->getId());
+			if ($suborder_status_id) $order['order_status_id'] = $suborder_status_id;
+			$order_status_name = '';
+			foreach ($order_statuses as $order_status) {
+				if ($order_status['order_status_id'] == $order['order_status_id']) $order_status_name = $order_status['name'];
+			}
+
+            $products = $this->MsLoader->MsOrderData->getOrderProducts(array('order_id' => $order['order_id'], 'seller_id' => $seller_id));
 
             foreach($products as $key=>$p)
                 $products[$key]['options']	=  $this->model_account_order->getOrderOptions($order['order_id'], $p['order_product_id']);
@@ -75,6 +85,7 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
     		$this->data['orders'][] = array(
     			'order_id' => $order['order_id'],
     			'customer' => "{$order['firstname']} {$order['lastname']} ({$order['email']})",
+				'status' => $order_status_name,
     			'products' => $products,
     			'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
    				'total' => $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order['order_id'], array('seller_id' => $seller_id)), $this->config->get('config_currency'))
