@@ -78,7 +78,13 @@ $(function() {
 	$("#ms-submit-button").click(function() {
 		var button = $(this);
 		var url = 'jxsubmitproduct';
-		
+
+        if (msGlobals.config_enable_rte == 1) {
+            $('.ckeditor').each(function () {
+                $(this).val($(this).code());
+            });
+        }
+
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -330,16 +336,10 @@ $(function() {
 			}
 		})).init();
 	});
-	
+
 	if (msGlobals.config_enable_rte == 1) {
         $('.ckeditor').each(function () {
-            var $textArea = $(this);
-
-            $textArea.summernote({
-                onkeyup: function (e) {
-                    $textArea.val($(this).code());
-                    $textArea.change();
-                },
+            $(this).summernote({
                 height: 300
             });
         });
