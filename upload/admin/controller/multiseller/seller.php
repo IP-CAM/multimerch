@@ -178,6 +178,8 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 								'customer_group_id' => $this->config->get('config_customer_group_id'),
 								'newsletter' => 1,
 								'status' => 1,
+								'approved' => 1,
+								'safe' => 1,
 							)
 						)
 					);

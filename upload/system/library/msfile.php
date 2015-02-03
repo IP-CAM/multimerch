@@ -236,7 +236,7 @@ class MsFile extends Model {
 		unset ($this->session->data['multiseller']['files'][$key]);
 	}
 
-	public function resizeImage($filename, $width, $height) {
+	public function resizeImage($filename, $width, $height, $w = '') {
 		// todo consider using default cache folder
 		if (!file_exists(DIR_IMAGE . $filename) || !$filename || !filesize(DIR_IMAGE . $filename)) {
 			return;
@@ -250,7 +250,7 @@ class MsFile extends Model {
 
 		$temporary_filename = time() . '_' . md5(rand()) . '.' . $info["basename"];
 		$image = new Image(DIR_IMAGE . $filename);
-		$image->resize($width, $height);
+		$image->resize($width, $height, $w);
 		$image->save(DIR_IMAGE . $this->config->get('msconf_temp_image_path') . $temporary_filename);
 
 		$file = substr($info['basename'], 0, strrpos($info['basename'], '.')) . '-' . $width . 'x' . $height . '.' . $extension;

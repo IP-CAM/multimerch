@@ -62,7 +62,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			if ($product['p.image'] && file_exists(DIR_IMAGE . $product['p.image'])) {
 				$image = $this->MsLoader->MsFile->resizeImage($product['p.image'], $this->config->get('msconf_product_seller_product_list_seller_area_image_width'), $this->config->get('msconf_product_seller_product_list_seller_area_image_height'));
 			} else {
-				$image = $this->MsLoader->MsFile->resizeImage('no_image.jpg', $this->config->get('msconf_product_seller_product_list_seller_area_image_width'), $this->config->get('msconf_product_seller_product_list_seller_area_image_height'));
+				$image = $this->MsLoader->MsFile->resizeImage('no_image.png', $this->config->get('msconf_product_seller_product_list_seller_area_image_width'), $this->config->get('msconf_product_seller_product_list_seller_area_image_height'));
 			}
 			
 			// actions
@@ -1152,7 +1152,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					continue;
 
 				foreach ($attr['values'] as &$value) {
-					$value['image'] = (!empty($value['image']) ? $this->MsLoader->MsFile->resizeImage($value['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.jpg', 50, 50));
+					$value['image'] = (!empty($value['image']) ? $this->MsLoader->MsFile->resizeImage($value['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.png', 50, 50));
 				}
 				
 				if ($attr['multilang'] && in_array($attr['attribute_type'], array(MsAttribute::TYPE_TEXT, MsAttribute::TYPE_TEXTAREA))) {

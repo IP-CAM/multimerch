@@ -144,7 +144,7 @@
 			<?php echo $report_affiliate_activity; ?>
 			]]></search>
 			<add><![CDATA[
-				<li id="reports"><a class="parent"><i class="fa fa-users fa-fw"></i> <span><?php echo $ms_menu_multiseller; ?></span></a>
+				<li id="multimerch"><a class="parent"><i class="fa fa-users fa-fw"></i> <span><?php echo $ms_menu_multiseller; ?></span></a>
 					<ul>
 						<li><a href="<?php echo $this->url->link('multiseller/seller', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_sellers; ?></a></li>
 						<li><a href="<?php echo $this->url->link('multiseller/seller-group', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_seller_groups; ?></a></li>

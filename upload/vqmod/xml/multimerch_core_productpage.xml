@@ -105,7 +105,7 @@
 				<?php foreach ($ms_product_attributes as $attribute) { ?>
 					<?php if(is_array($attribute['values']) && implode($attribute['values']) != '' && (!isset($attribute['tab_display']) || !$attribute['tab_display'])) { ?>
 						<?php if ($attribute['attribute_type'] == MsAttribute::TYPE_IMAGE) { ?>
-							<?php $attribute['image'] = (!empty($attribute['image']) ? $this->MsLoader->MsFile->resizeImage($attribute['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.jpg', 50, 50)); ?>
+							<?php $attribute['image'] = (!empty($attribute['image']) ? $this->MsLoader->MsFile->resizeImage($attribute['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.png', 50, 50)); ?>
 							<li><?php echo $attribute['name']; ?>: <?php echo implode(',',$attribute['values']); ?></li>
 							<img src="<?php echo $attribute['image']; ?>" style="vertical-align: middle; padding: 1px; border: 1px solid #DDDDDD; margin-bottom: 10px" />
 							<br />

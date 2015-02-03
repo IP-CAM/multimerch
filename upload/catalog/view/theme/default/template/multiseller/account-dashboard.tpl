@@ -150,7 +150,7 @@
 			<?php } ?>
 		<?php } else { ?>
 			<tr>
-				<td class="center" colspan="6"><?php echo $ms_account_orders_noorders; ?></td>
+				<td class="center" colspan="7"><?php echo $ms_account_orders_noorders; ?></td>
 			</tr>
 		<?php } ?>
 		</tbody>

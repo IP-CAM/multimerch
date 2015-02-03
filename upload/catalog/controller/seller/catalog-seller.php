@@ -226,7 +226,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 
 		if ($this->config->get('msconf_enable_seller_banner')) {
 			if ($seller['banner'] && file_exists(DIR_IMAGE . $seller['banner'])) {
-				$this->data['seller']['banner'] = $this->MsLoader->MsFile->resizeImage($seller['banner'], $this->config->get('msconf_product_seller_banner_width'), $this->config->get('msconf_product_seller_banner_height'));
+				$this->data['seller']['banner'] = $this->MsLoader->MsFile->resizeImage($seller['banner'], $this->config->get('msconf_product_seller_banner_width'), $this->config->get('msconf_product_seller_banner_height'), 'w');
 			}
 		}
 
@@ -282,7 +282,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 				if ($product_info['image'] && file_exists(DIR_IMAGE . $product_info['image'])) {
 					$image = $this->MsLoader->MsFile->resizeImage($product_info['image'], $this->config->get('msconf_product_seller_profile_image_width'), $this->config->get('msconf_product_seller_profile_image_height'));
 				} else {
-					$image = $this->MsLoader->MsFile->resizeImage('no_image.jpg', $this->config->get('msconf_product_seller_profile_image_width'), $this->config->get('msconf_product_seller_profile_image_height'));
+					$image = $this->MsLoader->MsFile->resizeImage('no_image.png', $this->config->get('msconf_product_seller_profile_image_width'), $this->config->get('msconf_product_seller_profile_image_height'));
 				}
 
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
@@ -463,7 +463,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 				if ($product_data['image'] && file_exists(DIR_IMAGE . $product_data['image'])) {
 					$image = $this->MsLoader->MsFile->resizeImage($product_data['image'], $this->config->get('msconf_product_seller_products_image_width'), $this->config->get('msconf_product_seller_products_image_height'));
 				} else {
-					$image = $this->MsLoader->MsFile->resizeImage('no_image.jpg', $this->config->get('msconf_product_seller_products_image_width'), $this->config->get('msconf_product_seller_products_image_height'));
+					$image = $this->MsLoader->MsFile->resizeImage('no_image.png', $this->config->get('msconf_product_seller_products_image_width'), $this->config->get('msconf_product_seller_products_image_height'));
 				}
 
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
