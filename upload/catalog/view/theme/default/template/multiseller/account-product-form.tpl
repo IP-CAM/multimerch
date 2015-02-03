@@ -52,20 +52,22 @@
 		<div class="tab-content ms-product">
      	<div id="tab-general" class="tab-pane active">
      		<?php if (count($languages) > 1) { ?>
+			<?php $first = key($languages); ?>
 			<ul class="nav nav-tabs" id="language-tabs">
-				<?php foreach ($languages as $language) { ?>
-				<li><a class="lang" data-toggle="tab" href="#language<?php echo $language['language_id']; ?>"><img src="image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
+				<?php foreach ($languages as $k => $language) { ?>
+				<li <?php if ($k == $first) { ?> class="active" <?php } ?>><a data-toggle="tab" href="#language<?php echo $language['language_id']; ?>"><img src="image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
 				<?php } ?>
 			</ul>
 			<?php } ?>
-			
+
+			<div class="tab-content">
 			<?php
 			reset($languages); $first = key($languages);
 			foreach ($languages as $k => $language) {
 				$langId = $language['language_id'];
 				?>
 				
-				<div class="ms-language-div" id="language<?php echo $langId; ?>">
+				<div class="ms-language-div tab-pane <?php if ($k == $first) { echo 'active'; } ?>" id="language<?php echo $langId; ?>">
                     <fieldset>
                     <legend><?php echo $ms_account_product_name_description; ?></legend>
 					<div class="form-group <?php if ($k == $first) { echo 'required'; } ?>">
@@ -143,6 +145,7 @@
 					</fieldset>
 				</div>
 			<?php } ?>
+			</div>
 
 			<fieldset>
             	<legend><?php echo $ms_account_product_price_attributes; ?></legend>
