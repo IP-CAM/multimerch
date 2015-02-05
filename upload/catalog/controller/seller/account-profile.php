@@ -414,7 +414,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				$information_info = $this->model_catalog_information->getInformation($this->config->get('msconf_seller_terms_page'));
 
 				if ($information_info) {
-					$this->data['ms_account_sellerinfo_terms_note'] = sprintf($this->language->get('ms_account_sellerinfo_terms_note'), $this->url->link('information/information/info', 'information_id=' . $this->config->get('msconf_seller_terms_page'), 'SSL'), $information_info['title'], $information_info['title']);
+					$this->data['ms_account_sellerinfo_terms_note'] = sprintf($this->language->get('ms_account_sellerinfo_terms_note'), $this->url->link('information/information/agree', 'information_id=' . $this->config->get('msconf_seller_terms_page'), 'SSL'), $information_info['title'], $information_info['title']);
 				} else {
 					$this->data['ms_account_sellerinfo_terms_note'] = '';
 				}

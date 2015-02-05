@@ -430,7 +430,7 @@ $_['ms_account_sellerinfo_paypal_note'] = 'Specify your PayPal address';
 $_['ms_account_sellerinfo_reviewer_message'] = 'Message to the reviewer';
 $_['ms_account_sellerinfo_reviewer_message_note'] = 'Your message to the reviewer';
 $_['ms_account_sellerinfo_terms'] = 'Accept terms';
-$_['ms_account_sellerinfo_terms_note'] = 'I have read and agree to the <a class="colorbox" href="%s" alt="%s"><b>%s</b></a>';
+$_['ms_account_sellerinfo_terms_note'] = 'I have read and agree to the <a class="agree" href="%s" alt="%s"><b>%s</b></a>';
 $_['ms_account_sellerinfo_fee_flat'] = 'There is a signup fee of <span>%s</span> to become a seller at %s.';
 $_['ms_account_sellerinfo_fee_balance'] = 'This amount will be deducted from your initial balance.';
 $_['ms_account_sellerinfo_fee_paypal'] = 'You will be redirected to the PayPal payment page after form submission.';

@@ -7,7 +7,7 @@
 	<author>http://multimerch.com/</author>
 	
 	<file name="catalog/view/theme/&themeFolder;/template/product/product.tpl">
-		<!-- seller information on product page -->
+        <!-- seller information on product page -->
 		<operation>
 			<search position="before" offset="1" index="1"><![CDATA[
 			<div class="rating">
@@ -27,11 +27,11 @@
 						<?php if ($seller['country']) { ?>
 							<li><?php echo $ms_catalog_seller_profile_country; ?></b> <?php echo $seller['country']; ?></li>
 						<?php } ?>
-						
+
 						<?php if ($seller['zone']) { ?>
 							<li><?php echo $ms_catalog_seller_profile_zone; ?></b> <?php echo $seller['zone']; ?></li>
 						<?php } ?>
-		
+
 						<?php if ($seller['company']) { ?>
 							<li><?php echo $ms_catalog_seller_profile_company; ?></b> <?php echo $seller['company']; ?></li>
 						<?php } ?>
@@ -59,8 +59,10 @@
 					</ul>
 					</div>
 				</div>
+				<!-- end sellerinfo -->
 			</div>
 			<hr />
+			<!-- end seller block -->
 			<?php } ?>
 			]]></add>
 		</operation>
