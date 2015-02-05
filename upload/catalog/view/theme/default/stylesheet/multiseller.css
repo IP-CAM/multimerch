@@ -62,12 +62,14 @@ table.list tbody td, table.list thead td  {
 	margin-top: 5px;
 }
 
-.ms-product div.error p {
+.ms-product div.error p,
+.register-seller p.error {
 	margin: 0;
 }
 
 .ms-account-product-form p.warning.main,
-.ms-account-profile p.warning.main {
+.ms-account-profile p.warning.main,
+.register-seller .warning.main {
 	display: none;
 }
 
