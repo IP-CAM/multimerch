@@ -123,7 +123,7 @@ class MsOrderData extends Model {
 		
 		$res = $this->db->query($sql);
 
-		return $res->rows;
+		return ($res->num_rows == 1 && isset($data['single']) ? $res->row : $res->rows);
 	}
 
 	public function getOrderComment($data = array()) {
