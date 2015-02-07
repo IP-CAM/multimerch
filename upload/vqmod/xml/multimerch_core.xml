@@ -69,6 +69,8 @@
 
 				// Add complemented common.js
 				$this->document->addScript('catalog/view/javascript/ms-common.js');
+
+				$data['ms_seller_created'] = $this->MsLoader->MsSeller->isCustomerSeller($this->customer->getId());
 			]]></add>
 		</operation>
 	</file>

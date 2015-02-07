@@ -284,7 +284,9 @@ $_['ms_error_seller_product'] = 'You can\'t add your own product to cart';
 // Account - General
 $_['ms_account_unread_pm'] = 'You have unread private message';
 $_['ms_account_unread_pms'] = 'You have %s unread private messages';
-$_['ms_account_register_seller'] = 'Register Seller Account';
+$_['ms_account_register_new'] = 'New Seller';
+$_['ms_account_register_seller'] = 'Register seller account';
+$_['ms_account_register_seller_note'] = 'Create a seller account and start selling your products in our store!';
 $_['ms_account_register_details'] = 'Step 1: Your Details';
 $_['ms_account_register_seller_success_heading'] = 'Your Seller Account Has Been Created!';
 $_['ms_account_register_seller_success_message']  = '<p>Welcome to %s!</p> <p>Congratulations! Your new seller account has been successfully created!</p> <p>You can now take advantage of seller privileges and start selling your products with us.</p> <p>If you have any problems, <a href="%s">contact us</a>.</p>';
@@ -294,6 +296,7 @@ $_['ms_seller'] = 'Seller';
 $_['ms_seller_forseller'] = 'For seller';
 $_['ms_account_dashboard'] = 'Dashboard';
 $_['ms_account_seller_account'] = 'Seller Account';
+$_['ms_account_customer_account'] = 'Customer Account';
 $_['ms_account_sellerinfo'] = 'Seller profile';
 $_['ms_account_sellerinfo_new'] = 'New seller account';
 $_['ms_account_newproduct'] = 'New product';
