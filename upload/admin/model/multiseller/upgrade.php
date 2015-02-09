@@ -31,18 +31,6 @@ class ModelMultisellerUpgrade extends Model {
 	public function upgradeDb() {
 		$version = $this->getDbVersion();
 
-		if (version_compare($version, '1.0.1.0') < 0) {
-			$this->db->query("
-			ALTER TABLE `" . DB_PREFIX . "ms_seller` ADD (
-				`banner` VARCHAR(255) DEFAULT NULL)");
-
-			$this->load->model('user/user_group');
-			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'multiseller/addon');
-			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'multiseller/addon');
-
-			$this->_createSchemaEntry('1.0.1.0');
-		}
-
 		if (version_compare($version, '1.0.0.0') < 0) {
 			$this->db->query("
 			CREATE TABLE `" . DB_PREFIX . "ms_db_schema` (
@@ -63,16 +51,19 @@ class ModelMultisellerUpgrade extends Model {
 			PRIMARY KEY (`suborder_id`)
 			) DEFAULT CHARSET=utf8");
 
-			/*$sql = "
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_seller_tax_class` (
-			`seller_id` int(11) NOT NULL,
-			`tax_class_id` int(11) NOT NULL,
-			PRIMARY KEY (`seller_id`),
-			UNIQUE KEY `seller_id` (`seller_id`)
-			) DEFAULT CHARSET=utf8";
-			$this->db->query($sql);*/
-			
 			$this->_createSchemaEntry('1.0.0.0');
+		}
+
+		if (version_compare($version, '1.0.1.0') < 0) {
+			$this->db->query("
+			ALTER TABLE `" . DB_PREFIX . "ms_seller` ADD (
+				`banner` VARCHAR(255) DEFAULT NULL)");
+
+			$this->load->model('user/user_group');
+			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'multiseller/addon');
+			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'multiseller/addon');
+
+			$this->_createSchemaEntry('1.0.1.0');
 		}
 	}
 }
