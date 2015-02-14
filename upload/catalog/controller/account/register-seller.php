@@ -37,6 +37,7 @@ class ControllerAccountRegisterSeller extends Controller {
 				'href' => $this->url->link('account/register-seller', '', 'SSL')
 			)
 		));
+		$this->data['text_account_already'] = sprintf($this->language->get('text_account_already'),  $this->url->link('account/login', '', 'SSL'));
 
 		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account/register-seller');
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));

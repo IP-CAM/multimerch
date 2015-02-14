@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE modification [
 ]>
-<modification>>
+<modification>
 	<!-- opencart2 loader magic -->
 	<file name="system/engine/loader.php">
 		<operation>
