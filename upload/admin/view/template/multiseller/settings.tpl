@@ -267,7 +267,6 @@
 						</div>
 					</div>
 
-					<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_shipping_note; ?>"><?php echo $ms_config_enable_shipping; ?></span></label>
 						<div class="col-sm-10">
@@ -276,7 +275,6 @@
 							<label class="radio-inline"><input type="radio" name="msconf_enable_shipping" value="2" <?php if($msconf_enable_shipping == 2) { ?> checked="checked" <?php } ?>  /><?php echo $text_seller_select; ?></label>
 						</div>
 					</div>
-					-->
 
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_quantities_note; ?>"><?php echo $ms_config_enable_quantities; ?></span></label>

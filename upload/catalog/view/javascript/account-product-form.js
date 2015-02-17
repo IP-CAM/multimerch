@@ -1,4 +1,13 @@
 $(function() {
+    if ($("input[name='product_enable_shipping']:checked").val() == 0) {
+		$('#shipping_tab').hide();
+	}
+
+	$("body").on("change", "input[name='product_enable_shipping']", function() {
+	    $('#shipping_tab').toggle();
+        if (msGlobals.config_enable_quantities == 2) $("input[name='product_quantity']").parents('.form-group').toggle();
+    });
+
 	//$( ".product_image_files" ).sortable();
     new Sortable($( ".product_image_files" )[0]);
 
