@@ -66,7 +66,11 @@ $(document).ready(function() {
 			{ "mData": "description" },
 			{ "mData": "rates", "bSortable": false },
 			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
-		],
+		]
+	});
+
+	$(document).on('click', '.ms-button-delete', function() {
+    	return confirm("<?php echo $this->language->get('text_confirm'); ?>");
 	});
 });
 </script>

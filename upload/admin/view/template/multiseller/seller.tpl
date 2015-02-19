@@ -104,6 +104,10 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	$(document).on('click', '.ms-button-delete', function() {
+    	return confirm("<?php echo $this->language->get('text_confirm'); ?>");
+	});
 });
 </script>
 <?php echo $footer; ?> 
