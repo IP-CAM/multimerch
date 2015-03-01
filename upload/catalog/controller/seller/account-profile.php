@@ -32,6 +32,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 	public function jxSaveSellerInfo() {
 		$data = $this->request->post;
 		$seller = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
+
 		$json = array();
 		$json['redirect'] = $this->url->link('seller/account-dashboard');
 
@@ -152,7 +153,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				}
 			}
 
-			if (empty($seller)) {
+			if (empty($seller) || (!empty($seller) && $seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE)) {
 				$data['seller']['approved'] = 0;
 				// create new seller
 				switch ($this->config->get('msconf_seller_validation')) {
@@ -203,7 +204,12 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 
 				$data['seller']['seller_id'] = $this->customer->getId();
 				$data['seller']['product_validation'] = $this->config->get('msconf_product_validation');
-				$this->MsLoader->MsSeller->createSeller($data['seller']);
+
+				if (!empty($seller) && $seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {
+					$this->MsLoader->MsSeller->editSeller($data['seller']);
+				} else {
+					$this->MsLoader->MsSeller->createSeller($data['seller']);
+				}
 
 				$commissions = $this->MsLoader->MsCommission->calculateCommission(array('seller_group_id' => $this->config->get('msconf_default_seller_group_id')));
 				$fee = (float)$commissions[MsCommission::RATE_SIGNUP]['flat'];
@@ -366,6 +372,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 		if ($seller) {
 			switch ($seller['ms.seller_status']) {
 				case MsSeller::STATUS_UNPAID:
+				case MsSeller::STATUS_INCOMPLETE:
 					$this->data['statusclass'] = 'warning';
 					break;
 				case MsSeller::STATUS_ACTIVE:
@@ -394,10 +401,18 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				}
 			}
 
-			$this->data['statustext'] = $this->language->get('ms_account_status') . $this->language->get('ms_seller_status_' . $seller['ms.seller_status']);
+			$this->data['statustext'] = '';
+
+			if ($seller['ms.seller_status'] != MsSeller::STATUS_INCOMPLETE) {
+				$this->data['statustext'] = $this->language->get('ms_account_status') . $this->language->get('ms_seller_status_' . $seller['ms.seller_status']);
+			}
 
 			if ($seller['ms.seller_status'] == MsSeller::STATUS_INACTIVE && !$seller['ms.seller_approved']) {
-				$this->data['statustext'] .= $this->language->get('ms_account_status_tobeapproved');
+				$this->data['statustext'] .= $this->language->get('ms_account_status_please_fill_in');
+			}
+
+			if ($seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {
+				$this->data['statustext'] .= $this->language->get('ms_account_status_please_fill_in');
 			}
 
 			$this->data['ms_account_sellerinfo_terms_note'] = '';
@@ -423,8 +438,9 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 		}
 
-		if (!$seller || $seller['ms.seller_status'] == MsSeller::STATUS_UNPAID) {
+		if (!$seller || $seller['ms.seller_status'] == MsSeller::STATUS_UNPAID || $seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {
 			$this->data['group_commissions'] = $this->MsLoader->MsCommission->calculateCommission(array('seller_group_id' => $this->config->get('msconf_default_seller_group_id')));
+
 			switch($this->data['group_commissions'][MsCommission::RATE_SIGNUP]['payment_method']) {
 				case MsPayment::METHOD_PAYPAL:
 					$this->data['ms_commission_payment_type'] = $this->language->get('ms_account_sellerinfo_fee_paypal');

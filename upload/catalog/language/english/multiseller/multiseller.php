@@ -449,6 +449,7 @@ $_['ms_account_status_please_fill_in'] = 'Please complete the following form to 
 $_['ms_seller_status_' . MsSeller::STATUS_ACTIVE] = 'Active';
 $_['ms_seller_status_' . MsSeller::STATUS_INACTIVE] = 'Inactive';
 $_['ms_seller_status_' . MsSeller::STATUS_DISABLED] = 'Disabled';
+$_['ms_seller_status_' . MsSeller::STATUS_INCOMPLETE] = 'Incomplete';
 $_['ms_seller_status_' . MsSeller::STATUS_DELETED] = 'Deleted';
 $_['ms_seller_status_' . MsSeller::STATUS_UNPAID] = 'Unpaid signup fee';
 

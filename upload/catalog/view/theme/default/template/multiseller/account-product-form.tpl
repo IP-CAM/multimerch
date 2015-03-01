@@ -729,7 +729,7 @@
 
 		<div class="buttons">
 			<div class="pull-left"><a href="<?php echo $back; ?>" class="btn btn-default"><span><?php echo $ms_button_cancel; ?></span></a></div>
-			<?php if ($seller['ms.seller_status'] != MsSeller::STATUS_DISABLED && $seller['ms.seller_status'] != MsSeller::STATUS_DELETED) { ?>
+			<?php if ($seller['ms.seller_status'] != MsSeller::STATUS_DISABLED && $seller['ms.seller_status'] != MsSeller::STATUS_DELETED && $seller['ms.seller_status'] != MsSeller::STATUS_INCOMPLETE) { ?>
 			<div class="pull-right"><a class="btn btn-primary" id="ms-submit-button"><span><?php echo $ms_button_submit; ?></span></a></div>
 			<?php } ?>
 		</div>

@@ -216,6 +216,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 					case MsSeller::STATUS_INACTIVE:
 					case MsSeller::STATUS_DISABLED:
 					case MsSeller::STATUS_DELETED:
+					case MsSeller::STATUS_INCOMPLETE:
 						$products = $this->MsLoader->MsProduct->getProducts(array(
 							'seller_id' => $seller['seller_id']
 						));

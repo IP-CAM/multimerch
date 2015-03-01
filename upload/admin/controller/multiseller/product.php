@@ -206,6 +206,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 				$json['product_status'] = $this->language->get('ms_product_status_' . MsProduct::STATUS_INACTIVE);			
 				break;
 			case MsSeller::STATUS_DISABLED:
+			case MsSeller::STATUS_INCOMPLETE:
 				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DISABLED);
 				$this->MsLoader->MsProduct->disapprove($product_id);			
 				break;

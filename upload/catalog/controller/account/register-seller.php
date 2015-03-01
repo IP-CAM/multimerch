@@ -140,45 +140,11 @@ class ControllerAccountRegisterSeller extends Controller {
 			$this->model_account_activity->addActivity('register', $activity_data);
 
 			// Register seller
+			$data['seller']['status'] = MsSeller::STATUS_INCOMPLETE;
 			$data['seller']['approved'] = 0;
-			switch ($this->config->get('msconf_seller_validation')) {
-				case MsSeller::MS_SELLER_VALIDATION_APPROVAL:
-					$mails[] = array(
-						'type' => MsMail::SMT_SELLER_ACCOUNT_AWAITING_MODERATION
-					);
-					$mails[] = array(
-						'type' => MsMail::AMT_SELLER_ACCOUNT_AWAITING_MODERATION,
-						'data' => array(
-							'message' => $data['seller']['reviewer_message'],
-							'seller_name' => $data['seller']['nickname'],
-							'customer_name' => $data['seller']['firstname'] . ' ' . $data['seller']['lastname'],
-							'customer_email' => $data['seller']['email']
-						)
-					);
-					$data['seller']['status'] = MsSeller::STATUS_INACTIVE;
-					break;
-
-				case MsSeller::MS_SELLER_VALIDATION_NONE:
-				default:
-					$mails[] = array(
-						'type' => MsMail::SMT_SELLER_ACCOUNT_CREATED
-					);
-					$mails[] = array(
-						'type' => MsMail::AMT_SELLER_ACCOUNT_CREATED,
-						'data' => array(
-							'seller_name' => $data['seller']['nickname'],
-							'customer_name' => $data['seller']['firstname'] . ' ' . $data['seller']['lastname'],
-							'customer_email' => $data['seller']['email']
-						)
-					);
-					$data['seller']['status'] = MsSeller::STATUS_ACTIVE;
-					$data['seller']['approved'] = 1;
-					break;
-			}
 
 			$data['seller']['seller_id'] = $this->customer->getId();
 			$this->MsLoader->MsSeller->createSeller($data['seller']);
-			$this->MsLoader->MsMail->sendMails($mails);
 			$json['redirect'] = $this->url->link('seller/account-profile');
 		}
 

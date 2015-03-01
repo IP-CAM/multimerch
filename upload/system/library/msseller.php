@@ -5,6 +5,7 @@ final class MsSeller extends Model {
 	const STATUS_DISABLED = 3;
 	const STATUS_DELETED = 4;
 	const STATUS_UNPAID = 5;
+	const STATUS_INCOMPLETE = 6;
 		
 	const MS_SELLER_VALIDATION_NONE = 1;
 	const MS_SELLER_VALIDATION_ACTIVATION = 2;

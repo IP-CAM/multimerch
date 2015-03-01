@@ -154,7 +154,7 @@
 			<td>
 				<select name="order_status" id="order_status" class="form-control">
 					<?php foreach ($order_statuses as $status) { ?>
-					<option value="<?php echo $status['order_status_id']; ?>" <?php if ($status['order_status_id'] == $suborder_status_id) { ?>selected="selected"<?php } ?>><?php echo $status['name']; ?></option>
+					<option value="<?php echo $status['order_status_id']; ?>" <?php if ($suborder_status_id && $status['order_status_id'] == $suborder_status_id || !$suborder_status_id && $status['order_status_id'] == $order_status_id) { ?>selected="selected"<?php } ?>><?php echo $status['name']; ?></option>
 					<?php } ?>
 				</select>
 			</td>
