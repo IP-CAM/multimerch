@@ -85,7 +85,7 @@
 			]]></add>
 		</operation>
 	</file>
-	
+
 	<file name="&adminFolder;/view/template/common/header.tpl">
 		<operation>
 			<search position="after"><![CDATA[
@@ -200,6 +200,47 @@
 			),
 			]]></add>
 		</operation>
+
+        <operation>
+			<search position="after"><![CDATA[
+			$data['histories'] = array();
+			]]></search>
+			<add><![CDATA[
+			$data['seller_histories'] = array();
+			$suborders = $this->MsLoader->MsOrderData->getSuborders(array(
+			    'order_id' => $this->request->get['order_id']
+			));
+
+			foreach ($suborders as $sub) {
+			    $suborder_histories = array();
+
+			    $seller = $this->MsLoader->MsSeller->getSellers(array(
+			        'seller_id' => $sub['seller_id'],
+			        'single' => 1
+			    ));
+
+                // fetch histories
+                $histories = $this->MsLoader->MsOrderData->getSuborderHistory(array(
+                    'suborder_id' => $sub['suborder_id']
+                ));
+
+                // format histories
+                foreach ($histories as $h) {
+                    $suborder_histories[] = array(
+                        'date_added' => date($this->language->get('date_format_short'), strtotime($h['date_added'])),
+                        'status'     => $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $h['order_status_id'])),
+                        'comment'    => $h['comment']
+                    );
+                }
+
+                // assign histories
+			    $data['seller_histories'][$sub['seller_id']] = array(
+			        'seller' => $seller[0]['ms.nickname'],
+			        'entries' => $suborder_histories
+			    );
+			}
+			]]></add>
+		</operation>
 	</file>
 	
 	<file name="&adminFolder;/view/template/sale/order_info.tpl">
@@ -228,9 +269,45 @@
 			<add><![CDATA[
 			<td colspan="5" class="text-right"><?php echo $totals['title']; ?>:</td>
 			]]></add>
-		</operation>		
+		</operation>
 	</file>
-	
+
+    <!-- suborder histories -->
+	<file name="&adminFolder;/view/template/sale/order_history.tpl">
+		<operation>
+			<search position="after" offset="1"><![CDATA[
+			<div class="col-sm-6 text-right"><?php echo $results; ?></div>
+			]]></search>
+			<add><![CDATA[
+            <?php if (isset($seller_histories) && $seller_histories) { ?>
+            <?php foreach ($seller_histories as $history) { ?>
+                <h4><?php echo $history['seller']; ?></h4>
+                <table class="table table-bordered">
+                <thead>
+                <tr>
+                <td class="text-left"><?php echo $column_date_added; ?></td>
+                <td class="text-left"><?php echo $column_comment; ?></td>
+                <td class="text-left"><?php echo $column_status; ?></td>
+                <td class="text-left"><?php echo $column_notify; ?></td>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($history['entries'] as $history) { ?>
+                    <tr>
+                    <td class="text-left"><?php echo $history['date_added']; ?></td>
+                    <td class="text-left"><?php echo $history['comment']; ?></td>
+                    <td class="text-left"><?php echo $history['status']; ?></td>
+                    <td class="text-left"></td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+                </table>
+            <?php } ?>
+            <?php } ?>
+			]]></add>
+		</operation>
+    </file>
+
 	<!-- contact all sellers from admin -->
 	<file name="&adminFolder;/view/template/marketing/contact.tpl">
 		<operation>

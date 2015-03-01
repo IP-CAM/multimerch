@@ -1,5 +1,6 @@
 <?php
 class MsOrderData extends Model {
+	/** orders **/
 	public function getOrders($data = array(), $sort = array(), $cols = array()) {
 		$hFilters = $wFilters = '';
 		
@@ -70,50 +71,6 @@ class MsOrderData extends Model {
 		return $res->row['total'];		
 	}
 
-	public function getTotalOrders($data = array(), $sort = array()) {
-		$sql = "SELECT COUNT(DISTINCT order_id) as 'total'
-				FROM `" . DB_PREFIX . "ms_order_product_data` mopd
-				WHERE seller_id = " . (int)$data['seller_id'];
-
-		$res = $this->db->query($sql);
-
-		return $res->row['total'];
-	}
-
-	
-
-	/*
-	public function existsOrderData($order_id) {
-		$sql = "SELECT 1 FROM " . DB_PREFIX . "ms_order_product_data
-					WHERE order_product_id IN ( 
-						SELECT order_product_id FROM " . DB_PREFIX . "order_product 
-						WHERE order_id = " . (int)$order_id . "
-					)
-				";
-				
-		$res = $this->db->query($sql);
-		
-		if ($res->num_rows)
-			return true;
-		
-		return false;
-	}
-	*/
-	
-	/*
-	public function existsOrderProductData($order_product_id) {
-		$sql = "SELECT 1 FROM " . DB_PREFIX . "ms_order_product_data
-					WHERE order_product_id = " . (int)$order_product_id;
-
-		$res = $this->db->query($sql);
-		
-		if ($res->num_rows)
-			return true;
-		
-		return false;
-	}
-	*/
-	
 	public function getOrderData($data = array()) {
 		$sql = "SELECT *
 				FROM " . DB_PREFIX . "ms_order_product_data
@@ -153,32 +110,6 @@ class MsOrderData extends Model {
 		return $res->rows;
 	}
 	
-	public function getOrderSellers($data) {
-		$sql = "SELECT 
-					SQL_CALC_FOUND_ROWS
-					DISTINCT(seller_id)
-				FROM " . DB_PREFIX . "order_product
-				LEFT JOIN " . DB_PREFIX . "ms_order_product_data msopd USING(order_id, product_id)
-				WHERE 1 = 1"
-				. (isset($data['order_id']) ? " AND order_id =  " .  (int)$data['order_id'] : '');
-				
-		$res = $this->db->query($sql);
-		$result['sellers'] = $res->rows;
-		$total_res = $this->db->query("SELECT FOUND_ROWS() as total");
-		$total = $total_res->row['total'];
-		$seller_id = 0;
-		foreach ($result['sellers'] as $seller) {
-			if ($seller['seller_id'] == NULL || empty($seller['seller_id'])) {
-				unset($result['sellers'][$seller_id]);
-				$total = $total - 1;
-			}
-			$seller_id++;
-		}
-			
-		$result['total_rows'] = $total;
-		return $result;
-	}
-	
 	public function addOrderProductData($order_id, $product_id, $data) {
 		$sql = "INSERT INTO " . DB_PREFIX . "ms_order_product_data
 				SET order_id = " . (int)$order_id . ",
@@ -189,11 +120,7 @@ class MsOrderData extends Model {
 					seller_net_amt = " . (float)$data['seller_net_amt'];
 				
 		$this->db->query($sql);
-		
-		$order_product_data_id = $this->db->getLastId();
-		$this->db->query("INSERT INTO " . DB_PREFIX . "ms_suborder (order_id, seller_id, order_status_id) VALUES (" . (int)$order_id . ", " . (int)$data['seller_id'] . ", " . (isset($data['order_status_id']) ? (int)$data['order_status_id'] : 1) . ")");
-
-		return $order_product_data_id;
+		return $this->db->getLastId();
 	}
 
 	public function addOrderComment($order_id, $product_id, $data) {
@@ -208,7 +135,7 @@ class MsOrderData extends Model {
 		$order_comment_id = $this->db->getLastId();
 		return $order_comment_id;
 	}
-	
+
 	public function getTotalSales($data = array()) {
 		$sql = "SELECT SUM(quantity) as 'total' FROM (
 					SELECT quantity FROM `" . DB_PREFIX . "ms_order_product_data` mopd
@@ -227,6 +154,55 @@ class MsOrderData extends Model {
 
 		$res = $this->db->query($sql);
 		return (int)$res->row['total'];
-	}	
+	}
+
+	/** suborder histories **/
+	public function addSuborderHistory($data = array()) {
+		$sql = "INSERT INTO " . DB_PREFIX . "ms_suborder_history
+				SET suborder_id = " . (int)$data['suborder_id'] . ",
+					order_status_id = " . (int)$data['order_status_id'] . ",
+					comment = '" . $this->db->escape(isset($data['comment']) ? $data['comment'] : '') . "',
+					date_added = NOW()";
+
+		return $this->db->query($sql);
+	}
+
+	public function getSuborderHistory($data = array()) {
+		$sql = "SELECT * FROM " . DB_PREFIX . "ms_suborder_history
+				WHERE 1 = 1"
+				. (isset($data['suborder_id']) ? " AND suborder_id =  " .  (int)$data['suborder_id'] : '');
+
+		$res = $this->db->query($sql);
+		return ($res->num_rows == 1 && isset($data['single']) ? $res->row : $res->rows);
+	}
+
+	/** suborders **/
+	public function createSuborder($data = array())	{
+		$sql = "INSERT INTO " . DB_PREFIX . "ms_suborder
+				SET order_id = " . (int)$data['order_id'] . ",
+					seller_id = " . (int)$data['seller_id'] . ",
+					order_status_id = " . (int)$data['order_status_id'];
+
+		return $this->db->query($sql);
+	}
+
+	public function getSuborders($data = array()) {
+		$sql = "SELECT * FROM " . DB_PREFIX . "ms_suborder
+				WHERE 1 = 1 "
+				. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '')
+				. (isset($data['order_id']) ? " AND order_id =  " .  (int)$data['order_id'] : '')
+				. (isset($data['suborder_id']) ? " AND suborder_id =  " .  (int)$data['suborder_id'] : '');
+
+		$res = $this->db->query($sql);
+		return ($res->num_rows == 1 && isset($data['single']) ? $res->row : $res->rows);
+	}
+
+	public function updateSuborderStatus($data = array()) {
+		$sql = "UPDATE " . DB_PREFIX . "ms_suborder
+				SET order_status_id = " . (int)$data['order_status_id'] . "
+				WHERE suborder_id = " . (int)$data['suborder_id'];
+
+		$this->db->query($sql);
+	}
 }
 ?>

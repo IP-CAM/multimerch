@@ -123,36 +123,6 @@
 		</operation>
 	</file>
 	
-	<file name="catalog/controller/account/order.php">
-		<operation error="log">
-			<search position="after" offset="2"><![CDATA[
-				$order_id = 0; 
-			]]></search>
-			<add><![CDATA[
-				$this->load->model('localisation/order_status');
-				$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-			]]></add>
-		</operation>
-
-		<operation error="log">
-			<search position="after"><![CDATA[
-				foreach ($products as $product) {
-			]]></search>
-			<add><![CDATA[
-				$seller_id = $this->MsLoader->MsProduct->getSellerId($product['product_id']);
-			]]></add>
-		</operation>
-
-		<operation error="log">
-			<search position="after"><![CDATA[
-				$data['products'][] = array(
-			]]></search>
-			<add><![CDATA[
-				'order_status_id' => $this->model_localisation_order_status->getSuborderStatusId($order_id, $seller_id),
-			]]></add>
-		</operation>
-	</file>
-
 	<file name="catalog/controller/common/footer.php">
 		<operation>
 			<search position="after"><![CDATA[

@@ -27,6 +27,7 @@ class MsMail extends Model {
 	const SMT_SELLER_VOTE = 23;
 	
 	const SMT_REMIND_LISTING = 30;
+	const CMT_ORDER_UPDATED = 31;
 	
 	const AMT_SELLER_ACCOUNT_CREATED = 101;
 	const AMT_SELLER_ACCOUNT_AWAITING_MODERATION = 102;
@@ -274,7 +275,21 @@ class MsMail extends Model {
 				$mail_subject .= $this->language->get('ms_mail_subject_private_message');
 				$mail_text .= sprintf($this->language->get('ms_mail_private_message'), $data['customer_name'], $data['title'], $data['customer_message']);
 				break;
-			
+
+			case self::CMT_ORDER_UPDATED:
+				$mail_subject .= sprintf($this->language->get('ms_mail_subject_order_updated'), $order_info['order_id'], $seller['ms.nickname']);
+
+				// get products
+				$order_products = $this->MsLoader->MsOrderData->getOrderProducts(array('order_id' => $data['order_id'], 'seller_id' => $data['seller_id']));
+				$products = '';
+				foreach ($order_products as $p) {
+					if ($p['quantity'] > 1) $products .= "{$p['quantity']} x ";
+					$products .= "{$p['name']} \n";
+				}
+
+				$mail_text .= sprintf($this->language->get('ms_mail_order_updated'), $this->config->get('config_name'), $seller['ms.nickname'], $order_info['order_id'], $products, $data['status'], $data['comment']);
+				break;
+
 			case self::SMT_SELLER_VOTE:
 				$mail_subject .= $this->language->get('ms_mail_subject_seller_vote');
 				$mail_text .= sprintf($this->language->get('ms_mail_seller_vote_message'), $data['customer_name'], $data['title'], $data['customer_message']);

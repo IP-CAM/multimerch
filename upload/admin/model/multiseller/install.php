@@ -236,6 +236,16 @@ class ModelMultisellerInstall extends Model {
 		`order_status_id` int(11) NOT NULL,
 		PRIMARY KEY (`suborder_id`)
 		) DEFAULT CHARSET=utf8");
+
+		$this->db->query("
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_suborder_history` (
+		`suborder_history_id` int(5) NOT NULL AUTO_INCREMENT,
+		`suborder_id` int(5) NOT NULL,
+		`order_status_id` int(5) NOT NULL,
+		`comment` text NOT NULL DEFAULT '',
+		`date_added` datetime NOT NULL,
+		PRIMARY KEY (`suborder_history_id`)
+		) DEFAULT CHARSET=utf8");
 	}
 	
 	public function createData() {

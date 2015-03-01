@@ -69,12 +69,16 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
 		$order_statuses = $this->model_localisation_order_status->getOrderStatuses();
 
     	foreach ($orders as $order) {
+			$suborder = $this->MsLoader->MsOrderData->getSuborders(array(
+				'order_id' => $order['order_id'],
+				'seller_id' => $this->customer->getId(),
+				'single' => 1
+			));
 
-			$suborder_status_id = $this->model_localisation_order_status->getSuborderStatusId($order['order_id'], $this->customer->getId());
-			if ($suborder_status_id) $order['order_status_id'] = $suborder_status_id;
-			$order_status_name = '';
-			foreach ($order_statuses as $order_status) {
-				if ($order_status['order_status_id'] == $order['order_status_id']) $order_status_name = $order_status['name'];
+			$status_name = $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $order['order_status_id']));
+
+			if ($suborder['order_status_id'] && $order['order_status_id'] != $suborder['order_status_id']) {
+				$status_name .= ' (' . $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $suborder['order_status_id'])) . ')';
 			}
 
             $products = $this->MsLoader->MsOrderData->getOrderProducts(array('order_id' => $order['order_id'], 'seller_id' => $seller_id));
@@ -85,7 +89,7 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
     		$this->data['orders'][] = array(
     			'order_id' => $order['order_id'],
     			'customer' => "{$order['firstname']} {$order['lastname']} ({$order['email']})",
-				'status' => $order_status_name,
+				'status' => $status_name,
     			'products' => $products,
     			'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
    				'total' => $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order['order_id'], array('seller_id' => $seller_id)), $this->config->get('config_currency'))

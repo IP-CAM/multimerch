@@ -268,6 +268,22 @@ class MsHelper extends Model {
 		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('dialog-sellercontact');
 		return $this->load->view($template, $data);
 	}
+
+	public function getStatusName($data = array()) {
+		$this->load->model('localisation/order_status');
+
+		$order_statuses = $this->model_localisation_order_status->getOrderStatuses(array(
+			'language_id' => (isset($data['language_id']) ? $data['language_id'] : $this->config->get('config_language_id'))
+		));
+
+		foreach ($order_statuses as $order_status) {
+			if ($order_status['order_status_id'] == $data['order_status_id']) {
+				return $order_status['name'];
+			}
+		}
+
+		return '';
+	}
 }
 
 ?>

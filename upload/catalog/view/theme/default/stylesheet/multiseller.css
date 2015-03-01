@@ -873,3 +873,10 @@ table.list thead td.right {
     min-height: 50px;
     text-align: center;
 }
+
+.ms-account-order-info table thead,
+.ms-account-order-info table tfoot {
+    color: #595959;
+    border-color: #e8e8e8;
+    background: #fcfcfc;
+}

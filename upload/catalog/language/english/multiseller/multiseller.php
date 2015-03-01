@@ -45,6 +45,7 @@ $_['ms_button_select_image'] = 'Select image';
 $_['ms_button_select_images'] = 'Select images';
 $_['ms_button_select_files'] = 'Select files';
 
+$_['ms_transaction_order_created'] = 'Order created';
 $_['ms_transaction_order'] = 'Sale: Order Id #%s';
 $_['ms_transaction_sale'] = 'Sale: %s (-%s commission)';
 $_['ms_transaction_refund'] = 'Refund: %s';
@@ -511,6 +512,21 @@ You have received a new private message from %s!
 You can reply in the messaging area in your account.
 EOT;
 
+$_['ms_mail_subject_order_updated'] = 'Your order #%s has been updated by %s';
+$_['ms_mail_order_updated'] = <<<EOT
+Your order at %s has been updated by %s:
+
+Order#: %s
+
+Products:
+%s
+
+Status: %s
+
+Comment:
+%s
+
+EOT;
 
 $_['ms_mail_subject_seller_vote'] = 'Vote for the seller';
 $_['ms_mail_seller_vote_message'] = 'Vote for the seller';
@@ -544,10 +560,14 @@ $_['ms_account_orders_breadcrumbs'] = 'Your Orders';
 $_['ms_account_orders_id'] = 'Order #';
 $_['ms_account_orders_customer'] = 'Customer';
 $_['ms_account_orders_products'] = 'Products';
+$_['ms_account_orders_history'] = 'History';
+$_['ms_account_orders_addresses'] = 'Addresses';
 $_['ms_account_orders_total'] = 'Total amount';
 $_['ms_account_orders_view'] = 'View order';
 $_['ms_account_orders_noorders'] = 'You don\'t have any orders yet!';
+$_['ms_account_orders_nohistory'] = 'There is no history for this order yet!';
 $_['ms_account_orders_change_status']    = 'Change order status';
+$_['ms_account_orders_add_comment']    = 'Add order comment...';
 
 $_['ms_account_order_information'] = 'Order Information';
 

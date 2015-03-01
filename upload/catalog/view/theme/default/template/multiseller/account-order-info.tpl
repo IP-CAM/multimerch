@@ -1,5 +1,5 @@
 <?php echo $header; ?>
-<div class="container">
+<div class="container ms-account-order-info">
   <ul class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
@@ -25,22 +25,21 @@
     <?php } else { ?>
     <?php $class = 'col-sm-12'; ?>
     <?php } ?>
-    <div id="content" class="ms-product <?php echo $class; ?> ms-account-profile"><?php echo $content_top; ?>
-    <h2><?php echo $ms_account_order_information; ?></h2>
+    <div id="content" class="<?php echo $class; ?>"><?php echo $content_top; ?>
 
 	<!-- order information -->
-	<table class="table table-responsive table-bordered table-hover">
-		<thead>
-			<tr>
-				<td colspan="2"><?php echo $text_order_detail; ?></td>
-			</tr>
-		</thead>
+	<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-book"></i> <?php echo $text_order_detail; ?></h3>
+	</div>
+	<table class="table table-responsive table-bordered">
 		<tbody>
 			<tr>
 				<td style="width: 50%;"><?php if ($invoice_no) { ?>
 					<b><?php echo $text_invoice_no; ?></b> <?php echo $invoice_no; ?><br />
 					<?php } ?>
 					<b><?php echo $text_order_id; ?></b> #<?php echo $order_id; ?><br />
+					<b><?php echo $ms_status; ?>:</b> <?php echo $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $order_status_id)); ?><br />
 					<b><?php echo $text_date_added; ?></b> <?php echo $date_added; ?></td>
 				<td style="width: 50%;"><?php if ($payment_method) { ?>
 					<b><?php echo $text_payment_method; ?></b> <?php echo $payment_method; ?><br />
@@ -51,8 +50,13 @@
 			</tr>
 		</tbody>
 	</table>
+	</div>
 
 	<!-- addresses -->
+	<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-map-marker"></i> <?php echo $ms_account_orders_addresses; ?></h3>
+	</div>
 	<table class="table table-responsive table-bordered">
 		<thead>
 			<tr>
@@ -71,9 +75,14 @@
 			</tr>
 		</tbody>
 	</table>
+	</div>
 
 	<!-- products -->
-	<table class="list table table-responsive table-bordered">
+	<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-shopping-cart"></i> <?php echo $ms_account_products; ?></h3>
+	</div>
+	<table class="table table-responsive table-bordered text-center">
 		<thead>
 			<tr>
 				<td class="left"><?php echo $column_name; ?></td>
@@ -104,30 +113,59 @@
 			<?php } ?>
 		</tfoot>
 	</table>
+	</div>
 
-	<!-- sub-order history -->
+	<!-- history -->
+	<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-history"></i> <?php echo $ms_account_orders_history; ?></h3>
+	</div>
 
+	<table class="table table-responsive table-bordered text-center">
+		<thead>
+		<tr>
+			<td class="col-md-6"><?php echo $text_comment; ?></td>
+			<td class="col-md-3"><?php echo $ms_status; ?></td>
+			<td class="col-md-3"><?php echo $ms_date; ?></td>
+		</tr>
+		</thead>
 
-	<!-- change -->
-	<table class="list table table-responsive table-bordered">
+		<tbody>
+			<?php if ($order_history) { ?>
+			<?php foreach ($order_history as $history) { ?>
+			<tr>
+				<td class="col-md-6"><?php echo $history['comment']; ?></td>
+				<td class="col-md-3"><?php echo $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $history['order_status_id'])); ?></td>
+				<td class="col-md-3"><?php echo date($this->language->get('date_format_short'), strtotime($history['date_added'])); ?></td>
+			</tr>
+			<?php } ?>
+			<?php } else { ?>
+				<td colspan="3" style="padding: 25px;border: 1px solid #e8e8e8;"><?php echo $ms_account_orders_nohistory; ?></td>
+			<?php } ?>
+		</tbody>
+
+		<tfoot>
 		<tr>
 			<td>
-				<form method="POST" action="<?= $redirect ?>">
-					<?php echo $ms_account_orders_change_status ?>:
-					<select name="order_status_edit">
-							<?php foreach ($order_statuses as $order_statuses) { ?>
-							 <?php if ($order_statuses['order_status_id'] == $order_status_id) { ?>
-									<option value="<?php echo $order_statuses['order_status_id']; ?>" selected="selected"><?php echo $order_statuses['name']; ?></option>
-								<?php } else { ?>
-								 <option value="<?php echo $order_statuses['order_status_id']; ?>"><?php echo $order_statuses['name']; ?></option>
-								<?php } ?>
-							<?php } ?>
-					</select>
-						<button><?php echo $ms_button_submit; ?></button>
-				</form>
-		</td>
+				<input type="hidden" name="suborder_id" id="suborder_id" value="<?php echo $suborder_id; ?>" />
+				<textarea class="form-control" name="order_comment" id="order_comment" placeholder="<?php echo $ms_account_orders_add_comment; ?>" rows="3"></textarea>
+			</td>
+
+			<td>
+				<select name="order_status" id="order_status" class="form-control">
+					<?php foreach ($order_statuses as $status) { ?>
+					<option value="<?php echo $status['order_status_id']; ?>" <?php if ($status['order_status_id'] == $suborder_status_id) { ?>selected="selected"<?php } ?>><?php echo $status['name']; ?></option>
+					<?php } ?>
+				</select>
+			</td>
+
+			<td>
+				<button type="button" id="button-history" data-loading-text="Loading..." class="btn btn-primary"><i class="fa fa-plus-circle"></i> Add History</button>
+			</td>
 		</tr>
+		</tfoot>
 	</table>
+	</div>
 
 	<div class="buttons">
 		<div class="pull-left"><a href="<?php echo $link_back; ?>" class="btn btn-default"><span><?php echo $button_back; ?></span></a></div>
@@ -135,4 +173,27 @@
     <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
 </div>
+
+<script type="text/javascript">
+	$(function() {
+		$("#button-history").click(function() {
+			if (!$("#order_comment").val() && $("#order_status").val() == <?php echo $suborder_status_id; ?>) return;
+
+			var $btn = $(this).button('loading');
+
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: $('base').attr('href') + 'index.php?route=seller/account-order/jxAddHistory',
+				data: $("#order_comment,#order_status,#suborder_id").serialize(),
+				success: function(jsonData) {
+					//window.location.reload();
+				}
+			});
+
+			$btn.button('reset');
+			//window.location.reload();
+		});
+	});
+</script>
 <?php echo $footer; ?>

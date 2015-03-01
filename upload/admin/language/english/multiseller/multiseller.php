@@ -549,6 +549,7 @@ EOT;
 $_['ms_mail_product_purchased_comment'] = 'Comment: %s';
 
 // Sales - Mail
+$_['ms_transaction_order_created'] = 'Order created';
 $_['ms_transaction_order'] = 'Sale: Order Id #%s';
 $_['ms_transaction_sale'] = 'Sale: %s (-%s commission)';
 $_['ms_transaction_refund'] = 'Refund: %s';
