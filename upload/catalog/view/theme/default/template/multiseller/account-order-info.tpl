@@ -187,12 +187,12 @@
 				url: $('base').attr('href') + 'index.php?route=seller/account-order/jxAddHistory',
 				data: $("#order_comment,#order_status,#suborder_id").serialize(),
 				success: function(jsonData) {
-					//window.location.reload();
+					window.location.reload();
 				}
 			});
 
 			$btn.button('reset');
-			//window.location.reload();
+			window.location.reload();
 		});
 	});
 </script>
