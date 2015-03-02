@@ -118,8 +118,6 @@
 	</file>
 
 	<!-- seller info in account -->
-<file name="catalog/controller/account/order.php">
-
 	<file name="catalog/controller/account/order.php">
         <operation error="log">
 			<search position="after" offset="2"><![CDATA[
