@@ -13,7 +13,7 @@ class ControllerAccountRegisterSeller extends Controller {
 
 	public function index() {
 		if ($this->customer->isLogged()) {
-	  		$this->response->redirect($this->url->link('account/account', '', 'SSL'));
+	  		$this->response->redirect($this->url->link('seller/account-profile', '', 'SSL'));
     	}
 
 		if ($this->config->get('msconf_seller_terms_page')) {
