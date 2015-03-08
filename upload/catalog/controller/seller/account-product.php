@@ -1100,8 +1100,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 						'custom' => 'custom'
 					);
 
-					list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('payment-paypal', array());
-					$this->data['payment_form'] = $this->render();
+					list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('payment-paypal');
+					$this->data['payment_form'] =  $this->load->view($template, $this->data);
 					break;
 
 				case MsPayment::METHOD_BALANCE:

@@ -305,10 +305,10 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			'custom' => $payment_id
 		);
 		
-		list($this->template) = $this->MsLoader->MsHelper->admLoadTemplate('payment/multimerch-paypal');
-		
-		$json['form'] = $this->render();
+		list($template, $children) = $this->MsLoader->MsHelper->admLoadTemplate('payment/multimerch-paypal');
+		$json['form'] = $this->load->view($template, $this->data);
 		$json['success'] = 1;
+
 		$this->response->setOutput(json_encode($json));
 	}
 	
