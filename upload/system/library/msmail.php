@@ -122,10 +122,12 @@ class MsMail extends Model {
 
 		if (isset($data['order_id'])) {
 			if ($this->_modelExists('checkout/order')) {
+				// catalog
 				$this->load->model('checkout/order');
 				$this->load->model('account/order');
 				$order_info = $this->model_checkout_order->getOrder($data['order_id']);
 			} else {
+				// admin
 				$this->load->model('sale/order');
 				$order_info = $this->model_sale_order->getOrder($data['order_id']);
 			}

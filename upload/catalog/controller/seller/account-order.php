@@ -278,13 +278,22 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			'order_status_id' => $suborder_status_id
 		));
 
+		// get customer information
+		$this->load->model('checkout/order');
+		$this->load->model('account/order');
+		$order_info = $this->model_checkout_order->getOrder($suborderData['order_id']);
+
 		$mails[] = array(
 			'type' => MsMail::CMT_ORDER_UPDATED,
 			'data' => array(
 				'status' => $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $suborder_status_id)),
 				'comment' => $this->request->post['order_comment'],
 				'seller_id' => $this->customer->getId(),
-				'order_id' => $suborderData['order_id']
+				'order_id' => $suborderData['order_id'],
+
+				// send email to customer
+				'recipients' => $order_info['email'],
+				'addressee' => $order_info['firstname']
 			)
 		);
 
