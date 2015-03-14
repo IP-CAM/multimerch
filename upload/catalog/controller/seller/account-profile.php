@@ -408,7 +408,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 
 			if ($seller['ms.seller_status'] == MsSeller::STATUS_INACTIVE && !$seller['ms.seller_approved']) {
-				$this->data['statustext'] .= $this->language->get('ms_account_status_please_fill_in');
+				$this->data['statustext'] .= $this->language->get('ms_account_status_tobeapproved');
 			}
 
 			if ($seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {

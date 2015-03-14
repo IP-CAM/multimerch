@@ -444,7 +444,7 @@ $_['ms_account_sellerinfo_saved'] = 'Seller account data saved.';
 
 $_['ms_account_status'] = 'Your seller account status is: ';
 $_['ms_account_status_tobeapproved'] = '<br />You will be able to use your account as soon as it is approved by the store owner.';
-$_['ms_account_status_please_fill_in'] = 'Please complete the following form to create a seller account.';
+$_['ms_account_status_please_fill_in'] = '<br />Please complete the following form to create a seller account.';
 
 $_['ms_seller_status_' . MsSeller::STATUS_ACTIVE] = 'Active';
 $_['ms_seller_status_' . MsSeller::STATUS_INACTIVE] = 'Inactive';
