@@ -183,6 +183,8 @@ $(function() {
             $(this).summernote({
                 height: 300
             });
+
+            if(!$(this).val()) $(this).code('');
         });
 	}
 
