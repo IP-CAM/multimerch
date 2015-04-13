@@ -1,6 +1,6 @@
 <div class="option">
 	<input type="hidden" name="product_option[<?php echo $option_index; ?>][option_id]" value="<?php echo $option['option_id']; ?>"></td>
-	<input type="hidden" name="product_option[<?php echo $option_index; ?>][required]" value="1"></td>
+	<input type="hidden" name="product_option[<?php echo $option_index; ?>][required]" value="<?php echo isset($option['required']) ? (int)$option['required'] : 1; ?>"></td>
 	<div class="o-heading"><span class="option_required <?php echo isset($option['required']) && !$option['required'] ? "bw" : ""; ?>" title="<?php echo $ms_options_required; ?>"></span><?php echo $option['name']; ?><a class="ms-button-delete option_delete" title="<?php echo $ms_delete; ?>"></a></div>
 	
 	<?php if (!empty($values)) { ?>
