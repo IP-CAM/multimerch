@@ -179,7 +179,7 @@ class MsAttribute extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "ms_attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "ms_attribute_description WHERE attribute_id = '" . (int)$attribute_id . "'");
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = $attribute_id");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "attribute WHERE attribute_id = $attribute_id");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "attribute_description WHERE attribute_id IN (SELECT oc_attribute_id FROM " . DB_PREFIX . "ms_attribute_attribute WHERE ms_attribute_id = $attribute_id AND oc_attribute_id IS NOT NULL)");
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "ms_attribute_value WHERE attribute_id = '" . (int)$attribute_id . "'");
