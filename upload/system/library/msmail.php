@@ -139,7 +139,7 @@ class MsMail extends Model {
 
 		//$message .= sprintf($this->language->get('ms_mail_regards'), HTTP_SERVER) . "\n" . $this->config->get('config_name');
 
-		$mail = new Mail($this->config->get('config_mail'));
+		$mail = new Mail();
 
 		if (!isset($data['recipients'])) {
 			$mail->setTo($this->_getRecipients($mail_type));
