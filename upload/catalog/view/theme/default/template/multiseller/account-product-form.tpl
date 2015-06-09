@@ -171,10 +171,10 @@
 							<?php foreach ($categories as $category) { ?>
                                 <?php if($msconf_enable_categories && $this->config->get('msconf_enable_shipping') == 2) { ?>
                                     <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
-                                        <?php if(in_array($category['category_id'],$msconf_physical_product_categories)) { ?>
+                                        <?php if(in_array($category['category_id'],$msship_physical_product_categories)) { ?>
                                             <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
                                     <?php }} else { ?>
-                                        <?php if(in_array($category['category_id'],$msconf_digital_product_categories)) { ?>
+                                        <?php if(in_array($category['category_id'],$msship_digital_product_categories)) { ?>
                                             <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
                                     <?php }} ?>
                                 <?php } else { ?>
@@ -189,14 +189,14 @@
 						<?php foreach ($categories as $category) { ?>
                             <?php if($msconf_enable_categories && $this->config->get('msconf_enable_shipping') == 2) { ?>
                                 <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
-                                    <?php if(in_array($category['category_id'],$msconf_physical_product_categories)) { ?>
+                                    <?php if(in_array($category['category_id'],$msship_physical_product_categories)) { ?>
                                         <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
                                         <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
                                             <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
                                             <?php echo $category['name']; ?>
                                         </div>
                                 <?php }} else { ?>
-                                     <?php if(in_array($category['category_id'],$msconf_digital_product_categories)) { ?>
+                                     <?php if(in_array($category['category_id'],$msship_digital_product_categories)) { ?>
                                         <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
                                         <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
                                             <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
