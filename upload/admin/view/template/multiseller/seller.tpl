@@ -30,7 +30,7 @@
       <div class="panel-body">
 		<?php echo $total_balance; ?><br /><br />
 		<div class="table-responsive">
-		<table class="list mmTable table table-bordered table-hover" style="text-align: center" id="list-sellers">
+		<table class="table table-bordered table-hover" style="text-align: center" id="list-sellers">
 			<thead>
 				<tr>
 					<td class="tiny"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
@@ -42,7 +42,7 @@
 					<td class="medium"><?php echo $ms_catalog_sellers_current_balance; ?></td>
 					<td class="medium"><?php echo $ms_catalog_sellers_status; ?></td>
 					<td class="medium"><?php echo $ms_catalog_sellers_date_created; ?></td>
-					<td class="medium"><?php echo $ms_action; ?></td>
+					<td class="large"><?php echo $ms_action; ?></td>
 				</tr>
 				<tr class="filter">
 					<td></td>

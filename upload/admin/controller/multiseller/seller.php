@@ -44,15 +44,33 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 		foreach ($results as $result) {
 			// actions
 			$actions = "";
+
+			// log in as seller
+			$this->load->model('setting/store');
+
+			$actions .= "<div class='btn-group' data-toggle='tooltip' title='" . $this->language->get('button_login') . "'>
+				<button type='button' data-toggle='dropdown' class='btn btn-info dropdown-toggle'><i class='fa fa-lock'></i></button>
+				<ul class='dropdown-menu pull-right'>";
+
+			$actions .= "<li><a href='" . $this->url->link('sale/customer/login', 'token=' . $this->session->data['token'] . '&customer_id=' . $result['seller_id'] . '&store_id=0', 'SSL') . "' target='_blank'>" . $this->language->get('text_default') . "</a></li>";
+
+			foreach ($this->model_setting_store->getStores() as $store) {
+				$actions .= "<li><a href='" . $this->url->link('sale/customer/login', 'token=' . $this->session->data['token'] . '&customer_id=' . $result['seller_id'] . '&store_id=' . $store['store_id'], 'SSL') . "' target='_blank'>" . $store['name'] . "</a></li>";
+			}
+
+			$actions .= "</ul></div> ";
+
 			if ($this->currency->format($this->MsLoader->MsBalance->getSellerBalance($result['seller_id']) - $this->MsLoader->MsBalance->getReservedSellerFunds($result['seller_id']), $this->config->get('config_currency'), '', FALSE) > 0) {
 				if (!empty($result['ms.paypal']) && filter_var($result['ms.paypal'], FILTER_VALIDATE_EMAIL)) {
-					$actions .= "<a class='ms-button ms-button-paypal' title='" . $this->language->get('ms_catalog_sellers_balance_paypal') . "'></a>";
+					$actions .= "<a class='btn btn-info' data-toggle='tooltip' title='" . $this->language->get('ms_catalog_sellers_balance_paypal') . "'><i class='fa fa-paypal'></i></a> ";
 				} else {
-					$actions .= "<a class='ms-button ms-button-paypal-bw' title='".$this->language->get('ms_payment_payout_paypal_invalid') . "'></a>";
+					$actions .= "<div class='btn-group' data-toggle='tooltip' title='".$this->language->get('ms_payment_payout_paypal_invalid') . "'><a class='btn btn-default disabled'><i class='fa fa-paypal'></i></a></div> ";
 				}
 			}
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'></a>";
-			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' title='".$this->language->get('button_delete')."'></a>";
+
+			$actions .= "<a class='btn btn-primary' href='" . $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' data-toggle='tooltip' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil'></i></a> ";
+
+			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' data-toggle='tooltip' title='".$this->language->get('button_delete')."'><i class='fa fa-trash-o'></i></a> ";
 
 			$available = $this->MsLoader->MsBalance->getSellerBalance($result['seller_id']) - $this->MsLoader->MsBalance->getReservedSellerFunds($result['seller_id']);
 			
