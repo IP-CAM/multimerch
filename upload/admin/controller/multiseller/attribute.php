@@ -195,7 +195,7 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 		$json = array();
 		$data = $this->request->post;
 		unset($data['attribute_value'][0]);
-		
+
 		foreach ($data['attribute_description'] as $language_id => $value) {
 			if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 128)) {
 				$json['errors']["attribute_description[$language_id][name]"] = $this->language->get('ms_error_attribute_name');
@@ -206,7 +206,9 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 			if (empty($data['attribute_value'])) {
 				$json['errors']['attribute_type'] = $this->language->get('ms_error_attribute_type');
 			}
-		} else if (($data['attribute_type'] != MsAttribute::TYPE_TEXT && $data['attribute_type'] != MsAttribute::TYPE_TEXTAREA)) {
+		} else if (($data['attribute_type'] == MsAttribute::TYPE_TEXT || $data['attribute_type'] == MsAttribute::TYPE_TEXTAREA)) {
+			unset($data['attribute_value']);
+		} else {
 			unset($data['text_type']);
 			unset($data['attribute_value']);
 		}
