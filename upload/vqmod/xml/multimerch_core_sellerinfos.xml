@@ -244,13 +244,13 @@
         <!-- seller histories -->
         <operation error="log">
 			<search position="before"><![CDATA[
-				<div class="buttons clearfix">
+				<div class="buttons
 			]]></search>
 			<add><![CDATA[
                 <?php if (isset($seller_histories) && $seller_histories) { ?>
                 <?php foreach ($seller_histories as $history) { ?>
                     <h4><?php echo $history['seller']; ?></h4>
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover list">
                     <thead>
                     <tr>
                     <td class="text-left"><?php echo $column_date_added; ?></td>
