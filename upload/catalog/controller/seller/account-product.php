@@ -338,6 +338,8 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 			if (!empty($language['product_tags']) && mb_strlen($language['product_tags']) > 1000) {
 				$json['errors']['product_tags_' . $language_id] = $this->language->get('ms_error_product_tags_length');
+			} else if (empty($language['product_tags']) && $i != 0) {
+				$data['languages'][$language_id]['product_tags'] = $data['languages'][$default]['product_tags'];
 			}
 
 			// strip disallowed tags in description
@@ -348,10 +350,10 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					foreach ($allowed_tags as $tag) {
 						$allowed_tags_ready .= "<" . trim($tag) . ">";
 					}
-					$data['languages'][$language_id]['product_description'] = htmlspecialchars(strip_tags(htmlspecialchars_decode($language['product_description'], ENT_COMPAT), $allowed_tags_ready), ENT_COMPAT, 'UTF-8');
+					$data['languages'][$language_id]['product_description'] = htmlspecialchars(strip_tags(htmlspecialchars_decode($data['languages'][$language_id]['product_description'], ENT_COMPAT), $allowed_tags_ready), ENT_COMPAT, 'UTF-8');
 				}
 			} else {
-				$data['languages'][$language_id]['product_description'] = htmlspecialchars(nl2br($language['product_description']), ENT_COMPAT, 'UTF-8');
+				$data['languages'][$language_id]['product_description'] = htmlspecialchars(nl2br($data['languages'][$language_id]['product_description']), ENT_COMPAT, 'UTF-8');
 			}
 
 			// multilang attributes
