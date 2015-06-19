@@ -77,7 +77,7 @@ class ControllerSellerAccountDashboard extends ControllerSellerAccount {
 
 			$status_name = $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $order['order_status_id']));
 
-			if (isset($suborder['order_status_id']) && $order['order_status_id'] != $suborder['order_status_id']) {
+			if (isset($suborder['order_status_id']) && $suborder['order_status_id'] && $order['order_status_id'] != $suborder['order_status_id']) {
 				$status_name .= ' (' . $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $suborder['order_status_id'])) . ')';
 			}
 
