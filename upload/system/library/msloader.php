@@ -1,8 +1,8 @@
 <?php
 
 class MsLoader {
-	public $appVer = "7.1.1_pre";
-	public $dbVer = "1.0.2.0";
+	public $appVer = "7.1.1";
+	public $dbVer = "1.0.2.1";
 	
 	public function __construct($registry) {
 		$this->registry = $registry;
@@ -32,7 +32,7 @@ class MsLoader {
 
 	private static function _autoloadController($class) {
 		preg_match_all('/((?:^|[A-Z])[a-z]+)/',$class,$matches);
-		
+
 		if (isset($matches[0][1]) && isset($matches[0][2])) {
 			$file = DIR_APPLICATION . 'controller/' . strtolower($matches[0][1]) . '/' . strtolower($matches[0][2]) . '.php';
 			if (file_exists($file)) {

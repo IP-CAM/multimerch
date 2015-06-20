@@ -9,6 +9,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"multiseller/seller",
 		"multiseller/transaction",
 		"multiseller/dashboard",
+		"multiseller/debug",
 		"multiseller/seller-group"
 	);
 	

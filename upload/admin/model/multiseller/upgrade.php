@@ -79,5 +79,13 @@ class ModelMultisellerUpgrade extends Model {
 
 			$this->_createSchemaEntry('1.0.2.0');
 		}
+
+		if (version_compare($version, '1.0.2.1') < 0) {
+			$this->load->model('user/user_group');
+			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'multiseller/debug');
+			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'multiseller/debug');
+
+			$this->_createSchemaEntry('1.0.2.1');
+		}
 	}
 }

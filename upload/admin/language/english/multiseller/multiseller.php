@@ -95,6 +95,7 @@ $_['ms_menu_seller_groups'] = 'Seller groups';
 $_['ms_menu_attributes'] = 'Attributes';
 $_['ms_menu_products'] = 'Products';
 $_['ms_menu_transactions'] = 'Transactions';
+$_['ms_menu_debug'] = 'Debug';
 $_['ms_menu_payment'] = 'Payments';
 $_['ms_menu_addons'] = 'Addons';
 $_['ms_menu_settings'] = 'Settings';
@@ -454,6 +455,11 @@ $_['ms_error_payment_tostore'] = 'Incoming payments (seller to store) can not be
 $_['ms_error_payment_amount'] = 'Please specify a valid payment amount';
 $_['ms_error_payment_norequests'] = 'Error: no valid payouts to process. Please make sure the sellers have enough funds and valid PayPal addresses specified';
 $_['ms_success_payment_created'] = 'Payment successfully created';
+
+// Debug
+$_['ms_debug_heading'] = 'Debug';
+$_['ms_debug_breadcrumbs'] = 'Debug';
+$_['ms_debug_info'] = 'MultiMerch debug information';
 
 // Finances - Transactions
 $_['ms_transactions_heading'] = 'Transactions';
