@@ -295,7 +295,7 @@
                 <?php foreach ($history['entries'] as $history) { ?>
                     <tr>
                     <td class="text-left"><?php echo $history['date_added']; ?></td>
-                    <td class="text-left"><?php echo $history['comment']; ?></td>
+                    <td class="text-left"><?php echo nl2br($history['comment']); ?></td>
                     <td class="text-left"><?php echo $history['status']; ?></td>
                     <td class="text-left"></td>
                     </tr>

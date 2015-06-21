@@ -569,6 +569,7 @@ $_['ms_account_orders_noorders'] = 'You don\'t have any orders yet!';
 $_['ms_account_orders_nohistory'] = 'There is no history for this order yet!';
 $_['ms_account_orders_change_status']    = 'Change order status';
 $_['ms_account_orders_add_comment']    = 'Add order comment...';
+$_['ms_account_orders_add_history']    = 'Add History';
 
 $_['ms_account_order_information'] = 'Order Information';
 

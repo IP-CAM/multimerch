@@ -134,7 +134,7 @@
 			<?php if ($order_history) { ?>
 			<?php foreach ($order_history as $history) { ?>
 			<tr>
-				<td class="col-md-6"><?php echo $history['comment']; ?></td>
+				<td class="col-md-6"><?php echo nl2br($history['comment']); ?></td>
 				<td class="col-md-3"><?php echo $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $history['order_status_id'])); ?></td>
 				<td class="col-md-3"><?php echo date($this->language->get('date_format_short'), strtotime($history['date_added'])); ?></td>
 			</tr>
@@ -160,7 +160,7 @@
 			</td>
 
 			<td>
-				<button type="button" id="button-history" data-loading-text="Loading..." class="btn btn-primary"><i class="fa fa-plus-circle"></i> Add History</button>
+				<button type="button" id="button-history" data-loading-text="Loading..." class="btn btn-primary"><i class="fa fa-plus-circle"></i> <?php echo $ms_account_orders_add_history; ?></button>
 			</td>
 		</tr>
 		</tfoot>
@@ -186,13 +186,11 @@
 				dataType: "json",
 				url: $('base').attr('href') + 'index.php?route=seller/account-order/jxAddHistory',
 				data: $("#order_comment,#order_status,#suborder_id").serialize(),
-				success: function(jsonData) {
+				complete: function(jsonData) {
+					$btn.button('reset');
 					window.location.reload();
 				}
 			});
-
-			$btn.button('reset');
-			window.location.reload();
 		});
 	});
 </script>
