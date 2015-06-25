@@ -1069,7 +1069,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 		$this->document->addScript('catalog/view/javascript/account-product-form.js');
 		$this->document->addScript('catalog/view/javascript/multimerch/account-product-form-options.js');
-		$this->document->addScript('https://rawgit.com/RubaXa/Sortable/master/Sortable.js');
+		$this->document->addScript('catalog/view/javascript/multimerch/Sortable.js');
 
 		// rte
 		if ($this->config->get('msconf_enable_rte')) {
