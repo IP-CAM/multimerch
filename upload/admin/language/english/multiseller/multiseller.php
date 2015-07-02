@@ -194,7 +194,7 @@ $_['ms_config_provide_buyerinfo'] = 'Mail buyer information';
 $_['ms_config_provide_buyerinfo_note'] = 'Include buyer address in the Product purchased email';
 
 $_['ms_config_enable_shipping'] = 'Enable OpenCart\'s "Shippable" option';
-$_['ms_config_enable_shipping_note'] = 'New products will be created with OpenCart\'s "Shippable" field enabled. With MultiMerch Shipping Addon installed, this will enable shipping functionality.';
+$_['ms_config_enable_shipping_note'] = 'New products will be created with OpenCart\'s \'Shippable\' field enabled. With MultiMerch Shipping Addon installed, this will enable shipping functionality.';
 
 $_['ms_config_enable_quantities'] = 'Enable quantities';
 $_['ms_config_enable_quantities_note'] = 'Allow sellers to specify quantities for products';

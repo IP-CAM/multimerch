@@ -152,7 +152,8 @@
 						<li><a href="<?php echo $this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_products; ?></a></li>
 						<li><a href="<?php echo $this->url->link('multiseller/payment', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_payment; ?></a></li>
 						<li><a href="<?php echo $this->url->link('multiseller/transaction', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_transactions; ?></a></li>
-						<li><a href="<?php echo $this->url->link('module/multiseller', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_settings; ?></a></li>	
+						<li><a href="<?php echo $this->url->link('multiseller/debug', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_debug_heading; ?></a></li>
+						<li><a href="<?php echo $this->url->link('module/multiseller', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_settings; ?></a></li>
 					</ul>
 				</li>
 			]]></add>
