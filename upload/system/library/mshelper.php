@@ -265,7 +265,7 @@ class MsHelper extends Model {
 		if (empty($seller)) return false;
 
 		$data['seller_id'] = $seller_id;
-		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('dialog-sellercontact');
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('dialog-sellercontact', 1);
 		return $this->load->view($template, $data);
 	}
 
