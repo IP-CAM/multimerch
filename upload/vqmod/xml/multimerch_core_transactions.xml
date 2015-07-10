@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <!DOCTYPE modification [
-<!ENTITY adminFolder "admin">
 ]>
 <modification>
 	<id>MultiMerch Core Transactions</id>
