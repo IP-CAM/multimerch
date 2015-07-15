@@ -39,6 +39,18 @@
 		<td><?php echo $ms_account_products_listing_until; ?></td>
 		<td class="large"><?php echo $ms_account_products_action; ?></td>
 	</tr>
+
+	<tr class="filter">
+		<td></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td></td>
+	</tr>
 	</thead>
 	<tbody></tbody>
 	</table>

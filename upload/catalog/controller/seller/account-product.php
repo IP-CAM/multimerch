@@ -3,17 +3,19 @@
 class ControllerSellerAccountProduct extends ControllerSellerAccount {
 	public function getTableData() {
 		$colMap = array(
-			'product_name' => '`pd.name`',
+			'product_name' => 'pd.name',
 			'product_status' => '`mp.product_status`',
 			'date_created' => '`p.date_created`',
-			'list_until' => '`mp.list_until`',
+			'list_until' => 'mp.list_until',
 			'number_sold' => 'mp.number_sold',
 			'product_price' => 'p.price',
 		);
 		
 		$sorts = array('product_name', 'product_price', 'date_created', 'list_until', 'product_status', 'product_earnings', 'number_sold');
+		$filters = array_diff($sorts, array('product_status'));
 		
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
+		$filterParams = $this->MsLoader->MsHelper->getFilterParams($filters, $colMap);
 
 		$seller_id = $this->customer->getId();
 		$products = $this->MsLoader->MsProduct->getProducts(
@@ -25,6 +27,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			array(
 				'order_by'  => $sortCol,
 				'order_way' => $sortDir,
+				'filters' => $filterParams,
 				'offset' => $this->request->get['iDisplayStart'],
 				'limit' => $this->request->get['iDisplayLength']
 			),
@@ -90,7 +93,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			
 			// product status
 			$status = "";
-			if ($product['mp.product_status'] == MsProduct::STATUS_ACTIVE) { 
+			if ($product['mp.product_status'] == MsProduct::STATUS_ACTIVE) {
 				$status = "<span class='active' style='color: #080;'>" . $this->language->get('ms_product_status_' . $product['mp.product_status']) . "</td></span>";
 			} else {
 				$status = "<span class='inactive' style='color: #b00;'>" . $this->language->get('ms_product_status_' . $product['mp.product_status']) . "</td></span>";
@@ -658,7 +661,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$data['product_quantity'] = 999;
 			$data['product_subtract'] = 0;
 		}
-		
+
 		// SEO urls generation for products
 		if ($this->config->get('msconf_enable_seo_urls_product')) {
 			$latin_check = '/[^\x{0030}-\x{007f}]/u';
