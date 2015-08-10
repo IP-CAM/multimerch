@@ -226,6 +226,7 @@ class MsProduct extends Model {
 		foreach ($data['languages'] as $language_id => $language) {
             $meta_description = isset($language['product_meta_description']) ? htmlspecialchars(nl2br($language['product_meta_description']), ENT_COMPAT) : '';
             $meta_keyword = isset($language['product_meta_keyword']) ? htmlspecialchars(nl2br($language['product_meta_keyword']), ENT_COMPAT) : '';
+			$meta_title = isset($language['product_meta_title']) ? htmlspecialchars(nl2br($language['product_meta_title']), ENT_COMPAT) : $this->db->escape($language['product_name']);
 
 			$sql = "INSERT INTO " . DB_PREFIX . "product_description
 					SET product_id = " . (int)$product_id . ",
@@ -233,6 +234,7 @@ class MsProduct extends Model {
 						description = '". $this->db->escape($language['product_description']) ."',
 						meta_description = '". $this->db->escape($meta_description) ."',
 						meta_keyword = '". $this->db->escape($meta_keyword) ."',
+						meta_title = '". $this->db->escape($meta_title) ."',
 						tag = '" . $this->db->escape($language['product_tags']) . "',
 						language_id = " . (int)$language_id;
 			$this->db->query($sql);
@@ -469,14 +471,17 @@ class MsProduct extends Model {
 		 * languages
 		 */
 		foreach ($data['languages'] as $language_id => $language) {
-            $included_field_sql = '';
-            isset($language['product_meta_description']) ? $included_field_sql .= " meta_description = '". $this->db->escape(htmlspecialchars(nl2br($language['product_meta_description']), ENT_COMPAT)) ."',"  : '';
-            isset($language['product_meta_keyword']) ? $included_field_sql .= " meta_keyword = '". $this->db->escape(htmlspecialchars(nl2br($language['product_meta_keyword']), ENT_COMPAT)) ."',"  : '';
+			$meta_description = isset($language['product_meta_description']) ? $this->db->escape(htmlspecialchars(nl2br($language['product_meta_description'])), ENT_COMPAT) : '';
+            $meta_keyword = isset($language['product_meta_keyword']) ? $this->db->escape(htmlspecialchars(nl2br($language['product_meta_keyword'])), ENT_COMPAT) : '';
+			$meta_title = isset($language['product_meta_title']) ? $this->db->escape(htmlspecialchars(nl2br($language['product_meta_title'])), ENT_COMPAT) : $this->db->escape($language['product_name']);
 
 			$sql = "UPDATE " . DB_PREFIX . "product_description
-					SET" . $included_field_sql . " name = '". $this->db->escape($language['product_name']) ."',
+					SET name = '". $this->db->escape($language['product_name']) ."',
 						description = '". $this->db->escape($language['product_description']) ."',
-						tag = '". $this->db->escape($language['product_tags']) ."'
+						tag = '". $this->db->escape($language['product_tags']) ."',
+						meta_description = '". $this->db->escape($meta_description) ."',
+						meta_keyword = '". $this->db->escape($meta_keyword) ."',
+						meta_title = '". $this->db->escape($meta_title) ."',
 					WHERE product_id = " . (int)$product_id . "
 					AND language_id = " . (int)$language_id;
 					
