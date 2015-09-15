@@ -92,7 +92,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'suborder_status' => $status_name,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
 					'total_amount' => $this->currency->format($order['total_amount'], $this->config->get('config_currency')),
-					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']) . '" class="ms-button ms-button-view" title="' . $this->language->get('ms_view_modify') . '"></a>'
+					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" class="ms-button ms-button-view" title="' . $this->language->get('ms_view_modify') . '"></a>'
 				)
 			);
 		}

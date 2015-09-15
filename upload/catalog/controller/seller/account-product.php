@@ -1067,6 +1067,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->load->model('catalog/product');
 		$this->load->model('localisation/currency');
 		$this->load->model('localisation/language');
+		$this->load->model('account/customer_group');
 
 		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
@@ -1082,6 +1083,9 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 		$this->data['seller'] = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 		$this->data['seller_group'] = $this->MsLoader->MsSellerGroup->getSellerGroup($this->data['seller']['ms.seller_group']);
+
+		$this->data['customer_groups'] = $this->model_account_customer_group->getCustomerGroups();
+		$this->data['hide_customer_groups'] = (count($this->data['customer_groups']) < 2) ? true : false;
 
 		$product_id = isset($this->request->get['product_id']) ? (int)$this->request->get['product_id'] : 0;
 		if ($product_id) $product_status = $this->MsLoader->MsProduct->getStatus($product_id);
@@ -1252,7 +1256,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 		$product['specials'] = $this->MsLoader->MsProduct->getProductSpecials($product_id);
 		$product['discounts'] = $this->MsLoader->MsProduct->getProductDiscounts($product_id);
-		
+
 		if (!empty($product['thumbnail'])) {
 		
 			if ($clone){

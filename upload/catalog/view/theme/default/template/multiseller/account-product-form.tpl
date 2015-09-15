@@ -550,6 +550,7 @@
 				<thead>
 				<tr>
 					<td><span class="required">*</span><?php echo $ms_account_product_priority; ?></td>
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>><span class="required">*</span><?php echo $ms_account_product_customer_group; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_price; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_date_start; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_date_end; ?></td>
@@ -561,8 +562,17 @@
 
 				<!-- sample row -->
 				<tr class="ffSample">
-					<td><input type="text" class="form-control inline" name="product_specials[0][priority]" value="" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[0][price]" value="" /></td>
+					<td><input type="text" class="form-control inline small" name="product_specials[0][priority]" value="" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_specials[0][customer_group_id]" class="form-control inline">
+						  <?php foreach ($customer_groups as $customer_group) { ?>
+						  <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+						  <?php } ?>
+						</select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_specials[0][price]" value="" /></td>
 					<td>
 						<div class="input-group date">
 						<input type="text" class="form-control inline" name="product_specials[0][date_start]" value="" data-date-format="YYYY-MM-DD" />
@@ -586,8 +596,17 @@
 				<?php $special_row = 1; ?>
 				<?php foreach ($product['specials'] as $product_special) { ?>
 				<tr>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][priority]" value="<?php echo $product_special['priority']; ?>" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']); ?>" /></td>
+					<td><input type="text" class="form-control inline small" name="product_specials[<?php echo $special_row; ?>][priority]" value="<?php echo $product_special['priority']; ?>" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_specials[<?php echo $special_row; ?>][customer_group_id]" class="form-control inline">
+						  <?php foreach ($customer_groups as $customer_group) { ?>
+						  <option value="<?php echo $customer_group['customer_group_id']; ?>" <?php if ($customer_group['customer_group_id'] == $product_special['customer_group_id']) { ?> selected="selected" <?php } ?>><?php echo $customer_group['name']; ?></option>
+						  <?php } ?>
+						</select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_specials[<?php echo $special_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']); ?>" /></td>
 					<td>
 						<div class="input-group date">
 						<input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_start]" value="<?php echo $product_special['date_start']; ?>" data-date-format="YYYY-MM-DD" />
@@ -613,7 +632,7 @@
 
 				<tfoot>
 				<tr>
-				<td colspan="5" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_special; ?></a></td>
+				<td colspan="6" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_special; ?></a></td>
 				</tr>
 				</tfoot>
 			</table>
@@ -630,6 +649,7 @@
 				<thead>
 				<tr>
 					<td><span class="required">*</span><?php echo $ms_account_product_priority; ?></td>
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>><span class="required">*</span><?php echo $ms_account_product_customer_group; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_quantity; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_price; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_date_start; ?></td>
@@ -642,9 +662,18 @@
 				
 				<!-- sample row -->
 				<tr class="ffSample">				
-					<td><input type="text" class="form-control inline" name="product_discounts[0][priority]" value="" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][quantity]" value="" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][price]" value="" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[0][priority]" value="" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_discounts[0][customer_group_id]" class="form-control inline">
+                          <?php foreach ($customer_groups as $customer_group) { ?>
+                          <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+                          <?php } ?>
+                        </select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_discounts[0][quantity]" value="" size="2" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[0][price]" value="" /></td>
 					<td>
 						<div class="input-group date">
 						<input type="text" class="form-control inline" name="product_discounts[0][date_start]" value="" data-date-format="YYYY-MM-DD" />
@@ -668,9 +697,18 @@
 				<?php $discount_row = 1; ?>
 				<?php foreach ($product['discounts'] as $product_discount) { ?>
 				<tr>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][priority]" value="<?php echo $product_discount['priority']; ?>" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][quantity]" value="<?php echo $product_discount['quantity']; ?>" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']); ?>" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[<?php echo $discount_row; ?>][priority]" value="<?php echo $product_discount['priority']; ?>" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_discounts[<?php echo $discount_row; ?>][customer_group_id]" class="form-control inline">
+						  <?php foreach ($customer_groups as $customer_group) { ?>
+						  <option value="<?php echo $customer_group['customer_group_id']; ?>" <?php if ($customer_group['customer_group_id'] == $product_discount['customer_group_id']) { ?> selected="selected" <?php } ?>><?php echo $customer_group['name']; ?></option>
+						  <?php } ?>
+						</select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_discounts[<?php echo $discount_row; ?>][quantity]" value="<?php echo $product_discount['quantity']; ?>" size="2" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[<?php echo $discount_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']); ?>" /></td>
 					<td>
 						<div class="input-group date">
 						<input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_start]" value="<?php echo $product_discount['date_start']; ?>" data-date-format="YYYY-MM-DD" />
@@ -696,7 +734,7 @@
 
 				<tfoot>
 				<tr>
-					<td colspan="6" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_discount; ?></a></td>
+					<td colspan="7" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_discount; ?></a></td>
 				</tr>
 				</tfoot>
 			</table>

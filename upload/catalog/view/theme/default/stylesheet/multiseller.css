@@ -145,6 +145,10 @@ table.list tbody td, table.list thead td  {
 	width: 200px;
 }
 
+.ms-product .table .input-group.date {
+	margin: 0 auto;
+}
+
 .ms-product select {
 	width: 200px;
 }
@@ -776,15 +780,15 @@ table .tiny {
 	width: 50px;
 }
 
-table .small {
+table .small, input.small, input[type='text'].small {
 	width: 75px;
 }
 
-table .medium {
+table .medium, input.medium, input[type='text'].medium {
 	width: 125px;
 }
 
-table .large {
+table .large, input.large, input[type='text'].large {
 	width: 200px;
 }
 

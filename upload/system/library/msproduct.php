@@ -389,14 +389,18 @@ class MsProduct extends Model {
 		
 		// specials
 		if (isset($data['product_specials'])) {
+			$customer_group_id = (int)$this->config->get('config_customer_group_id');
 			foreach ($data['product_specials'] as $product_special) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "product_special SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "', priority = '" . (int)$product_special['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']) . "', date_start = '" . $this->db->escape($product_special['date_start']) . "', date_end = '" . $this->db->escape($product_special['date_end']) . "'");
+				if (isset($product_special['customer_group_id'])) $customer_group_id = (int)$product_special['customer_group_id'];
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_special SET product_id = '" . (int)$product_id . "', customer_group_id = '" . $customer_group_id . "', priority = '" . (int)$product_special['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']) . "', date_start = '" . $this->db->escape($product_special['date_start']) . "', date_end = '" . $this->db->escape($product_special['date_end']) . "'");
 			}
 		}
 
 		if (isset($data['product_discounts'])) {
+			$customer_group_id = (int)$this->config->get('config_customer_group_id');
 			foreach ($data['product_discounts'] as $product_discount) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "product_discount SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "', quantity = '" . (int)$product_discount['quantity'] . "', priority = '" . (int)$product_discount['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']) . "', date_start = '" . $this->db->escape($product_discount['date_start']) . "', date_end = '" . $this->db->escape($product_discount['date_end']) . "'");
+				if (isset($product_discount['customer_group_id'])) $customer_group_id = (int)$product_discount['customer_group_id'];
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_discount SET product_id = '" . (int)$product_id . "', customer_group_id = '" . $customer_group_id . "', quantity = '" . (int)$product_discount['quantity'] . "', priority = '" . (int)$product_discount['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']) . "', date_start = '" . $this->db->escape($product_discount['date_start']) . "', date_end = '" . $this->db->escape($product_discount['date_end']) . "'");
 			}
 		}
 
@@ -481,7 +485,7 @@ class MsProduct extends Model {
 						tag = '". $this->db->escape($language['product_tags']) ."',
 						meta_description = '". $this->db->escape($meta_description) ."',
 						meta_keyword = '". $this->db->escape($meta_keyword) ."',
-						meta_title = '". $this->db->escape($meta_title) ."',
+						meta_title = '". $this->db->escape($meta_title) ."'
 					WHERE product_id = " . (int)$product_id . "
 					AND language_id = " . (int)$language_id;
 					
@@ -720,16 +724,20 @@ class MsProduct extends Model {
 		// specials
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "'");
 		if (isset($data['product_specials'])) {
+			$customer_group_id = (int)$this->config->get('config_customer_group_id');
 			foreach ($data['product_specials'] as $product_special) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "product_special SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "', priority = '" . (int)$product_special['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']) . "', date_start = '" . $this->db->escape($product_special['date_start']) . "', date_end = '" . $this->db->escape($product_special['date_end']) . "'");
+				if (isset($product_special['customer_group_id'])) $customer_group_id = (int)$product_special['customer_group_id'];
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_special SET product_id = '" . (int)$product_id . "', customer_group_id = '" . $customer_group_id . "', priority = '" . (int)$product_special['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']) . "', date_start = '" . $this->db->escape($product_special['date_start']) . "', date_end = '" . $this->db->escape($product_special['date_end']) . "'");
 			}
 		}		
 		
 		// discounts
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "'");
 		if (isset($data['product_discounts'])) {
+			$customer_group_id = (int)$this->config->get('config_customer_group_id');
 			foreach ($data['product_discounts'] as $product_discount) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "product_discount SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "', quantity = '" . (int)$product_discount['quantity'] . "', priority = '" . (int)$product_discount['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']) . "', date_start = '" . $this->db->escape($product_discount['date_start']) . "', date_end = '" . $this->db->escape($product_discount['date_end']) . "'");
+				if (isset($product_discount['customer_group_id'])) $customer_group_id = (int)$product_discount['customer_group_id'];
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_discount SET product_id = '" . (int)$product_id . "', customer_group_id = '" . $customer_group_id . "', quantity = '" . (int)$product_discount['quantity'] . "', priority = '" . (int)$product_discount['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']) . "', date_start = '" . $this->db->escape($product_discount['date_start']) . "', date_end = '" . $this->db->escape($product_discount['date_end']) . "'");
 			}
 		}		
 		

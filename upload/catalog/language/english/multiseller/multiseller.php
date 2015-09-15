@@ -245,7 +245,7 @@ $_['ms_error_file_size'] = 'File too big';
 $_['ms_error_image_too_small'] = 'Image file dimensions are too small. Minimum allowed size is: %s x %s (Width x Height)';
 $_['ms_error_image_too_big'] = 'Image file dimensions are too big. Maximum allowed size is: %s x %s (Width x Height)';
 $_['ms_error_file_upload_error'] = 'File upload error';
-$_['ms_error_form_submit_error'] = 'Error occured when submitting the form. Please contact the store owner for more information.';
+$_['ms_error_form_submit_error'] = 'Error occurred when submitting the form. Please contact the store owner for more information.';
 $_['ms_error_form_notice'] = 'Please check all form tabs for errors.';
 $_['ms_error_product_name_empty'] = 'Product name cannot be empty';
 $_['ms_error_product_name_length'] = 'Product name should be between %s and %s characters';
@@ -372,6 +372,8 @@ $_['ms_account_product_date_available'] = 'Date Available';
 $_['ms_account_product_stock_status'] = 'Out Of Stock Status';
 $_['ms_account_product_stock_status_note'] = 'Status shown when a product is out of stock';
 $_['ms_account_product_subtract'] = 'Subtract Stock';
+$_['ms_account_product_customer_group'] = 'Customer Group';
+
 
 // Options
 $_['ms_account_product_tab_options'] = 'Options';
