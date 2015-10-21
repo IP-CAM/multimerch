@@ -1,5 +1,18 @@
 <?php
 
+if (!class_exists('ControllerMultisellerBase')) {
+    die('
+<h3>MultiMerch Installation Error - ControllerMultisellerBase class not found</h3>
+<pre>This usually means vQmod is missing or broken. Please make sure that:
+
+1. You have installed the latest version of vQmod available at <a href="http://vqmod.com/">http://vqmod.com/</a>
+2. You have run vQmod installation script at <a target="_blank" href="'.HTTP_CATALOG.'vqmod/install/">'.HTTP_CATALOG.'vqmod/install/</a> successfully (see <a target="_blank" href="https://github.com/vqmod/vqmod/wiki/Installing-vQmod-on-OpenCart">Installing vQmod on OpenCart</a> for more information)
+3. Your vqmod/ and vqmod/vqcache/ folders are server-writable. Contact your hosting provider for more information
+4. You have copied all MultiMerch files and folders from the upload/ folder to your OpenCart root
+</pre>
+    ');
+}
+
 class ControllerModuleMultiseller extends ControllerMultisellerBase {
 	private $_controllers = array(
 		"multiseller/base",
