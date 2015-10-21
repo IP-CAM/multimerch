@@ -186,11 +186,15 @@
 				dataType: "json",
 				url: $('base').attr('href') + 'index.php?route=seller/account-order/jxAddHistory',
 				data: $("#order_comment,#order_status,#suborder_id").serialize(),
-				complete: function(jsonData) {
-					$btn.button('reset');
+				success: function(jsonData) {
 					window.location.reload();
+				},
+				error: function() {
+				  window.location.reload();
 				}
 			});
+
+			$btn.button('reset');
 		});
 	});
 </script>

@@ -256,7 +256,9 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 	}
 
 	public function jxAddHistory() {
-		if(!isset($this->request->post['order_comment']) || !isset($this->request->post['order_status']) || !isset($this->request->post['suborder_id'])) return false;
+	  $json = array();	 
+	  
+	  if(!isset($this->request->post['order_comment']) || !isset($this->request->post['order_status']) || !isset($this->request->post['suborder_id'])) return false;
 		if(empty($this->request->post['order_comment']) && !$this->request->post['order_status']) return false;
 
 		// keep current status if not changing explicitly
@@ -298,6 +300,10 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		);
 
 		$this->MsLoader->MsMail->sendMails($mails);
+		
+		$json['success'] = "ok";
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
 	}
 }
 
