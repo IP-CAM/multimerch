@@ -124,7 +124,15 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 				'href' => $this->url->link('multiseller/product', '', 'SSL'),
 			)
 		));
-		
+		$this->data['sellers'] = $this->MsLoader->MsSeller->getSellers(
+			array(
+				'seller_status' => array(MsSeller::STATUS_ACTIVE, MsSeller::STATUS_INACTIVE)
+			),
+			array(
+				'order_by'  => 'ms.nickname',
+				'order_way' => 'ASC'
+			)
+		);
 		$this->data['column_left'] = $this->load->controller('common/column_left');
 		$this->data['footer'] = $this->load->controller('common/footer');
 		$this->data['header'] = $this->load->controller('common/header');
@@ -227,6 +235,18 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
+        
+        public function jxProductsSeller(){
+                if(isset($this->request->post['bulk_product_sel'])){
+                        $new_sel = $this->request->post['bulk_product_sel'];
+                        if (isset($this->request->post['selected'])) {
+                                foreach ($this->request->post['selected'] as $product_id) {
+                                        $this->MsLoader->MsProduct->changeSeller($product_id, $new_sel);
+                                }
+                        }
+                }
+                $this->session->data['success'] = $this->language->get('ms_success_products_seller');
+        }        
 	
 	public function delete() {
 		$product_id = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : 0;

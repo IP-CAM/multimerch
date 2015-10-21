@@ -27,8 +27,8 @@
         <h3 class="panel-title"><i class="fa fa-list"></i> <?php echo $ms_catalog_products_heading; ?></h3>
       </div>
       <div class="panel-body">
-      <div class="pull-left page-header">
-        <form id="bulk" method="post" enctype="multipart/form-data" class="form-inline">
+      <div class=" page-header row">
+        <form id="bulk" method="post" enctype="multipart/form-data" class="form-inline col-xs-12 col-md-6 col-lg-2">
       	<select name="bulk_product_status" class="form-control">
       		<option><?php echo $ms_catalog_products_bulk; ?></option>
             <?php $msProduct = new ReflectionClass('MsProduct'); ?>
@@ -47,6 +47,18 @@
 
 		<button type="button" data-toggle="tooltip" title="" class="btn btn-primary" id="ms-bulk-apply" data-original-title="<?php echo $ms_apply; ?>"><i class="fa fa-fw fa-check"></i></button>
       	</form>
+        <form id="bulk_sel" method="post" enctype="multipart/form-data" class="form-inline col-xs-12 col-md-6 col-lg-2">
+                <select name="bulk_product_sel" class="form-control">
+                        <option value="0"><?php echo $ms_catalog_products_bulk_seller; ?></option>
+                        <?php if ($sellers) { ?>
+                            <?php foreach ($sellers as $cval) { ?>
+                                        <option value="<?php echo $cval['seller_id']; ?>"><?php echo $cval['ms.nickname']; ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                </select>
+		<button type="button" data-toggle="tooltip" title="" class="btn btn-primary" id="ms-bulk-sel-apply" data-original-title="<?php echo $ms_apply; ?>"><i class="fa fa-fw fa-check"></i></button>
+      	</form>          
+          
       </div>
 		<div class="table-responsive">
         <form class="form-inline" action="" method="post" enctype="multipart/form-data" id="form">
@@ -117,6 +129,24 @@ $(document).ready(function() {
 		});
 	});
 	
+	$("#ms-bulk-sel-apply").click(function() {
+		if ($('#form tbody input:checkbox:checked').length == 0)
+			return;
+
+			var data  = $('#form,#product_message,#bulk_sel').serialize();
+			$('#ms-bulk-sel-apply').find('i').switchClass( "fa-check", "fa-spinner fa-spin", 0, "linear" );
+		    $.ajax({
+				type: "POST",
+				//async: false,
+				dataType: "json",
+				url: 'index.php?route=multiseller/product/jxProductsSeller&token=<?php echo $token; ?>',
+				data: data,
+				complete: function(jsonData) {
+					window.location.reload();
+				}
+			});
+	}); 
+        
 	$("#ms-bulk-apply").click(function() {
 		if ($('#form tbody input:checkbox:checked').length == 0)
 			return;
@@ -173,7 +203,7 @@ $(document).ready(function() {
 				}
 			});
 		}
-	});
+	});        
 
 	$(document).on('click', '.ms-button-delete', function() {
     	return confirm("<?php echo $this->language->get('text_confirm'); ?>");

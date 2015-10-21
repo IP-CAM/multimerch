@@ -27,6 +27,7 @@ $_['ms_error_directory_exists'] = "Warning: Directory already exists: %s. Please
 $_['ms_error_product_publish'] = 'Failed to publish some products: seller account not active.';
 $_['ms_success_installed'] = 'Extension successfully installed';
 $_['ms_success_product_status'] = 'Successfully changed product status.';
+$_['ms_success_products_seller'] = 'Successfully changed products seller.';
 
 $_['ms_db_upgrade'] = 'Please <a href="%s">click here</a> to upgrade your MultiMerch Marketplace database to the latest version.';
 $_['ms_db_success'] = 'Your MultiMerch Marketplace database is now up to date!';
@@ -383,6 +384,7 @@ $_['ms_catalog_products_heading'] = 'Products';
 $_['ms_catalog_products_breadcrumbs'] = 'Products';
 $_['ms_catalog_products_notify_sellers'] = 'Notify Sellers';
 $_['ms_catalog_products_bulk'] = '--Bulk status change--';
+$_['ms_catalog_products_bulk_seller'] = '--Bulk seller change--';
 $_['ms_catalog_products_noseller'] = '--No seller--';
 
 $_['ms_product_status_' . MsProduct::STATUS_ACTIVE] = 'Active';
