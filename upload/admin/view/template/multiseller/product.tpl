@@ -48,7 +48,7 @@
 		<button type="button" data-toggle="tooltip" title="" class="btn btn-primary" id="ms-bulk-apply" data-original-title="<?php echo $ms_apply; ?>"><i class="fa fa-fw fa-check"></i></button>
       	</form>
         <form id="bulk_sel" method="post" enctype="multipart/form-data" class="form-inline col-xs-12 col-md-6 col-lg-2">
-                <select name="bulk_product_sel" class="form-control">
+                <select name="seller_id" id="seller_id" class="form-control">
                         <option value="0"><?php echo $ms_catalog_products_bulk_seller; ?></option>
                         <?php if ($sellers) { ?>
                             <?php foreach ($sellers as $cval) { ?>
@@ -132,21 +132,21 @@ $(document).ready(function() {
 	$("#ms-bulk-sel-apply").click(function() {
 		if ($('#form tbody input:checkbox:checked').length == 0)
 			return;
-
-			var data  = $('#form,#product_message,#bulk_sel').serialize();
+			var seller_id = $("#seller_id").val();
+			var data  = $('#form,#product_message').serialize();
 			$('#ms-bulk-sel-apply').find('i').switchClass( "fa-check", "fa-spinner fa-spin", 0, "linear" );
-		    $.ajax({
+			$.ajax({
 				type: "POST",
 				//async: false,
 				dataType: "json",
-				url: 'index.php?route=multiseller/product/jxProductsSeller&token=<?php echo $token; ?>',
+				url: 'index.php?route=multiseller/product/jxProductSeller&seller_id='+ seller_id +'&token=<?php echo $token; ?>',
 				data: data,
 				complete: function(jsonData) {
 					window.location.reload();
 				}
 			});
 	}); 
-        
+
 	$("#ms-bulk-apply").click(function() {
 		if ($('#form tbody input:checkbox:checked').length == 0)
 			return;
@@ -161,14 +161,14 @@ $(document).ready(function() {
 				modal: true,
 				buttons: [
 					{
-	    				id: "button-submit",
-	    				text: "Submit",
+					id: "button-submit",
+					text: "Submit",
 						click: function() {
 							var data  = $('#form,#product_message,#bulk').serialize();
 							var dialog = $(this);
 							$('#button-submit').find('i').switchClass( "fa-check", "fa-spinner fa-spin", 0, "linear" );
 							$('#button-submit,#button-cancel').remove();
-						    $.ajax({
+							$.ajax({
 								type: "POST",
 								//async: false,
 								dataType: "json",
@@ -181,8 +181,8 @@ $(document).ready(function() {
 						}
 					},
 					{
-	    				id: "button-cancel",
-	    				text: "Cancel",
+					id: "button-cancel",
+					text: "Cancel",
 						click: function() {
 							$(this).dialog("close");
 						}
@@ -192,7 +192,7 @@ $(document).ready(function() {
 		} else {
 			var data  = $('#form,#product_message,#bulk').serialize();
 			$('#ms-bulk-apply').find('i').switchClass( "fa-check", "fa-spinner fa-spin", 0, "linear" );
-		    $.ajax({
+			$.ajax({
 				type: "POST",
 				//async: false,
 				dataType: "json",
@@ -203,10 +203,10 @@ $(document).ready(function() {
 				}
 			});
 		}
-	});        
+	});
 
 	$(document).on('click', '.ms-button-delete', function() {
-    	return confirm("<?php echo $this->language->get('text_confirm'); ?>");
+	return confirm("<?php echo $this->language->get('text_confirm'); ?>");
 	});
 });
 </script>

@@ -201,86 +201,46 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 		$json = array();
 		
 		$this->validate(__FUNCTION__);
-		$product_id = $this->request->get['product_id'];
-		$seller = $this->MsLoader->MsSeller->getSeller($this->request->get['seller_id']);
-		$this->MsLoader->MsProduct->createRecord($product_id, array('seller_id' => $this->request->get['seller_id']));
-		$this->MsLoader->MsProduct->changeSeller($product_id, $this->request->get['seller_id']);
-		$json['product_status'] = $this->language->get('ms_product_status_' . $seller['ms.seller_status']);
-		switch($seller['ms.seller_status']) {
-			case MsSeller::STATUS_INACTIVE:
-			case MsSeller::STATUS_UNPAID:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_INACTIVE);
-				$this->MsLoader->MsProduct->disapprove($product_id);
-				$json['product_status'] = $this->language->get('ms_product_status_' . MsProduct::STATUS_INACTIVE);			
-				break;
-			case MsSeller::STATUS_DISABLED:
-			case MsSeller::STATUS_INCOMPLETE:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DISABLED);
-				$this->MsLoader->MsProduct->disapprove($product_id);			
-				break;
-			case MsSeller::STATUS_DELETED:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
-				$this->MsLoader->MsProduct->disapprove($product_id);			
-				break;
-			case MsSeller::STATUS_UNPAID:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
-				$this->MsLoader->MsProduct->disapprove($product_id);			
-				break;				
-			default:
-				$product = $this->MsLoader->MsProduct->getProduct($product_id);
-				$json['product_status'] = $this->language->get('ms_product_status_' . $product['mp.product_status']);
-				break;
+		if(isset($this->request->get['product_id'])){
+			$products = array($this->request->get['product_id']);
 		}
-
+		else if(isset($this->request->post['selected'])){
+			$products = $this->request->post['selected'];
+		}
+		$seller = $this->MsLoader->MsSeller->getSeller($this->request->get['seller_id']);
+		foreach ($products as $product_id) {
+			$this->MsLoader->MsProduct->createRecord($product_id, array('seller_id' => $this->request->get['seller_id']));
+			$this->MsLoader->MsProduct->changeSeller($product_id, $this->request->get['seller_id']);
+			$json['product_status'] = $this->language->get('ms_product_status_' . $seller['ms.seller_status']);
+			switch($seller['ms.seller_status']) {
+				case MsSeller::STATUS_INACTIVE:
+				case MsSeller::STATUS_UNPAID:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_INACTIVE);
+					$this->MsLoader->MsProduct->disapprove($product_id);
+					$json['product_status'] = $this->language->get('ms_product_status_' . MsProduct::STATUS_INACTIVE);			
+					break;
+				case MsSeller::STATUS_DISABLED:
+				case MsSeller::STATUS_INCOMPLETE:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DISABLED);
+					$this->MsLoader->MsProduct->disapprove($product_id);			
+					break;
+				case MsSeller::STATUS_DELETED:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
+					$this->MsLoader->MsProduct->disapprove($product_id);			
+					break;
+				case MsSeller::STATUS_UNPAID:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
+					$this->MsLoader->MsProduct->disapprove($product_id);			
+					break;				
+				default:
+					$product = $this->MsLoader->MsProduct->getProduct($product_id);
+					$json['product_status'] = $this->language->get('ms_product_status_' . $product['mp.product_status']);
+					break;
+			}
+		}
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
-        
-        public function jxProductsSeller(){
-		$json = array();
-		
-		$this->validate(__FUNCTION__);            
-                if(isset($this->request->post['bulk_product_sel'])){
-                        $new_sel = $this->request->post['bulk_product_sel'];
-                        $seller = $this->MsLoader->MsSeller->getSeller($new_sel);
-                        if (isset($this->request->post['selected'])) {
-                                foreach ($this->request->post['selected'] as $product_id) {
-
-                                        $this->MsLoader->MsProduct->createRecord($product_id, array('seller_id' => $new_sel));
-                                        $this->MsLoader->MsProduct->changeSeller($product_id, $new_sel);
-                                        $json['product_status'] = $this->language->get('ms_product_status_' . $seller['ms.seller_status']);
-                                        switch($seller['ms.seller_status']) {
-                                                case MsSeller::STATUS_INACTIVE:
-                                                case MsSeller::STATUS_UNPAID:
-                                                        $this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_INACTIVE);
-                                                        $this->MsLoader->MsProduct->disapprove($product_id);
-                                                        $json['product_status'] = $this->language->get('ms_product_status_' . MsProduct::STATUS_INACTIVE);			
-                                                        break;
-                                                case MsSeller::STATUS_DISABLED:
-                                                case MsSeller::STATUS_INCOMPLETE:
-                                                        $this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DISABLED);
-                                                        $this->MsLoader->MsProduct->disapprove($product_id);			
-                                                        break;
-                                                case MsSeller::STATUS_DELETED:
-                                                        $this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
-                                                        $this->MsLoader->MsProduct->disapprove($product_id);			
-                                                        break;
-                                                case MsSeller::STATUS_UNPAID:
-                                                        $this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
-                                                        $this->MsLoader->MsProduct->disapprove($product_id);			
-                                                        break;				
-                                                default:
-                                                        $product = $this->MsLoader->MsProduct->getProduct($product_id);
-                                                        $json['product_status'] = $this->language->get('ms_product_status_' . $product['mp.product_status']);
-                                                        break;
-                                        }                                    
-                                }
-                        }
-                }
-                $this->session->data['success'] = $this->language->get('ms_success_products_seller');
-		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($json));                
-        }        
 	
 	public function delete() {
 		$product_id = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : 0;
