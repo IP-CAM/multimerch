@@ -28,7 +28,7 @@
       </div>
       <div class="panel-body">
       <div class=" page-header row">
-        <form id="bulk" method="post" enctype="multipart/form-data" class="form-inline col-xs-12 col-md-6 col-lg-2">
+        <form id="bulk" method="post" enctype="multipart/form-data" class="form-inline" style="display:inline">
       	<select name="bulk_product_status" class="form-control">
       		<option><?php echo $ms_catalog_products_bulk; ?></option>
             <?php $msProduct = new ReflectionClass('MsProduct'); ?>
@@ -46,18 +46,18 @@
 		-->
 
 		<button type="button" data-toggle="tooltip" title="" class="btn btn-primary" id="ms-bulk-apply" data-original-title="<?php echo $ms_apply; ?>"><i class="fa fa-fw fa-check"></i></button>
-      	</form>
-        <form id="bulk_sel" method="post" enctype="multipart/form-data" class="form-inline col-xs-12 col-md-6 col-lg-2">
-                <select name="seller_id" id="seller_id" class="form-control">
-                        <option value="0"><?php echo $ms_catalog_products_bulk_seller; ?></option>
-                        <?php if ($sellers) { ?>
-                            <?php foreach ($sellers as $cval) { ?>
-                                        <option value="<?php echo $cval['seller_id']; ?>"><?php echo $cval['ms.nickname']; ?></option>
-                            <?php } ?>
-                        <?php } ?>
-                </select>
+		</form>
+		<form id="bulk_sel" method="post" enctype="multipart/form-data" class="form-inline" style="display:inline">
+				<select name="seller_id" id="seller_id" class="form-control">
+						<option value="0"><?php echo $ms_catalog_products_bulk_seller; ?></option>
+						<?php if ($sellers) { ?>
+							<?php foreach ($sellers as $cval) { ?>
+										<option value="<?php echo $cval['seller_id']; ?>"><?php echo $cval['ms.nickname']; ?></option>
+							<?php } ?>
+						<?php } ?>
+				</select>
 		<button type="button" data-toggle="tooltip" title="" class="btn btn-primary" id="ms-bulk-sel-apply" data-original-title="<?php echo $ms_apply; ?>"><i class="fa fa-fw fa-check"></i></button>
-      	</form>          
+		</form>
           
       </div>
 		<div class="table-responsive">
