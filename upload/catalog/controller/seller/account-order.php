@@ -247,7 +247,6 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		} else {
 			$server = $this->config->get('config_url');
 		}
-		$this->data = array_merge($this->data, $this->load->language('account/invoice'));
 		$this->data['base'] = $server;
 		$this->data['description'] = $this->document->getDescription();
 		$this->data['keywords'] = $this->document->getKeywords();

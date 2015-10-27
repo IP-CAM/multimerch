@@ -701,4 +701,5 @@ $_['ms_sellercontact_close'] = 'Close';
 $_['ms_sellercontact_send'] = 'Send';
 $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
 
+$_['heading_invoice_title']         = 'Order Invoice';
 ?>
