@@ -247,7 +247,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		} else {
 			$server = $this->config->get('config_url');
 		}
-
+		$this->data = array_merge($this->data, $this->load->language('account/invoice'));
 		$this->data['base'] = $server;
 		$this->data['description'] = $this->document->getDescription();
 		$this->data['keywords'] = $this->document->getKeywords();
@@ -340,7 +340,6 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->data['invoice_no'] = isset($order_info['invoice_no']) ? $order_info['invoice_prefix'] . $order_info['invoice_no'] : '';
 		$this->data['order_status_id'] = $order_info['order_status_id'];
 		$this->data['order_id'] = $this->request->get['order_id'];
-		$this->data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
 
 		$types = array("payment");
 
@@ -393,7 +392,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		// totals @todo
 		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId() )));
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
-		$this->document->setTitle($this->language->get('text_order'));
+		$this->data['title'] = $this->language->get('heading_invoice_title');
 		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-invoice');
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
