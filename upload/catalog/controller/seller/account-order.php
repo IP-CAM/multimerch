@@ -230,6 +230,173 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-order-info');
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
+	
+	public function invoice() {
+
+		$this->data['title'] = $this->document->getTitle();
+		
+		if($this->customer->isLogged()){
+			$customer_id = $this->customer->getId();
+		}
+		else{
+			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
+		}
+		
+		if ($this->request->server['HTTPS']) {
+			$server = $this->config->get('config_ssl');
+		} else {
+			$server = $this->config->get('config_url');
+		}
+
+		$this->data['base'] = $server;
+		$this->data['description'] = $this->document->getDescription();
+		$this->data['keywords'] = $this->document->getKeywords();
+		$this->data['links'] = $this->document->getLinks();
+		$this->data['styles'] = $this->document->getStyles();
+		$this->data['scripts'] = $this->document->getScripts();
+		$this->data['lang'] = $this->language->get('code');
+		$this->data['direction'] = $this->language->get('direction');
+
+		if ($this->config->get('config_google_analytics_status')) {
+			$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
+		} else {
+			$this->data['google_analytics'] = '';
+		}
+		if (is_file(DIR_IMAGE . $this->config->get('config_icon'))) {
+			$this->data['icon'] = $server . 'image/' . $this->config->get('config_icon');
+		} else {
+			$this->data['icon'] = '';
+		}
+		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
+		$this->data['phone'] = $this->customer->getTelephone();
+		$this->data['fax'] = $this->customer->getFax();
+		$this->data['mail'] = $this->customer->getEmail();
+		$address_id = $this->customer->getAddressId();
+		if($address_id != 0){
+			$this->load->model('account/address');
+			$address_fields = $this->model_account_address->getAddress($address_id);
+			if(isset($address_fields['address_1']) && $address_fields['address_1']){
+				$adr1 = $address_fields['address_1'].', ';
+			} else{
+				$adr1 = '';
+			}
+			if(isset($address_fields['city']) && $address_fields['city']){
+				$adr2 = $address_fields['city'].', ';
+			} else{
+				$adr2 = '';
+			}
+			if(isset($address_fields['zone']) && $address_fields['zone']){
+				$adr3 = $address_fields['zone'].', ';
+			} else{
+				$adr3 = '';
+			}
+			if(isset($address_fields['country']) && $address_fields['country']){
+				$adr4 = $address_fields['country'];
+			} else{
+				$adr4 = '';
+			}
+
+			$this->data['address'] = $adr1.$adr2.$adr3.$adr4;
+		}
+		
+		$avatar = $this->MsLoader->MsSeller->getSellerAvatar($customer_id);
+		if (is_file(DIR_IMAGE . $avatar['avatar'])) {
+			$this->data['logo'] = $server . 'image/' . $avatar['avatar'];
+		} else {
+			$this->data['logo'] = '';
+		}
+
+		$status = true;
+
+		if (isset($this->request->server['HTTP_USER_AGENT'])) {
+			$robots = explode("\n", str_replace(array("\r\n", "\r"), "\n", trim($this->config->get('config_robots'))));
+			foreach ($robots as $robot) {
+				if ($robot && strpos($this->request->server['HTTP_USER_AGENT'], trim($robot)) !== false) {
+					$status = false;
+					break;
+				}
+			}
+		}
+		
+		$order_id = isset($this->request->get['order_id']) ? (int)$this->request->get['order_id'] : 0;
+		$this->load->model('account/order');
+
+		$order_info = $this->model_account_order->getOrder($order_id, 'seller');
+		$products = $this->MsLoader->MsOrderData->getOrderProducts(array(
+			'order_id' => $order_id,
+			'seller_id' => $customer_id
+		));
+
+		// stop if no order or no products belonging to seller
+		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+
+		// load default OC language file for orders
+		$this->data = array_merge($this->data, $this->load->language('account/order'));
+
+		// order statuses
+		$this->load->model('localisation/order_status');
+
+		// OC way of displaying addresses and invoices
+		$this->data['invoice_no'] = isset($order_info['invoice_no']) ? $order_info['invoice_prefix'] . $order_info['invoice_no'] : '';
+		$this->data['order_status_id'] = $order_info['order_status_id'];
+		$this->data['order_id'] = $this->request->get['order_id'];
+		$this->data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
+
+		$types = array("payment");
+
+		foreach ($types as $key => $type) {
+			if ($order_info[$type . '_address_format']) {
+				$format = $order_info[$type . '_address_format'];
+			} else {
+				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . ", " . '{city}' . "\n" . '{zone}' . ", " . '{country}' . "\n" . '{telephone}';
+			}
+
+			$find = array(
+				'{firstname}',
+				'{lastname}',
+				'{company}',
+				'{address_1}',
+				'{city}',
+				'{zone}',
+				'{country}',
+				'{telephone}'
+			);
+
+			$replace = array(
+				'firstname'	=> $order_info[$type . '_firstname'],
+				'lastname'	=> $order_info[$type . '_lastname'],
+				'company'	=> $order_info[$type . '_company'],
+				'address_1'	=> $order_info[$type . '_address_1'],
+				'city'		=> $order_info[$type . '_city'],
+				'zone'		=> $order_info[$type . '_zone'],
+				'country'	=> $order_info[$type . '_country'],
+				'telephone'	=> $order_info['telephone']
+			);
+
+			$this->data[$type . '_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
+		}
+
+		// products
+		$this->data['products'] = array();
+		foreach ($products as $product) {
+			$this->data['products'][] = array(
+				'product_id'=> $product['product_id'],
+				'name'		=> $product['name'],
+				'model'		=> $product['model'],
+				'quantity'	=> $product['quantity'],
+				'price'		=> $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
+				'total'		=> $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
+				'return'	=> $this->url->link('account/return/insert', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id'], 'SSL')
+			);
+		}
+
+		// totals @todo
+		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId() )));
+		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
+		$this->document->setTitle($this->language->get('text_order'));
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-invoice');
+		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
+	}
 		
 	public function index() {
 		$this->data['link_back'] = $this->url->link('account/account', '', 'SSL');
@@ -256,9 +423,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 	}
 
 	public function jxAddHistory() {
-	  $json = array();	 
-	  
-	  if(!isset($this->request->post['order_comment']) || !isset($this->request->post['order_status']) || !isset($this->request->post['suborder_id'])) return false;
+		if(!isset($this->request->post['order_comment']) || !isset($this->request->post['order_status']) || !isset($this->request->post['suborder_id'])) return false;
 		if(empty($this->request->post['order_comment']) && !$this->request->post['order_status']) return false;
 
 		// keep current status if not changing explicitly
@@ -300,10 +465,6 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		);
 
 		$this->MsLoader->MsMail->sendMails($mails);
-		
-		$json['success'] = "ok";
-		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($json));
 	}
 }
 

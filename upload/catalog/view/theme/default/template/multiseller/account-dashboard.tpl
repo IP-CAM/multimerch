@@ -119,6 +119,7 @@
 				<td><?php echo $ms_date_created; ?></td>
 				<td><?php echo $ms_account_orders_total; ?></td>
 				<td><?php echo $ms_action; ?></td>
+				<td><?php echo $ms_action; ?></td>
 			</tr>
 		</thead>
 		
@@ -146,6 +147,7 @@
 				<td><?php echo $order['date_created']; ?></td>
 				<td><?php echo $order['total']; ?></td>
 				<td><a href="<?php echo $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']); ?>" class="ms-button ms-button-view" title="<?php echo $this->language->get('ms_view_modify') ?>"></a></td>
+				<td><a href="<?php echo $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id']); ?>" class="ms-button ms-button-print" title="<?php echo $this->language->get('ms_view_modify') ?>"></a></td>
 			</tr>
 			<?php } ?>
 		<?php } else { ?>
