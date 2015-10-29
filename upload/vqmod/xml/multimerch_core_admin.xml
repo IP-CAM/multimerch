@@ -48,7 +48,7 @@
 	</file>
 	
 	<!-- delete seller account when customer deleted -->
-	<file name="&adminFolder;/model/sale/customer.php">
+	<file name="&adminFolder;/model/sale/customer.php,&adminFolder;/model/customer/customer.php" error="skip">
 		<operation>
 			<search position="after"><![CDATA[
 				public function deleteCustomer($customer_id) {
