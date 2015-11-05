@@ -104,7 +104,7 @@ $(document).ready(function() {
 			{ "mData": "name" },
 			{ "mData": "seller" },
 			{ "mData": "status" },
-			{ "mData": "date_created" },
+			{ "mData": "date_added" },
 			{ "mData": "date_modified" },
 			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 		]
