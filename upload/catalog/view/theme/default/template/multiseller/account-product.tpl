@@ -75,7 +75,7 @@
 				{ "mData": "number_sold" },
 				{ "mData": "product_earnings" },
 				{ "mData": "product_status" },
-				{ "mData": "date_created" },
+				{ "mData": "date_added" },
 				{ "mData": "list_until" },
 				{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 			]
