@@ -5,13 +5,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$colMap = array(
 			'product_name' => 'pd.name',
 			'product_status' => '`mp.product_status`',
-			'date_created' => '`p.date_created`',
+			'date_added' => '`p.date_added`',
 			'list_until' => 'mp.list_until',
 			'number_sold' => 'mp.number_sold',
 			'product_price' => 'p.price',
 		);
 		
-		$sorts = array('product_name', 'product_price', 'date_created', 'list_until', 'product_status', 'product_earnings', 'number_sold');
+		$sorts = array('product_name', 'product_price', 'date_added', 'list_until', 'product_status', 'product_earnings', 'number_sold');
 		$filters = array_diff($sorts, array('product_status'));
 		
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
@@ -115,7 +115,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					'number_sold' => $product['mp.number_sold'],
 					'product_earnings' => $this->currency->format($sale_data['seller_total'], $this->config->get('config_currency')),
 					'product_status' => $status,
-					'date_created' => date($this->language->get('date_format_short'), strtotime($product['p.date_created'])),
+					'date_added' => date($this->language->get('date_format_short'), strtotime($product['p.date_added'])),
 					'list_until' => $list_until,
 					'actions' => $actions
 				)
