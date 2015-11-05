@@ -121,7 +121,7 @@
 			]]></search>
 			<add><![CDATA[
 				<?php global $config; $this->config = $config; ?>
-				<script type="text/javascript"> if (!window.console) console = {log: function() {}}; var msGlobals = { config_admin_limit: '<?php echo $this->config->get('config_admin_limit'); ?>', config_language: <?php echo $dt_language; ?> }; </script>
+				<script type="text/javascript"> if (!window.console) console = {log: function() {}}; var msGlobals = { config_limit_admin: '<?php echo $this->config->get('config_limit_admin'); ?>', config_language: <?php echo $dt_language; ?> }; </script>
 			]]></add>
 		</operation>
 	</file>

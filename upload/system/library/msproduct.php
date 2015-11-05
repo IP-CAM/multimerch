@@ -866,7 +866,7 @@ class MsProduct extends Model {
 		$hFilters = $wFilters = '';
 
 		if(isset($sort['filters'])) {
-			$cols = array_merge($cols, array("`p.date_created`" => 1));
+			$cols = array_merge($cols, array("`p.date_added`" => 1));
 			foreach($sort['filters'] as $k => $v) {
 				if (!isset($cols[$k])) {
 					$wFilters .= " AND {$k} LIKE '%" . $this->db->escape($v) . "%'";
@@ -898,7 +898,7 @@ class MsProduct extends Model {
 					mp.product_approved as 'mp.product_approved',
 					mp.number_sold as 'mp.number_sold',
 					mp.list_until as 'mp.list_until',
-					p.date_added as 'p.date_created',
+					p.date_added as 'p.date_added',
 					p.date_modified  as 'p.date_modified',
 					pd.description as 'pd.description'
 				FROM " . DB_PREFIX . "product p

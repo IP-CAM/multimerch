@@ -7,11 +7,11 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 			'name' => 'pd.name',
 			'status' => 'mp.product_status',
 			'seller' => 'ms.nickname',
-			'date_created' => 'p.date_created',
+			'date_added' => 'p.date_added',
 			'date_modified' => 'p.date_modified'
 		);
 
-		$sorts = array('name', 'seller', 'date_created', 'date_modified', 'status');
+		$sorts = array('name', 'seller', 'date_added', 'date_modified', 'status');
 		$filters = array_diff($sorts, array('status'));
 		
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
@@ -78,7 +78,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 					'name' => $result['pd.name'],
 					'seller' => $sellerselect,
 					'status' => $result['mp.product_status'] ? $this->language->get('ms_product_status_' . $result['mp.product_status']) : '',
-					'date_created' => date($this->language->get('date_format_short'), strtotime($result['p.date_created'])),
+					'date_added' => date($this->language->get('date_format_short'), strtotime($result['p.date_added'])),
 					'date_modified' => date($this->language->get('date_format_short'), strtotime($result['p.date_modified'])),
 					'actions' => $actions
 				)
