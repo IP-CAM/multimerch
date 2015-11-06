@@ -38,47 +38,26 @@
 					<ul>
 				</div>
 				<div class="col-sm-9">
-					
 					<form id="ms-sellerinfo" class="ms-form form-horizontal" method="POST">
-						<div class="form-group required">
-								<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_nickname; ?></label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control"  name="nickname" value="<?php echo $seller['ms.nickname']; ?>" />
-									<p class="ms-note"><?php echo $ms_account_sellerinfo_nickname_note; ?></p>
-								</div>
-						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_description; ?></label>
+							<label class="col-sm-2 control-label"><?php echo $as_main_information_status; ?></label>
 							<div class="col-sm-10">
-								<!-- todo strip tags if rte disabled -->
-								<textarea name="description" id="seller_textarea" class="form-control <?php echo $this->config->get('msconf_enable_rte') ? 'ckeditor' : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($seller['ms.description']) : strip_tags(htmlspecialchars_decode($seller['ms.description'])); ?></textarea>
-								<p class="ms-note"><?php echo $ms_account_sellerinfo_description_note; ?></p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_company; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control"  name="company" value="<?php echo $seller['ms.company']; ?>" />
-								<p class="ms-note"><?php echo $ms_account_sellerinfo_company_note; ?></p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_country; ?></label>
-							<div class="col-sm-10">
-								<select name="country" class="form-control">
-									<option value="" selected="selected"><?php echo $ms_account_sellerinfo_country_dont_display; ?></option>
-									<?php foreach ($countries as $country) { ?>
-									<option value="<?php echo $country['country_id']; ?>" <?php if ($seller['ms.country_id'] == $country['country_id'] || $country_id == $country['country_id']) { ?>selected="selected"<?php } ?>><?php echo $country['name']; ?></option>
-									<?php } ?>
+								<select name="main_enabled" class="form-control">
+									<option value="0" <?php if($main_enabled == 0){ echo 'selected'; } ?>><?php echo $ms_seller_status_off; ?></option>
+									<option value="1"<?php if($main_enabled == 1){ echo 'selected'; } ?>><?php echo $ms_seller_status_on; ?></option>
 								</select>
-								<p class="ms-note"><?php echo $ms_account_sellerinfo_country_note; ?></p>
 							</div>
+						</div>						
+						<div class="form-group required">
+								<label class="col-sm-2 control-label"><?php echo $as_main_information_city; ?></label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control"  name="main_address_city" value="<?php echo $main_address_city; ?>" />
+								</div>
 						</div>
 						<div class="buttons">
 							<div class="pull-right"><button type="submit" class="btn btn-primary" id="ms-submit-button"><?php echo $ms_button_save; ?></button></div>
 						</div>
 					</form>
-					
 				</div>
 			</div>
 		<?php echo $content_bottom; ?></div>

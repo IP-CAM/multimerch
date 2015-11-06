@@ -598,6 +598,8 @@ $_['ms_account_dashboard_nav_products'] = 'Manage your products';
 $_['ms_account_dashboard_nav_orders'] = 'View your orders';
 $_['ms_account_dashboard_nav_balance'] = 'View your financial records';
 $_['ms_account_dashboard_nav_payout'] = 'Request your payout';
+$_['ms_account_sellersetting_breadcrumbs'] = 'Seller Settings';
+
 
 // Account - Request withdrawal
 $_['ms_account_withdraw_heading'] = 'Request Payout';
@@ -704,8 +706,18 @@ $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
 
 $_['heading_invoice_title']         = 'Order Invoice';
 
-//For sellers setting
-$_['ms_sellersetting_as_main_information'] = 'Main information';
-$_['ms_sellersetting_as_tax'] = 'Tax';
-$_['ms_sellersetting_as_holiday'] = 'Holiday';
+/* For Seller Settings */
+$_['ms_seller_settings_title'] = 'Saller Settings';
+$_['ms_seller_status_on'] = 'On';
+$_['ms_seller_status_off'] = 'Off';
+//For settings group menu
+$_['ms_sellersetting_as_main_information_menu'] = 'Main information';
+
+
+//For sellers setting tpl (as_main_information.tpl)
+$_['as_main_information_title'] = 'Main information title';
+$_['as_main_information_breadcrumbs'] = 'Main Information';
+$_['as_main_information_status'] = 'Status';
+$_['as_main_information_city'] = 'City';
+$_['as_main_information_type'] = 'Type';
 ?>
