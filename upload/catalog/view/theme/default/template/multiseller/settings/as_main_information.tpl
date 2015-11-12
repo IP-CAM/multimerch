@@ -5,17 +5,6 @@
 			<li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
 		<?php } ?>
 	</ul>
-	<?php if (isset($error_warning) && $error_warning) { ?>
-		<div class="alert alert-danger warning main"><?php echo $error_warning; ?></div>
-	<?php } ?>
-
-	<?php if (isset($success) && ($success)) { ?>
-		<div class="alert alert-success"><?php echo $success; ?></div>
-	<?php } ?>
-
-	<?php if (isset($statustext) && ($statustext)) { ?>
-		<div class="alert alert-<?php echo $statusclass; ?>"><?php echo $statustext; ?></div>
-	<?php } ?>
 
 	<div class="row"><?php echo $column_left; ?>
 		<?php if ($column_left && $column_right) { ?>
@@ -39,15 +28,6 @@
 				</div>
 				<div class="col-sm-9">
 					<form id="ms-sellerinfo" class="ms-form form-horizontal" method="POST">
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $as_main_information_status; ?></label>
-							<div class="col-sm-10">
-								<select name="main_enabled" class="form-control">
-									<option value="0" <?php if($main_enabled == 0){ echo 'selected'; } ?>><?php echo $ms_seller_status_off; ?></option>
-									<option value="1"<?php if($main_enabled == 1){ echo 'selected'; } ?>><?php echo $ms_seller_status_on; ?></option>
-								</select>
-							</div>
-						</div>						
 						<div class="form-group required">
 								<label class="col-sm-2 control-label"><?php echo $as_main_information_city; ?></label>
 								<div class="col-sm-10">

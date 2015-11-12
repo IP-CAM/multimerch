@@ -248,13 +248,13 @@ class ModelMultisellerInstall extends Model {
 		) DEFAULT CHARSET=utf8");
 		
 		$this->db->query("
-		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_settings` (
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_setting` (
 		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		`seller_id` int(11) unsigned DEFAULT '0',
-		`group` varchar(50) DEFAULT NULL,
+		`seller_id` int(11) unsigned DEFAULT NULL,
+		`seller_group_id` int(11) unsigned DEFAULT NULL,
 		`name` varchar(50) DEFAULT NULL,
 		`value` varchar(250) DEFAULT NULL,
-		`serialized` smallint(1) unsigned DEFAULT NULL,
+		`is_encoded` smallint(1) unsigned DEFAULT NULL,
 		PRIMARY KEY (`id`)
 		) DEFAULT CHARSET=utf8;");
 	}
