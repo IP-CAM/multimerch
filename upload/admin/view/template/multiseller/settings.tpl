@@ -276,6 +276,15 @@
 						</div>
 					</div>
 
+					<?php // filters ?>
+					<div class="form-group">
+							<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_allow_product_filters_note; ?>"><?php echo $ms_config_allow_product_filters; ?></span></label>
+						<div class="col-sm-10">
+								<label class="radio-inline"><input type="radio" name="msconf_allow_product_filters" value="1" <?php if($msconf_allow_product_filters == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
+								<label class="radio-inline"><input type="radio" name="msconf_allow_product_filters" value="0" <?php if($msconf_allow_product_filters == 0) { ?> checked="checked" <?php } ?>  /><?php echo $text_no; ?></label>
+						</div>
+					</div>
+
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_quantities_note; ?>"><?php echo $ms_config_enable_quantities; ?></span></label>
 						<div class="col-sm-10">
