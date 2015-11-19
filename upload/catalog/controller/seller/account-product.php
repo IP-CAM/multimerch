@@ -751,10 +751,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			}
 			
 			if (isset($data['product_id']) && !empty($data['product_id'])) {
-				$product_id = $this->MsLoader->MsProduct->editProduct(
-						$data,
-						$this->config->get('msconf_allow_product_filters')
-				);
+				$product_id = $this->MsLoader->MsProduct->editProduct($data);
 				if ($product['product_status'] == MsProduct::STATUS_UNPAID) {
 					$commissions = $this->MsLoader->MsCommission->calculateCommission(array('seller_id' => $this->customer->getId()));
 					$fee = (float)$commissions[MsCommission::RATE_LISTING]['flat'] + $commissions[MsCommission::RATE_LISTING]['percent'] * $data['product_price'] / 100;
@@ -1064,8 +1061,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
-	private function _initProductFilters()
-	{
+	private function _initProductFilters() {
 		if (empty($this->request->get['product_id'])) return;
 		
 		$productId = $this->request->get['product_id'];
@@ -1074,14 +1070,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		
 		$this->data['product_filters'] = array();
 		foreach ($filters as $filter_id) {
-				$filter_info = $this->model_catalog_filter->getFilter($filter_id);
-				if ($filter_info)
-				{
-						$this->data['product_filters'][] = array(
-								'filter_id' => $filter_info['filter_id'],
-								'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
-						);
-				}
+			$filter_info = $this->model_catalog_filter->getFilter($filter_id);
+			if ($filter_info) {
+				$this->data['product_filters'][] = array(
+						'filter_id' => $filter_info['filter_id'],
+						'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
+				);
+			}
 		}
 	}
 	

@@ -219,22 +219,19 @@
 					</div>
 				</div>
 
-				<?php
-				// filters. copied from /admin/view/template/catalog/product_form.tpl
-				?>
 				<?php if ($this->config->get('msconf_allow_product_filters')) { ?>
 				<div class="form-group">
-						<label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip" title="<?php echo $this->language->get('ms_help_filter') ?>"><?php echo $this->language->get('ms_entry_filter'); ?></span></label>
-						<div class="col-sm-10">
-								<input type="text" name="filter" value="" placeholder="<?php echo $this->language->get('ms_entry_filter'); ?>" id="input-filter" class="form-control" />
-								<div id="product-filter" class="well well-sm" style="height: 150px; overflow: auto;">
-							<?php if ($product_filters) foreach ($product_filters as $product_filter) { ?>
-										<div id="product-filter<?php echo $product_filter['filter_id']; ?>"><i class="fa fa-minus-circle"></i> <?php echo $product_filter['name']; ?>
-												<input type="hidden" name="product_filter[]" value="<?php echo $product_filter['filter_id']; ?>" />
-										</div>
-							<?php } ?>
-								</div>
+					<label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip" title="<?php echo $this->language->get('ms_help_filter') ?>"><?php echo $this->language->get('ms_entry_filter'); ?></span></label>
+					<div class="col-sm-10">
+						<input type="text" name="filter" value="" placeholder="<?php echo $this->language->get('ms_entry_filter'); ?>" id="input-filter" class="form-control" />
+						<div id="product-filter" class="well well-sm" style="height: 150px; overflow: auto;">
+						<?php if ($product_filters) foreach ($product_filters as $product_filter) { ?>
+							<div id="product-filter<?php echo $product_filter['filter_id']; ?>"><i class="fa fa-minus-circle"></i>
+								<?php echo $product_filter['name']; ?><input type="hidden" name="product_filter[]" value="<?php echo $product_filter['filter_id']; ?>" />
+							</div>
+						<?php } ?>
 						</div>
+					</div>
 				</div>
 				<?php } ?>
 
@@ -809,8 +806,5 @@
 		config_enable_rte: '<?php echo $this->config->get('msconf_enable_rte'); ?>',
 		config_enable_quantities: '<?php echo $this->config->get('msconf_enable_quantities'); ?>'
 	};
-</script>
-<script>
-		<?php include 'account-product-filter.tpl.js' ?>
 </script>
 <?php echo $footer; ?>

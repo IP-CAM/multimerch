@@ -409,7 +409,7 @@ class MsProduct extends Model {
 		return $product_id;
 	}	
 
-	public function editProduct($data, $allowProductFilters = false) {
+	public function editProduct($data) {
 		reset($data['languages']); $first = key($data['languages']);
 		$product_id = $data['product_id'];
 
@@ -742,12 +742,11 @@ class MsProduct extends Model {
 		}
 		
 		// product filters
-		if ($allowProductFilters) {
-				$this->removeProductFilters($product_id);
-				if (isset($data['product_filter']) && is_array($data['product_filter']))
-				{
-						$this->addProductFilters($product_id, $data['product_filter']);
-				}
+		if ($this->config->get('msconf_allow_product_filters')) {
+			$this->removeProductFilters($product_id);
+			if (isset($data['product_filter']) && is_array($data['product_filter'])) {
+				$this->addProductFilters($product_id, $data['product_filter']);
+			}
 		}
 
 		$this->registry->get('cache')->delete('product');
@@ -763,11 +762,11 @@ class MsProduct extends Model {
 	
 	private function addProductFilters($product_id, array $filters) {
 		foreach ($filters as $filter_id) {
-				$this->db->query(
-						"INSERT INTO " . DB_PREFIX . "product_filter"
-						. " SET product_id = '" . (int) $product_id . "',"
-						. " filter_id = '" . (int) $filter_id . "'"
-				);
+			$this->db->query(
+				"INSERT INTO " . DB_PREFIX . "product_filter"
+				. " SET product_id = '" . (int) $product_id . "',"
+				. " filter_id = '" . (int) $filter_id . "'"
+			);
 		}
 	}
 	
