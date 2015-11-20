@@ -246,6 +246,17 @@ class ModelMultisellerInstall extends Model {
 		`date_added` datetime NOT NULL,
 		PRIMARY KEY (`suborder_history_id`)
 		) DEFAULT CHARSET=utf8");
+		
+		$this->db->query("
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_setting` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`seller_id` int(11) unsigned DEFAULT NULL,
+		`seller_group_id` int(11) unsigned DEFAULT NULL,
+		`name` varchar(50) DEFAULT NULL,
+		`value` varchar(250) DEFAULT NULL,
+		`is_encoded` smallint(1) unsigned DEFAULT NULL,
+		PRIMARY KEY (`id`)
+		) DEFAULT CHARSET=utf8;");
 	}
 	
 	public function createData() {
@@ -295,6 +306,7 @@ class ModelMultisellerInstall extends Model {
 		`" . DB_PREFIX . "ms_seller_group`,
 		`" . DB_PREFIX . "ms_seller_group_description`,
 		`" . DB_PREFIX . "ms_seller_group_criteria`,
+		`" . DB_PREFIX . "ms_settings`,
 		`" . DB_PREFIX . "ms_commission_rate`,
 		`" . DB_PREFIX . "ms_commission`,
 		`" . DB_PREFIX . "ms_criteria`,
