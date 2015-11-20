@@ -1065,16 +1065,15 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		if (empty($this->request->get['product_id'])) return;
 		
 		$productId = $this->request->get['product_id'];
-		$this->load->model('catalog/filter');
-		$filters = $this->model_catalog_filter->getProductFilters($productId);
+		$filters = $this->MsLoader->MsFilter->getProductFilters($productId);
 		
 		$this->data['product_filters'] = array();
 		foreach ($filters as $filter_id) {
-			$filter_info = $this->model_catalog_filter->getFilter($filter_id);
+			$filter_info = $this->MsLoader->MsFilter->getFilter($filter_id);
 			if ($filter_info) {
 				$this->data['product_filters'][] = array(
-						'filter_id' => $filter_info['filter_id'],
-						'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
+					'filter_id' => $filter_info['filter_id'],
+					'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
 				);
 			}
 		}

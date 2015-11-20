@@ -410,6 +410,7 @@ $_['ms_catalog_products_field_date_available']   = 'Date Available';
 $_['ms_catalog_products_field_stock_status']     = 'Out Of Stock Status';
 $_['ms_catalog_products_field_tax_class']        = 'Tax Class';
 $_['ms_catalog_products_field_subtract']         = 'Subtract Stock';
+$_['ms_catalog_products_filters']         = 'Filters';
 
 // Catalog - Seller Groups
 $_['ms_catalog_seller_groups_heading'] = 'Seller groups';

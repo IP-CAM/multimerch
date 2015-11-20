@@ -742,7 +742,7 @@ class MsProduct extends Model {
 		}
 		
 		// product filters
-		if ($this->config->get('msconf_allow_product_filters')) {
+		if (in_array('filters', $this->config->get('msconf_product_included_fields'))) {
 			$this->removeProductFilters($product_id);
 			if (isset($data['product_filter']) && is_array($data['product_filter'])) {
 				$this->addProductFilters($product_id, $data['product_filter']);

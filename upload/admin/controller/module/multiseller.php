@@ -302,7 +302,8 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			'subtract' => $this->language->get('ms_catalog_products_field_subtract'),
 			'stockStatus' => $this->language->get('ms_catalog_products_field_stock_status'),
 			'metaDescription' => $this->language->get('ms_catalog_products_field_meta_description'),
-			'metaKeywords' => $this->language->get('ms_catalog_products_field_meta_keyword')
+			'metaKeywords' => $this->language->get('ms_catalog_products_field_meta_keyword'),
+			'filters' => $this->language->get('ms_catalog_products_filters'),
 		);
 		
 		$this->document->setTitle($this->language->get('ms_settings_heading'));

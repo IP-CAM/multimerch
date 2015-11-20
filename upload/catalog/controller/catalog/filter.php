@@ -8,15 +8,13 @@ class ControllerCatalogFilter extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/filter');
-
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],
 				'start'       => 0,
 				'limit'       => 5
 			);
 
-			$filters = $this->model_catalog_filter->getFilters($filter_data);
+			$filters = $this->MsLoader->MsFilter->getFilters($filter_data);
 
 			foreach ($filters as $filter) {
 				$json[] = array(

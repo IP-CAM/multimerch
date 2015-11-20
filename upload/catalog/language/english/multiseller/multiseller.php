@@ -703,5 +703,6 @@ $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
 
 // Product filters
 $_['ms_entry_filter'] = 'Filters';
-$_['ms_help_filter'] = '(Autocomplete)';
+$_['ms_autocomplete'] = '(Autocomplete)';
+
 ?>
