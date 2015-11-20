@@ -704,4 +704,8 @@ $_['ms_sellercontact_close'] = 'Close';
 $_['ms_sellercontact_send'] = 'Send';
 $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
 
+// Product filters
+$_['ms_entry_filter'] = 'Filters';
+$_['ms_autocomplete'] = '(Autocomplete)';
+
 ?>

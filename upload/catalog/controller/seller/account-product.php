@@ -5,13 +5,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$colMap = array(
 			'product_name' => 'pd.name',
 			'product_status' => '`mp.product_status`',
-			'date_created' => '`p.date_created`',
+			'date_added' => '`p.date_added`',
 			'list_until' => 'mp.list_until',
 			'number_sold' => 'mp.number_sold',
 			'product_price' => 'p.price',
 		);
 		
-		$sorts = array('product_name', 'product_price', 'date_created', 'list_until', 'product_status', 'product_earnings', 'number_sold');
+		$sorts = array('product_name', 'product_price', 'date_added', 'list_until', 'product_status', 'product_earnings', 'number_sold');
 		$filters = array_diff($sorts, array('product_status'));
 		
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
@@ -115,7 +115,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					'number_sold' => $product['mp.number_sold'],
 					'product_earnings' => $this->currency->format($sale_data['seller_total'], $this->config->get('config_currency')),
 					'product_status' => $status,
-					'date_created' => date($this->language->get('date_format_short'), strtotime($product['p.date_created'])),
+					'date_added' => date($this->language->get('date_format_short'), strtotime($product['p.date_added'])),
 					'list_until' => $list_until,
 					'actions' => $actions
 				)
@@ -1061,6 +1061,24 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
+	private function _initProductFilters() {
+		if (empty($this->request->get['product_id'])) return;
+		
+		$productId = $this->request->get['product_id'];
+		$filters = $this->MsLoader->MsFilter->getProductFilters($productId);
+		
+		$this->data['product_filters'] = array();
+		foreach ($filters as $filter_id) {
+			$filter_info = $this->MsLoader->MsFilter->getFilter($filter_id);
+			if ($filter_info) {
+				$this->data['product_filters'][] = array(
+					'filter_id' => $filter_info['filter_id'],
+					'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
+				);
+			}
+		}
+	}
+	
 	private function _initForm()
 	{
 		$this->load->model('catalog/category');
@@ -1244,6 +1262,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		}
 			
 		$this->_initForm();
+		$this->_initProductFilters();
 
 		if (!empty($this->data['normal_attributes']) || !empty($this->data['multilang_attributes'])) {
 			$a = $this->MsLoader->MsAttribute->getProductAttributeValues($product_id);
