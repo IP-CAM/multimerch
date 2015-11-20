@@ -616,6 +616,14 @@ div.ms-jquery-dialog.ui-widget-content,
 	margin: 3px 0;
 }
 
+.ms-account-product-form #product-filter {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background-color: inherit;
+	width: 50%;
+}
+
+
 .ms-account-product-form .ms-button-delete {
 	background-image: url(../image/ms-cross.png);
 }

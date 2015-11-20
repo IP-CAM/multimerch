@@ -197,6 +197,9 @@ $_['ms_config_provide_buyerinfo_note'] = 'Include buyer address in the Product p
 $_['ms_config_enable_shipping'] = 'Enable OpenCart\'s "Shippable" option';
 $_['ms_config_enable_shipping_note'] = 'New products will be created with OpenCart\'s \'Shippable\' field enabled. With MultiMerch Shipping Addon installed, this will enable shipping functionality.';
 
+$_['ms_config_allow_product_filters'] = 'Allow product filters';
+$_['ms_config_allow_product_filters_note'] = 'Allow sellers to assign filters for products';
+
 $_['ms_config_enable_quantities'] = 'Enable quantities';
 $_['ms_config_enable_quantities_note'] = 'Allow sellers to specify quantities for products';
 
@@ -407,6 +410,7 @@ $_['ms_catalog_products_field_date_available']   = 'Date Available';
 $_['ms_catalog_products_field_stock_status']     = 'Out Of Stock Status';
 $_['ms_catalog_products_field_tax_class']        = 'Tax Class';
 $_['ms_catalog_products_field_subtract']         = 'Subtract Stock';
+$_['ms_catalog_products_filters']         = 'Filters';
 
 // Catalog - Seller Groups
 $_['ms_catalog_seller_groups_heading'] = 'Seller groups';

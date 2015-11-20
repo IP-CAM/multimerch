@@ -1061,6 +1061,24 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
+	private function _initProductFilters() {
+		if (empty($this->request->get['product_id'])) return;
+		
+		$productId = $this->request->get['product_id'];
+		$filters = $this->MsLoader->MsFilter->getProductFilters($productId);
+		
+		$this->data['product_filters'] = array();
+		foreach ($filters as $filter_id) {
+			$filter_info = $this->MsLoader->MsFilter->getFilter($filter_id);
+			if ($filter_info) {
+				$this->data['product_filters'][] = array(
+					'filter_id' => $filter_info['filter_id'],
+					'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
+				);
+			}
+		}
+	}
+	
 	private function _initForm()
 	{
 		$this->load->model('catalog/category');
@@ -1244,6 +1262,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		}
 			
 		$this->_initForm();
+		$this->_initProductFilters();
 
 		if (!empty($this->data['normal_attributes']) || !empty($this->data['multilang_attributes'])) {
 			$a = $this->MsLoader->MsAttribute->getProductAttributeValues($product_id);

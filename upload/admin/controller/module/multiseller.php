@@ -56,6 +56,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"msconf_images_limits" => array(0,0),
 		"msconf_downloads_limits" => array(0,0),
 		
+		"msconf_allow_product_filters" => 0, // 0 - no, 1 - yes
 		"msconf_enable_shipping" => 0, // 0 - no, 1 - yes, 2 - seller select
 		"msconf_provide_buyerinfo" => 0, // 0 - no, 1 - yes, 2 - shipping dependent
 		"msconf_enable_quantities" => 0, // 0 - no, 1 - yes, 2 - shipping dependent
@@ -301,7 +302,8 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			'subtract' => $this->language->get('ms_catalog_products_field_subtract'),
 			'stockStatus' => $this->language->get('ms_catalog_products_field_stock_status'),
 			'metaDescription' => $this->language->get('ms_catalog_products_field_meta_description'),
-			'metaKeywords' => $this->language->get('ms_catalog_products_field_meta_keyword')
+			'metaKeywords' => $this->language->get('ms_catalog_products_field_meta_keyword'),
+			'filters' => $this->language->get('ms_catalog_products_filters'),
 		);
 		
 		$this->document->setTitle($this->language->get('ms_settings_heading'));

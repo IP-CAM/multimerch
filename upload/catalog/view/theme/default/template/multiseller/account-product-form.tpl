@@ -31,7 +31,7 @@
 			<li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $ms_account_product_tab_general; ?></a></li>
 
 			<?php
-			$data_tab_fields = array('model', 'sku', 'upc', 'ean', 'jan', 'isbn', 'mpn', 'manufacturer', 'taxClass', 'subtract', 'stockStatus', 'dateAvailable');
+			$data_tab_fields = array('model', 'sku', 'upc', 'ean', 'jan', 'isbn', 'mpn', 'manufacturer', 'taxClass', 'subtract', 'stockStatus', 'dateAvailable', 'filters');
 			$intersection_fields = array_intersect($data_tab_fields, $this->config->get('msconf_product_included_fields'));
      		if (!empty($intersection_fields)) { ?>
      		<li><a href="#tab-data" data-toggle="tab"><?php echo $ms_account_product_tab_data; ?></a></li>
@@ -412,7 +412,7 @@
 				<label class="col-sm-2 control-label"><?php echo $ms_account_product_model; ?></label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="product_model" value="<?php echo $product['model']; ?>" />
-					<p class="error" id="error_product_model; ?>"></p>
+					<p class="error" id="error_product_model"></p>
 				</div>
 			</div>
 			<?php } ?>
@@ -533,6 +533,22 @@
 			<div class="form-group required">
 				<label class="col-sm-2 control-label"><?php echo $ms_account_product_date_available; ?></label>
 				<div class="col-sm-10"><input type="text" class="form-control" name="product_date_available" value="<?php echo $date_available; ?>" size="12" class="date" /></div>
+			</div>
+			<?php } ?>
+
+			<?php if (in_array('filters', $this->config->get('msconf_product_included_fields'))) { ?>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip"><?php echo $this->language->get('ms_entry_filter'); ?></span></label>
+				<div class="col-sm-10">
+					<input type="text" name="filter" value="" placeholder="<?php echo $this->language->get('ms_autocomplete'); ?>" id="input-filter" class="form-control" />
+					<div id="product-filter" class="well well-sm" style="height: 150px; overflow: auto;">
+					<?php if ($product_filters) foreach ($product_filters as $product_filter) { ?>
+						<div id="product-filter<?php echo $product_filter['filter_id']; ?>"><i class="fa fa-minus-circle"></i>
+							<?php echo $product_filter['name']; ?><input type="hidden" name="product_filter[]" value="<?php echo $product_filter['filter_id']; ?>" />
+						</div>
+					<?php } ?>
+					</div>
+				</div>
 			</div>
 			<?php } ?>
         </div>
