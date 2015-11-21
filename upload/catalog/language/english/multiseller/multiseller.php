@@ -708,4 +708,7 @@ $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
 $_['ms_entry_filter'] = 'Filters';
 $_['ms_autocomplete'] = '(Autocomplete)';
 
+// Invoices
+$_['heading_invoice_title']         = 'Order Invoice';
+
 ?>
