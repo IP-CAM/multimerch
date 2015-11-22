@@ -1,8 +1,6 @@
 <?php
 final class MsSetting extends Model {
 	private $_settings = array(
-		"seller_inv_firstname" => 'John',
-		"seller_inv_lastname" => 'Cena'
 	);
 
 	public function getSetting($data = array()) {

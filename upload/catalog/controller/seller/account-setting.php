@@ -1,6 +1,11 @@
 <?php
 
 class ControllerSellerAccountSetting extends ControllerSellerAccount {
+	public function __construct($registry) {
+		parent::__construct($registry);
+		$this->response->redirect($this->url->link('seller/account-profile', '', 'SSL'));
+	}
+
 	public function index() {
 		$this->response->redirect($this->url->link('seller/account-setting/invoice', '', 'SSL'));
 	}
@@ -44,7 +49,7 @@ class ControllerSellerAccountSetting extends ControllerSellerAccount {
 		
 		$this->data['menu'] = $this->_getMenu();
 		
-		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/settings/' . __FUNCTION__);
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/settings/seller_invoice');
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 }
