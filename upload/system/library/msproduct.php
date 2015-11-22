@@ -739,11 +739,35 @@ class MsProduct extends Model {
 				if (isset($product_discount['customer_group_id'])) $customer_group_id = (int)$product_discount['customer_group_id'];
 				$this->db->query("INSERT INTO " . DB_PREFIX . "product_discount SET product_id = '" . (int)$product_id . "', customer_group_id = '" . $customer_group_id . "', quantity = '" . (int)$product_discount['quantity'] . "', priority = '" . (int)$product_discount['priority'] . "', price = '" . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']) . "', date_start = '" . $this->db->escape($product_discount['date_start']) . "', date_end = '" . $this->db->escape($product_discount['date_end']) . "'");
 			}
-		}		
+		}
 		
+		// product filters
+		if (in_array('filters', $this->config->get('msconf_product_included_fields'))) {
+			$this->removeProductFilters($product_id);
+			if (isset($data['product_filter']) && is_array($data['product_filter'])) {
+				$this->addProductFilters($product_id, $data['product_filter']);
+			}
+		}
+
 		$this->registry->get('cache')->delete('product');
 		
 		return $product_id;
+	}
+	
+	private function removeProductFilters($product_id) {
+		$sql = "DELETE FROM " . DB_PREFIX . "product_filter"
+				 . " WHERE product_id = '" . (int) $product_id . "'";
+		$this->db->query($sql);
+	}
+	
+	private function addProductFilters($product_id, array $filters) {
+		foreach ($filters as $filter_id) {
+			$this->db->query(
+				"INSERT INTO " . DB_PREFIX . "product_filter"
+				. " SET product_id = '" . (int) $product_id . "',"
+				. " filter_id = '" . (int) $filter_id . "'"
+			);
+		}
 	}
 	
 	public function hasDownload($product_id, $download_id) {

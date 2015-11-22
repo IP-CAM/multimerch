@@ -592,11 +592,14 @@ $_['ms_account_dashboard_sales_month'] = 'Sales this month';
 $_['ms_account_dashboard_earnings_month'] = 'Earnings this month';
 $_['ms_account_dashboard_nav'] = 'Quick navigation';
 $_['ms_account_dashboard_nav_profile'] = 'Modify your seller profile';
+$_['ms_account_dashboard_nav_setting'] = 'Modify your seller settings';
 $_['ms_account_dashboard_nav_product'] = 'Create a new product';
 $_['ms_account_dashboard_nav_products'] = 'Manage your products';
 $_['ms_account_dashboard_nav_orders'] = 'View your orders';
 $_['ms_account_dashboard_nav_balance'] = 'View your financial records';
 $_['ms_account_dashboard_nav_payout'] = 'Request your payout';
+$_['ms_account_sellersetting_breadcrumbs'] = 'Seller Settings';
+
 
 // Account - Request withdrawal
 $_['ms_account_withdraw_heading'] = 'Request Payout';
@@ -700,5 +703,12 @@ $_['ms_sellercontact_sendmessage'] = 'Send a message to %s';
 $_['ms_sellercontact_close'] = 'Close';
 $_['ms_sellercontact_send'] = 'Send';
 $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
+
+// Product filters
+$_['ms_entry_filter'] = 'Filters';
+$_['ms_autocomplete'] = '(Autocomplete)';
+
+// Invoices
+$_['heading_invoice_title']         = 'Order Invoice';
 
 ?>
