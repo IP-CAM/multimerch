@@ -306,7 +306,7 @@ class ModelMultisellerInstall extends Model {
 		`" . DB_PREFIX . "ms_seller_group`,
 		`" . DB_PREFIX . "ms_seller_group_description`,
 		`" . DB_PREFIX . "ms_seller_group_criteria`,
-		`" . DB_PREFIX . "ms_settings`,
+		`" . DB_PREFIX . "ms_setting`,
 		`" . DB_PREFIX . "ms_commission_rate`,
 		`" . DB_PREFIX . "ms_commission`,
 		`" . DB_PREFIX . "ms_criteria`,
