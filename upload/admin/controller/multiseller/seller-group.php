@@ -50,7 +50,7 @@ class ControllerMultisellerSellerGroup extends ControllerMultisellerBase {
 					'checkbox'          => "<input type='checkbox' name='selected[]' value='{$result['seller_group_id']}' />",
 					'id' => $result['seller_group_id'],
 					'name'              => $result['name'],
-					'description' => (mb_strlen($result['description']) > 80 ? mb_substr($result['description'], 0, 80) . '...' : $result['description']),
+					'description' => (utf8_strlen($result['description']) > 80 ? mb_substr($result['description'], 0, 80) . '...' : $result['description']),
 					'rates' => $actual_fees,
 					'actions' => $actions
 				)
