@@ -662,7 +662,7 @@ class ControllerSellerCatalogSeller extends ControllerSellerCatalog {
 			$json['errors'][] = $this->language->get('ms_error_contact_allfields');
 		}
 
-		if (mb_strlen($message_text) > 2000) {
+		if (utf8_strlen($message_text) > 2000) {
 			$json['errors'][] = $this->language->get('ms_error_contact_text');
 		}
 

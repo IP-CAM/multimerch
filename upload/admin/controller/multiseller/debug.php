@@ -16,7 +16,7 @@ class ControllerMultisellerDebug extends ControllerMultisellerBase {
 			$seek = min(ftell($f), $buffer);
 			fseek($f, -$seek, SEEK_CUR);
 			$output = ($chunk = fread($f, $seek)) . $output;
-			fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
+			fseek($f, -utf8_strlen($chunk, '8bit'), SEEK_CUR);
 			$lines -= substr_count($chunk, "\n");
 		}
 

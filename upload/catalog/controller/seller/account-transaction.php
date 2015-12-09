@@ -45,7 +45,7 @@ class ControllerSellerAccountTransaction extends ControllerSellerAccount {
 				array(
 					'payment_type' => ($result['payment_type'] == MsPayment::TYPE_SALE ? $this->language->get('ms_payment_type_' . $result['payment_type']) . ' (' . sprintf($this->language->get('ms_payment_order'), $result['order_id']) . ')' : $this->language->get('ms_payment_type_' . $result['payment_type'])),
 					'amount' => $this->currency->format(abs($result['amount']),$result['currency_code']),
-					'description' => (mb_strlen($result['mpay.description']) > 80 ? mb_substr($result['mpay.description'], 0, 80) . '...' : $result['mpay.description']),
+					'description' => (utf8_strlen($result['mpay.description']) > 80 ? mb_substr($result['mpay.description'], 0, 80) . '...' : $result['mpay.description']),
 					'payment_status' => $this->language->get('ms_payment_status_' . $result['payment_status']),
 					'date_created' => date($this->language->get('date_format_short'), strtotime($result['mpay.date_created'])),
 				)
@@ -97,7 +97,7 @@ class ControllerSellerAccountTransaction extends ControllerSellerAccount {
 				array(
 					'transaction_id' => $result['balance_id'],
 					'amount' => $this->currency->format($result['amount'], $this->config->get('config_currency')),
-					'description' => (mb_strlen($result['mb.description']) > 80 ? mb_substr($result['mb.description'], 0, 80) . '...' : $result['mb.description']),
+					'description' => (utf8_strlen($result['mb.description']) > 80 ? mb_substr($result['mb.description'], 0, 80) . '...' : $result['mb.description']),
 					'date_created' => date($this->language->get('date_format_short'), strtotime($result['mb.date_created'])),
 				)
 			);

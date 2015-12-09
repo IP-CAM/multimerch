@@ -73,7 +73,7 @@ class ControllerAccountRegisterSeller extends Controller {
 
 		if (empty($data['seller']['nickname'])) {
 			$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_empty');
-		} else if (mb_strlen($data['seller']['nickname']) < 4 || mb_strlen($data['seller']['nickname']) > 128 ) {
+		} else if (utf8_strlen($data['seller']['nickname']) < 4 || utf8_strlen($data['seller']['nickname']) > 128 ) {
 			$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_length');
 		} else if (($this->MsLoader->MsSeller->nicknameTaken($data['seller']['nickname'])) ) {
 			$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_taken');

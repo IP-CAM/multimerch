@@ -67,7 +67,7 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 					'payment_type' => $this->language->get('ms_payment_type_' . $result['payment_type']),
 					'seller' => "<a href='".$this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL')."'>{$result['nickname']}</a>",
 					'amount' => $this->currency->format(abs($result['amount']),$result['currency_code']),
-					'description' => (mb_strlen($result['mpay.description']) > 80 ? mb_substr($result['mpay.description'], 0, 80) . '...' : $result['mpay.description']),
+					'description' => (utf8_strlen($result['mpay.description']) > 80 ? mb_substr($result['mpay.description'], 0, 80) . '...' : $result['mpay.description']),
 					'payment_status' => $paymentstatus,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($result['mpay.date_created'])),
 					'date_paid' => $result['mpay.date_paid'] ? date($this->language->get('date_format_short'), strtotime($result['mpay.date_paid'])) : '',

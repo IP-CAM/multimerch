@@ -77,7 +77,7 @@ class MsFile extends Model {
 			}
 		} else {
 			// todo filename size
-			if (mb_strlen($file['name']) > 150) {
+			if (utf8_strlen($file['name']) > 150) {
 				$errors[] = $this->language->get('ms_error_file_upload_error');
 			}
 		}
@@ -154,7 +154,7 @@ class MsFile extends Model {
 		$key = array_search($fileName, $this->session->data['multiseller']['files']);
 
 		//strip nonce and timestamp
-		$original_file_name = substr($fileName, strpos($fileName, '.') + 1, mb_strlen($fileName));
+		$original_file_name = substr($fileName, strpos($fileName, '.') + 1, utf8_strlen($fileName));
 		//var_dump($original_file_name);
 		if ($this->_isNewUpload($fileName)) {
 			$newpath = $original_file_name . '.' . md5(rand());
@@ -189,7 +189,7 @@ class MsFile extends Model {
 			$dirname = $this->config->get('msconf_temp_image_path');
 			//strip nonce and timestamp
 			$originalFilename = $filename;
-			$filename = substr($filename, strpos($filename, '.') + 1, mb_strlen($filename));
+			$filename = substr($filename, strpos($filename, '.') + 1, utf8_strlen($filename));
 		}
 
 		if (DIR_IMAGE . $imageDir . $this->customer->getId() . "/" . $filename != DIR_IMAGE . $path) {

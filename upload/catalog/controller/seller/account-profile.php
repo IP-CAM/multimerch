@@ -44,7 +44,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			// seller doesn't exist yet
 			if (empty($data['seller']['nickname'])) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_empty');
-			} else if (mb_strlen($data['seller']['nickname']) < 4 || mb_strlen($data['seller']['nickname']) > 128 ) {
+			} else if (utf8_strlen($data['seller']['nickname']) < 4 || utf8_strlen($data['seller']['nickname']) > 128 ) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_length');
 			} else if ( ($data['seller']['nickname'] != $seller['ms.nickname']) && ($this->MsLoader->MsSeller->nicknameTaken($data['seller']['nickname'])) ) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_taken');
@@ -88,11 +88,11 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 		}
 
-		if (mb_strlen($data['seller']['company']) > 50 ) {
+		if (utf8_strlen($data['seller']['company']) > 50 ) {
 			$json['errors']['seller[company]'] = $this->language->get('ms_error_sellerinfo_company_length');
 		}
 
-		if (mb_strlen($data['seller']['description']) > 1000) {
+		if (utf8_strlen($data['seller']['description']) > 1000) {
 			$json['errors']['seller[description]'] = $this->language->get('ms_error_sellerinfo_description_length');
 		}
 

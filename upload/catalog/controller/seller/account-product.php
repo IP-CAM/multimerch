@@ -303,13 +303,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		foreach ($data['languages'] as $language_id => $language) {
 			// main language inputs are mandatory
 
-			$description_length = $this->config->get('msconf_enable_rte') ? mb_strlen(strip_tags(htmlspecialchars_decode($language['product_description'], ENT_COMPAT))) : mb_strlen(htmlspecialchars_decode($language['product_description'], ENT_COMPAT));
+			$description_length = $this->config->get('msconf_enable_rte') ? utf8_strlen(strip_tags(htmlspecialchars_decode($language['product_description'], ENT_COMPAT))) : utf8_strlen(htmlspecialchars_decode($language['product_description'], ENT_COMPAT));
 			if ($i == 0) {
 				$default = $language_id;
 
 				if (empty($language['product_name'])) {
 					$json['errors']['product_name_' . $language_id] = $this->language->get('ms_error_product_name_empty');
-				} else if (mb_strlen($language['product_name']) < 4 || mb_strlen($language['product_name']) > 50) {
+				} else if (utf8_strlen($language['product_name']) < 4 || utf8_strlen($language['product_name']) > 50) {
 					$json['errors']['product_name_' . $language_id] = sprintf($this->language->get('ms_error_product_name_length'), 4, 50);
 				}
 
@@ -319,7 +319,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					$json['errors']['product_description_' . $language_id] = sprintf($this->language->get('ms_error_product_description_length'), 25, 4000);
 				}
 			} else {
-				if (!empty($language['product_name']) && (mb_strlen($language['product_name']) < 4 || mb_strlen($language['product_name']) > 50)) {
+				if (!empty($language['product_name']) && (utf8_strlen($language['product_name']) < 4 || utf8_strlen($language['product_name']) > 50)) {
 					$json['errors']['product_name_' . $language_id] = sprintf($this->language->get('ms_error_product_name_length'), 4, 50);
 				} else if (empty($language['product_name'])) {
 					$data['languages'][$language_id]['product_name'] = $data['languages'][$default]['product_name'];
@@ -339,7 +339,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				$data['languages'][$language_id]['product_meta_keyword'] = $data['languages'][$default]['product_meta_keyword'];
 			}
 
-			if (!empty($language['product_tags']) && mb_strlen($language['product_tags']) > 1000) {
+			if (!empty($language['product_tags']) && utf8_strlen($language['product_tags']) > 1000) {
 				$json['errors']['product_tags_' . $language_id] = $this->language->get('ms_error_product_tags_length');
 			} else if (empty($language['product_tags']) && $i != 0) {
 				$data['languages'][$language_id]['product_tags'] = $data['languages'][$default]['product_tags'];
@@ -373,13 +373,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 					// attribute validation
 					if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXT) {
-						if (mb_strlen($product_attributes[$attribute_id]['value']) > 100) {
+						if (utf8_strlen($product_attributes[$attribute_id]['value']) > 100) {
 							$json['errors']["languages[$language_id][product_attributes][$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 100);
 							continue;
 						}
 						// text input validation
 					} else if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXTAREA) {
-						if (mb_strlen($product_attributes[$attribute_id]['value']) > 2000) {
+						if (utf8_strlen($product_attributes[$attribute_id]['value']) > 2000) {
 							$json['errors']["languages[$language_id][product_attributes][$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 2000);
 							continue;
 						}
@@ -463,7 +463,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			}
 		}
 
-		if (!empty($data['product_message']) && mb_strlen($data['product_message']) > 1000) {
+		if (!empty($data['product_message']) && utf8_strlen($data['product_message']) > 1000) {
 			$json['errors']['product_message'] = $this->language->get('ms_error_product_message_length');
 		}
 
@@ -537,7 +537,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		if (in_array('model', $this->config->get('msconf_product_included_fields'))) {
 			if (empty($data['product_model'])) {
 				$json['errors']['product_model'] = $this->language->get('ms_error_product_model_empty');
-			} else if (mb_strlen($data['product_model']) < 4 || mb_strlen($data['product_model']) > 64) {
+			} else if (utf8_strlen($data['product_model']) < 4 || utf8_strlen($data['product_model']) > 64) {
 				$json['errors']['product_model'] = sprintf($this->language->get('ms_error_product_model_length'), 4, 64);
 			}
 		}
@@ -594,13 +594,13 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				}
 				continue;
 			} else if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXT) {
-				if (mb_strlen($product_attributes[$attribute_id]['value']) > 100) {
+				if (utf8_strlen($product_attributes[$attribute_id]['value']) > 100) {
 					$json['errors']["product_attributes[$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 100);
 					continue;
 				}
 				// text input validation
 			} else if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXTAREA) {
-				if (mb_strlen($product_attributes[$attribute_id]['value']) > 2000) {
+				if (utf8_strlen($product_attributes[$attribute_id]['value']) > 2000) {
 					$json['errors']["product_attributes[$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 2000);
 					continue;
 				}

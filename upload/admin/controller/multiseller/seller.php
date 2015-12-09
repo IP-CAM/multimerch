@@ -108,7 +108,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			// creating new seller
 			if (empty($data['seller']['nickname'])) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_empty'); 
-			} else if (mb_strlen($data['seller']['nickname']) < 4 || mb_strlen($data['seller']['nickname']) > 128 ) {
+			} else if (utf8_strlen($data['seller']['nickname']) < 4 || utf8_strlen($data['seller']['nickname']) > 128 ) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_length');			
 			} else if ($this->MsLoader->MsSeller->nicknameTaken($data['seller']['nickname'])) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_taken');
@@ -142,15 +142,15 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 				// creating new customer
 				$this->language->load('sale/customer');
 
-				if ((mb_strlen($data['customer']['firstname']) < 1) || (mb_strlen($data['customer']['firstname']) > 32)) {
+				if ((utf8_strlen($data['customer']['firstname']) < 1) || (utf8_strlen($data['customer']['firstname']) > 32)) {
 			  		$json['errors']['customer[firstname]'] = $this->language->get('error_firstname');
 				}
 		
-				if ((mb_strlen($data['customer']['lastname']) < 1) || (mb_strlen($data['customer']['lastname']) > 32)) {
+				if ((utf8_strlen($data['customer']['lastname']) < 1) || (utf8_strlen($data['customer']['lastname']) > 32)) {
 			  		$json['errors']['customer[lastname]'] = $this->language->get('error_lastname');
 				}
 		
-				if ((mb_strlen($data['customer']['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $data['customer']['email'])) {
+				if ((utf8_strlen($data['customer']['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $data['customer']['email'])) {
 			  		$json['errors']['customer[email]'] = $this->language->get('error_email');
 				}
 				
@@ -167,7 +167,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 				}
 				
 				if ($data['customer']['password'] || (!isset($this->request->get['customer_id']))) {
-			  		if ((mb_strlen($data['customer']['password']) < 4) || (mb_strlen($data['customer']['password']) > 20)) {
+			  		if ((utf8_strlen($data['customer']['password']) < 4) || (utf8_strlen($data['customer']['password']) > 20)) {
 						$json['errors']['customer[password]'] = $this->language->get('error_password');
 			  		}
 			
