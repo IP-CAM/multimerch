@@ -560,13 +560,6 @@
 							<label class="radio-inline"><input type="radio" name="msconf_nickname_rules" value="2" <?php if ($msconf_nickname_rules == 2) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_nickname_rules_utf; ?></label>
 					  	</div>
 					</div>
-
-					<div class="form-group">
-						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_avatars_for_sellers_note; ?>"><?php echo $ms_config_avatars_for_sellers; ?></span></label>
-						<div class="col-sm-10">
-							<label class="radio-inline"><input type="radio" name="msconf_avatars_for_sellers" value="0" <?php if ($msconf_avatars_for_sellers == 0) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_avatars_manually; ?></label>
-						</div>
-					</div>
                     </fieldset>
 
                     <fieldset>

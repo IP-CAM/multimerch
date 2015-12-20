@@ -99,11 +99,8 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_avatar; ?></label>
 			<div class="col-sm-10">
-				<!--<input type="file" name="ms-file-selleravatar" id="ms-file-selleravatar" />-->
 				<div class="buttons">
-				<?php if ($this->config->get('msconf_avatars_for_sellers') != 2) { ?>
 					<a name="ms-file-selleravatar" id="ms-file-selleravatar" class="btn btn-primary"><span><?php echo $ms_button_select_image; ?></span></a>
-				<?php } ?>
 				</div>
 
 				<p class="ms-note"><?php echo $ms_account_sellerinfo_avatar_note; ?></p>
