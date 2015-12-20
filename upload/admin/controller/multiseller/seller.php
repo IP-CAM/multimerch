@@ -273,7 +273,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 				);
 			}
 			
-			if ($data['seller']['notify']) {
+			if (isset($data['seller']['notify']) && $data['seller']['notify']) {
 				$this->MsLoader->MsMail->sendMails($mails);
 			}
 			
