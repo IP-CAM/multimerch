@@ -303,8 +303,6 @@ $_['ms_config_nickname_rules_ext'] = 'Extended latin';
 $_['ms_config_nickname_rules_utf'] = 'Full UTF-8';
 
 $_['ms_config_other'] = 'Other';
-$_['ms_config_hide_sellers_product_count'] = 'Hide count of sellers and products in the header';
-$_['ms_config_hide_sellers_product_count_note'] = 'Hides line, which contains count of sellers and products in the header';
 
 // Seller - List
 $_['ms_catalog_sellers_heading'] = 'Sellers';
