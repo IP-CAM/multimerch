@@ -1,7 +1,7 @@
 <?php
 
 class MsLoader {
-	public $appVer = "7.2.1";
+	public $appVer = "7.3";
 	public $dbVer = "1.0.2.2";
 	
 	public function __construct($registry) {
