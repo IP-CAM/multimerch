@@ -165,53 +165,23 @@
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_category; ?></label>
 					<div class="col-sm-10" id="product_category_block">
 						<?php if (!$msconf_allow_multiple_categories) { ?>
-
-						<select class="form-control" name="product_category">
-							<option value=""><?php echo ''; ?></option>
-							<?php foreach ($categories as $category) { ?>
-                                <?php if($msconf_enable_categories && $this->config->get('msconf_enable_shipping') == 2) { ?>
-                                    <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
-                                        <?php if(in_array($category['category_id'],$msship_physical_product_categories)) { ?>
-                                            <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
-                                    <?php }} else { ?>
-                                        <?php if(in_array($category['category_id'],$msship_digital_product_categories)) { ?>
-                                            <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
-                                    <?php }} ?>
-                                <?php } else { ?>
-                                <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
-							<?php }} ?>
-						</select>
-
+							<select class="form-control" name="product_category">
+								<option value=""><?php echo ''; ?></option>
+								<?php foreach ($categories as $category) { ?>
+									<option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
+								<?php } ?>
+							</select>
 						<?php } else { ?>
-
-						<div class="scrollbox">
-						<?php $class = 'odd'; ?>
-						<?php foreach ($categories as $category) { ?>
-                            <?php if($msconf_enable_categories && $this->config->get('msconf_enable_shipping') == 2) { ?>
-                                <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
-                                    <?php if(in_array($category['category_id'],$msship_physical_product_categories)) { ?>
-                                        <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                                        <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
-                                            <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
-                                            <?php echo $category['name']; ?>
-                                        </div>
-                                <?php }} else { ?>
-                                     <?php if(in_array($category['category_id'],$msship_digital_product_categories)) { ?>
-                                        <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                                        <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
-                                            <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
-                                            <?php echo $category['name']; ?>
-                                        </div>
-                                <?php }} ?>
-                            <?php } else { ?>
-                                <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                                <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
-                                    <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
-                                    <?php echo $category['name']; ?>
-                                </div>
-                            <?php }} ?>
-						</div>
-
+							<div class="scrollbox">
+							<?php $class = 'odd'; ?>
+							<?php foreach ($categories as $category) { ?>
+									<?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
+									<div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
+										<input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
+										<?php echo $category['name']; ?>
+									</div>
+								<?php } ?>
+							</div>
 						<?php } ?>
 
 						<p class="ms-note"><?php echo $ms_account_product_category_note; ?></p>
@@ -542,7 +512,7 @@
 				<div class="col-sm-10">
 					<input type="text" name="filter" value="" placeholder="<?php echo $this->language->get('ms_autocomplete'); ?>" id="input-filter" class="form-control" />
 					<div id="product-filter" class="well well-sm" style="height: 150px; overflow: auto;">
-					<?php if ($product_filters) foreach ($product_filters as $product_filter) { ?>
+					<?php if (isset($product_filters) && $product_filters) foreach ($product_filters as $product_filter) { ?>
 						<div id="product-filter<?php echo $product_filter['filter_id']; ?>"><i class="fa fa-minus-circle"></i>
 							<?php echo $product_filter['name']; ?><input type="hidden" name="product_filter[]" value="<?php echo $product_filter['filter_id']; ?>" />
 						</div>
