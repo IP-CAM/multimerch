@@ -404,6 +404,13 @@ class MsProduct extends Model {
 			}
 		}
 
+		// product filters
+		if (in_array('filters', $this->config->get('msconf_product_included_fields'))) {
+			if (isset($data['product_filter']) && is_array($data['product_filter'])) {
+				$this->addProductFilters($product_id, $data['product_filter']);
+			}
+		}
+
 		$this->registry->get('cache')->delete('product');
 		
 		return $product_id;
