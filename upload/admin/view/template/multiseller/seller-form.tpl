@@ -185,6 +185,7 @@
                 </div>
             </div>
 
+			<!--
             <div class="form-group">
                 <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_avatar; ?></label>
                 <div class="col-sm-10">
@@ -196,6 +197,7 @@
                     </div>
                 </div>
             </div>
+			-->
 
             <?php $msSeller = new ReflectionClass('MsSeller'); ?>
             <div class="form-group">
@@ -211,6 +213,8 @@
                 </div>
             </div>
 
+			<!-- deprecated -->
+			<!--
             <div class="form-group">
                 <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_notify; ?></label>
                 <div class="col-sm-10">
@@ -230,6 +234,8 @@
                     <textarea class="form-control" name="seller[message]" disabled="disabled"></textarea>
                 </div>
             </div>
+            -->
+
             </fieldset>
 
             </div>

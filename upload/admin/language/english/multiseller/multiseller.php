@@ -302,16 +302,7 @@ $_['ms_config_nickname_rules_alnum'] = 'Alphanumeric';
 $_['ms_config_nickname_rules_ext'] = 'Extended latin';
 $_['ms_config_nickname_rules_utf'] = 'Full UTF-8';
 
-// Seller Avatars
-$_['ms_config_avatars_for_sellers'] = 'Avatars for sellers';
-$_['ms_config_avatars_for_sellers_note'] = 'Define the way seller avatars work';
-$_['ms_config_avatars_manually'] = 'Uploaded manually by seller';
-$_['ms_config_avatars_both'] = 'Both uploaded by seller and pre-defined';
-$_['ms_config_avatars_predefined'] = 'Only pre-defined';
-
 $_['ms_config_other'] = 'Other';
-$_['ms_config_hide_sellers_product_count'] = 'Hide count of sellers and products in the header';
-$_['ms_config_hide_sellers_product_count_note'] = 'Hides line, which contains count of sellers and products in the header';
 
 // Seller - List
 $_['ms_catalog_sellers_heading'] = 'Sellers';

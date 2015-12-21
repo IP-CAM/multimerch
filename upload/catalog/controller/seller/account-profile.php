@@ -101,7 +101,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 		}
 
 		if (isset($data['seller']['avatar_name']) && !empty($data['seller']['avatar_name'])) {
-			if ($this->config->get('msconf_avatars_for_sellers') == 0 && !$this->MsLoader->MsFile->checkFileAgainstSession($data['seller']['avatar_name'])) {
+			if (!$this->MsLoader->MsFile->checkFileAgainstSession($data['seller']['avatar_name'])) {
 				$json['errors']['seller[avatar]'] = $this->language->get('ms_error_file_upload_error');
 			}
 		}
