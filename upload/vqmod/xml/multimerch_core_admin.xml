@@ -94,7 +94,7 @@
 			<add><![CDATA[
                 <?php if (version_compare(VERSION, '2.1', '<') && file_exists(DIR_CATALOG . '../vqmod/xml/multimerch_oc21x_controllerfix.xml')) { ?>
                 <div class="alert alert-warning" style="margin: 10px auto; width: 90%;"><i class="fa fa-exclamation-circle"></i>
-                You are running OpenCart 2.0. The following file exists on your installation that is only needed for OpenCart 2.1 and newer: <br /><br /> <?php echo 'vqmod/xml/multimerch_oc21x_controllerfix.xml'; ?> <br /><br />Please remove or disable this file until you upgrade to OpenCart 2.1 to prevent controller-related errors
+                You are running OpenCart 2.0. The following file exists on your installation that is only needed for OpenCart 2.1 and newer: <br /><br /> <?php echo 'vqmod/xml/multimerch_oc21x_controllerfix.xml'; ?> <br /><br />Please remove or disable this file until you upgrade to OpenCart 2.1 to prevent controller-related errors.
                 </div>
 				<?php } else if (version_compare(VERSION, '2.1', '>=') && !file_exists(DIR_CATALOG . '../vqmod/xml/multimerch_oc21x_controllerfix.xml')) { ?>
 				<div class="alert alert-warning" style="margin: 10px auto; width: 90%;"><i class="fa fa-exclamation-circle"></i>
