@@ -1025,7 +1025,7 @@ class MsProduct extends Model {
 				INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 					ON (op.product_id = mopd.product_id)
 				WHERE op.product_id = " . (int)$product_id . "
-				GROUP BY order_product_id";
+				GROUP BY op.order_product_id";
 
 		$res = $this->db->query($sql);
 		return $res->num_rows ? $res->row : FALSE;
