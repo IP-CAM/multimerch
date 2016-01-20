@@ -102,5 +102,13 @@ class ModelMultisellerUpgrade extends Model {
 
 			$this->_createSchemaEntry('1.0.2.2');
 		}
+
+		if (version_compare($version, '1.0.3.1') < 0) {
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "ms_order_product_data` ADD `order_product_id` int(11) DEFAULT NULL AFTER `product_id`");
+
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "ms_balance` ADD `order_product_id` int(11) DEFAULT NULL AFTER `product_id`");
+
+			$this->_createSchemaEntry('1.0.3.1');
+		}
 	}
 }

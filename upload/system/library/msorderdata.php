@@ -76,6 +76,7 @@ class MsOrderData extends Model {
 				FROM " . DB_PREFIX . "ms_order_product_data
 				WHERE 1 = 1"
 				. (isset($data['product_id']) ? " AND product_id =  " .  (int)$data['product_id'] : '')
+				. (isset($data['order_product_id']) ? " AND order_product_id =  " .  (int)$data['order_product_id'] : '')
 				. (isset($data['order_id']) ? " AND order_id =  " .  (int)$data['order_id'] : '');
 		
 		$res = $this->db->query($sql);
@@ -97,16 +98,15 @@ class MsOrderData extends Model {
 	}
 
 	public function getOrderProducts($data) {
-		$sql = "SELECT *
-				FROM " . DB_PREFIX . "order_product
-				LEFT JOIN " . DB_PREFIX . "ms_order_product_data
-					USING(order_id, product_id)
+		$sql = "SELECT * FROM (SELECT op.*,opd1.seller_id,opd1.seller_net_amt FROM " . DB_PREFIX . "order_product op JOIN " . DB_PREFIX . "ms_order_product_data opd1 ON (op.order_product_id = opd1.order_product_id AND opd1.order_product_id IS NOT NULL)
+				UNION
+				SELECT op.*,opd2.seller_id,opd2.seller_net_amt FROM " . DB_PREFIX . "order_product op JOIN " . DB_PREFIX . "ms_order_product_data opd2 ON (op.order_id = opd2.order_id AND op.product_id = opd2.product_id AND opd2.order_product_id IS NULL)) AS u
 				WHERE 1 = 1"
-				. (isset($data['order_id']) ? " AND order_id =  " .  (int)$data['order_id'] : '')
-				. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '');
+				. (isset($data['order_id']) ? " AND u.order_id =  " .  (int)$data['order_id'] : '')
+				. (isset($data['seller_id']) ? " AND u.seller_id =  " .  (int)$data['seller_id'] : '');
 
+//var_dump($sql);
 		$res = $this->db->query($sql);
-
 		return $res->rows;
 	}
 	
@@ -114,6 +114,7 @@ class MsOrderData extends Model {
 		$sql = "INSERT INTO " . DB_PREFIX . "ms_order_product_data
 				SET order_id = " . (int)$order_id . ",
 					product_id = " . (int)$product_id . ",
+					order_product_id = " . (int)$data['order_product_id'] . ",
 					seller_id = " . (int)$data['seller_id'] . ",
 					store_commission_flat = " . (float)$data['store_commission_flat'] . ",
 					store_commission_pct = " . (float)$data['store_commission_pct'] . ",
@@ -149,7 +150,7 @@ class MsOrderData extends Model {
 					. (isset($data['product_id']) ? " AND mopd.product_id =  " .  (int)$data['product_id'] : '')
 					. (isset($data['period_start']) ? " AND DATEDIFF(o.date_added, '{$data['period_start']}') >= 0" : "")
 					. " AND o.order_status_id IN  (" .  $this->db->escape(implode(',', $this->config->get('msconf_credit_order_statuses'))) . ")"
-					. " GROUP BY order_product_id
+					. " GROUP BY op.order_product_id
 				) t";
 
 		$res = $this->db->query($sql);

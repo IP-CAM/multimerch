@@ -95,7 +95,15 @@
 		<tbody>
 			<?php foreach ($products as $product) { ?>
 			<tr>
-				<td class="left"><?php echo $product['name']; ?>
+				<td class="text-left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
+                <?php foreach ($product['option'] as $option) { ?>
+                <br />
+                <?php if ($option['type'] != 'file') { ?>
+                &nbsp;<small> - <?php echo $option['name']; ?>: <?php echo $option['value']; ?></small>
+                <?php } else { ?>
+                &nbsp;<small> - <?php echo $option['name']; ?>: <a href="<?php echo $option['href']; ?>"><?php echo $option['value']; ?></a></small>
+                <?php } ?>
+                <?php } ?></td>
 				<td class="left"><?php echo $product['model']; ?></td>
 				<td class="right"><?php echo $product['quantity']; ?></td>
 				<td class="right"><?php echo $product['price']; ?></td>

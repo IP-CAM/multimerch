@@ -48,6 +48,7 @@ class MsBalance extends Model {
 					ON (mb.seller_id = ms.seller_id)
 				WHERE 1 = 1"
 				. (isset($data['order_id']) ? " AND mb.order_id =  " .  (int)$data['order_id'] : '')
+				. (isset($data['order_product_id']) ? " AND (mb.order_product_id =  " .  (int)$data['order_product_id'] . " OR mb.order_product_id IS NULL)" : '')
 				. (isset($data['product_id']) ? " AND mb.product_id =  " .  (int)$data['product_id'] : '')
 				. (isset($data['seller_id']) ? " AND mb.seller_id =  " .  (int)$data['seller_id'] : '')
 				. (isset($data['withdrawal_id']) ? " AND seller_id =  " .  (int)$data['withdrawal_id'] : '')
@@ -69,6 +70,7 @@ class MsBalance extends Model {
 				WHERE 1 = 1 "
 				. (isset($data['order_id']) ? " AND order_id =  " .  (int)$data['order_id'] : '')
 				. (isset($data['product_id']) ? " AND product_id =  " .  (int)$data['product_id'] : '')
+				. (isset($data['order_product_id']) ? " AND (mb.order_product_id =  " .  (int)$data['order_product_id'] . " OR mb.order_product_id IS NULL)" : '')
 				. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '')
 				. (isset($data['withdrawal_id']) ? " AND seller_id =  " .  (int)$data['withdrawal_id'] : '')
 				. (isset($data['balance_type']) ? " AND balance_type =  " .  (int)$data['balance_type'] : '')
@@ -162,6 +164,7 @@ class MsBalance extends Model {
 				SET seller_id = " . (int)$seller_id . ",
 					order_id = " . (isset($data['order_id']) ? (int)$data['order_id'] : 'NULL') . ",
 					product_id = " . (isset($data['product_id']) ? (int)$data['product_id'] : 'NULL') . ",
+					order_product_id = " . (isset($data['order_product_id']) ? (int)$data['order_product_id'] : 'NULL') . ",
 					withdrawal_id = " . (isset($data['withdrawal_id']) ? (int)$data['withdrawal_id'] : 'NULL') . ",
 					balance_type = " . (int)$data['balance_type'] . ",
 					amount = ". (float)$this->currency->format($data['amount'], $this->config->get('config_currency'), '', FALSE) . ",
