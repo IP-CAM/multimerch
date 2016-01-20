@@ -67,7 +67,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
                     $products .= "<small> - {$option['name']} : {$option['value']} </small>";
                 }
 
-                $products .= "<span class='total'>" . $this->currency->format($p['seller_net_amt'], $this->config->get('config_currency')) . "</span>";
+                $products .= "<span class='total'>" . $this->currency->format($p['seller_net_amt'], $order['currency_code'], $order['currency_value']) . "</span>";
 				$products .= "</p>";
 			}
 
@@ -91,12 +91,14 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'products' => $products,
 					'suborder_status' => $status_name,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
-					'total_amount' => $this->currency->format($order['total_amount'], $this->config->get('config_currency')),
+					'total_amount' => $this->currency->format($order['total_amount'], $order['currency_code'], $order['currency_value']),
 					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" class="ms-button ms-button-view" title="' . $this->language->get('ms_view_modify') . '"></a>'
 				)
 			);
 		}
-		
+
+
+
 		$this->response->setOutput(json_encode(array(
 			'iTotalRecords' => $total_orders,
 			'iTotalDisplayRecords' => $total_orders,
@@ -188,7 +190,9 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			$this->data['products'][] = array(
 				'product_id' => $product['product_id'],
 				'name'     => $product['name'],
+				'href' => $this->url->link('product/product', 'product_id=' . $product['product_id'], 'SSL'),
 				'model'    => $product['model'],
+				'option'     => $this->model_account_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']),
 				'quantity' => $product['quantity'],
 				'price'    => $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
 				'total'    => $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
@@ -202,7 +206,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		));
 
 		// totals @todo
-		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId() )));
+		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId())), $order_info['currency_code'], $order_info['currency_value']);
 		//$this->data['totals'] = $this->model_account_order->getOrderTotals($this->request->get['order_id']);
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
 

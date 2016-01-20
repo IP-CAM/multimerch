@@ -63,7 +63,7 @@ class MsStatistic extends Model {
 
 		$sql = "SELECT SQL_CALC_FOUND_ROWS  product_id, name, SUM(seller_net_amt) AS total_by_product, SUM(quantity) as sold
 				FROM " . DB_PREFIX . "order_product
-				JOIN " . DB_PREFIX . "order o USING (order_id)
+				JOIN `" . DB_PREFIX . "order` o USING (order_id)
 				LEFT JOIN " . DB_PREFIX . "ms_order_product_data
 					USING(order_id, product_id)
 				WHERE	o.order_status_id	in	("	.	$this->_getConcatStatuses()	.	")"
