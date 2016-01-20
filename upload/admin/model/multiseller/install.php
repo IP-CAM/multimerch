@@ -323,6 +323,8 @@ class ModelMultisellerInstall extends Model {
 		`" . DB_PREFIX . "ms_product_attribute`,
 		`" . DB_PREFIX . "ms_payment`,
 		`" . DB_PREFIX . "ms_suborder`,
+		`" . DB_PREFIX . "ms_suborder_history`,
+		`" . DB_PREFIX . "ms_order_comment`,
 		`" . DB_PREFIX . "ms_db_schema`,
 		`" . DB_PREFIX . "ms_version`");
 	}
