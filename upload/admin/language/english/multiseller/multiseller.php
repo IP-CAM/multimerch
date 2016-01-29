@@ -358,8 +358,9 @@ $_['ms_catalog_sellerinfo_country_dont_display'] = 'Do not display country';
 $_['ms_catalog_sellerinfo_avatar'] = 'Avatar';
 $_['ms_catalog_sellerinfo_paypal'] = 'Paypal';
 $_['ms_catalog_sellerinfo_message'] = 'Message';
-$_['ms_catalog_sellerinfo_message_note'] = 'Will be appended to the default email text';
-$_['ms_catalog_sellerinfo_notify'] = 'Notify seller via email';
+$_['ms_catalog_sellerinfo_message_note'] = 'Include this message in the notification email to the seller (optional)';
+$_['ms_catalog_sellerinfo_notify'] = 'Notify seller';
+$_['ms_catalog_sellerinfo_notify_note'] = 'Check this box to send an email to the seller indicating his account has been modified';
 $_['ms_catalog_sellerinfo_product_validation'] = 'Product validation';
 $_['ms_catalog_sellerinfo_product_validation_note'] = 'Product validation for this seller';
 
