@@ -98,8 +98,8 @@
 		</operation>
 
 		<!-- display attributes multimerch-style -->
-		<operation>
-			<search position="after" error="skip"><![CDATA[
+		<operation error="skip">
+			<search position="after"><![CDATA[
 				<li><?php echo $text_stock; ?> <?php echo $stock; ?></li>
 			]]></search>
 			<add><![CDATA[
@@ -121,8 +121,8 @@
 		</operation>
 
 		<!-- display attributes opencart-style -->
-		<operation>
-			<search position="replace" error="skip"><![CDATA[
+		<operation error="skip">
+			<search position="replace"><![CDATA[
 				<?php if ($attribute_groups) { ?>
 			]]></search>
 			<add><![CDATA[
