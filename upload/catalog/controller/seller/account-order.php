@@ -132,8 +132,8 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			'single' => 1
 		));
 
-		$this->data['suborder_status_id'] = $suborder_status_id = $suborder['order_status_id'];
-		$this->data['suborder_id'] = $suborder_id = $suborder['suborder_id'];
+		$this->data['suborder_status_id'] = $suborder ? $suborder['order_status_id'] : 0;
+		$this->data['suborder_id'] = isset($suborder['suborder_id']) ? $suborder['suborder_id'] : '';
 
 		// OC way of displaying addresses and invoices
 		$this->data['invoice_no'] = isset($order_info['invoice_no']) ? $order_info['invoice_prefix'] . $order_info['invoice_no'] : '';
@@ -202,7 +202,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 
 		// sub-order history entries
 		$this->data['order_history'] = $this->MsLoader->MsOrderData->getSuborderHistory(array(
-			'suborder_id' => $suborder_id
+			'suborder_id' => $this->data['suborder_id']
 		));
 
 		// totals @todo
