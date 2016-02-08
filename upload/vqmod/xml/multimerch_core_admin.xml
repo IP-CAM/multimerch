@@ -133,6 +133,13 @@
 			]]></search>
 			<add><![CDATA[
 			$data = array_merge(isset($data) ? $data : array(), $this->load->language('multiseller/multiseller'));
+                            
+                        $query = $this->db->query("SELECT * FROM ".DB_PREFIX."extension WHERE code='multiseller'");
+                        $installed = false;
+                        if (count($query->rows) > 0) {
+                            $installed = true;
+                        }
+                        $data['installed'] = $installed;
 			]]></add>
 		</operation>
 	</file>	
@@ -145,6 +152,7 @@
 			<add><![CDATA[
 				<li id="multimerch"><a class="parent"><i class="fa fa-users fa-fw"></i> <span><?php echo $ms_menu_multiseller; ?></span></a>
 					<ul>
+                                            <?php if($installed):?>
 						<li><a href="<?php echo $this->url->link('multiseller/seller', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_sellers; ?></a></li>
 						<li><a href="<?php echo $this->url->link('multiseller/seller-group', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_seller_groups; ?></a></li>
 						<li><a href="<?php echo $this->url->link('multiseller/attribute', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_attributes; ?></a></li>
@@ -153,6 +161,9 @@
 						<li><a href="<?php echo $this->url->link('multiseller/transaction', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_transactions; ?></a></li>
 						<li><a href="<?php echo $this->url->link('multiseller/debug', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_debug_heading; ?></a></li>
 						<li><a href="<?php echo $this->url->link('module/multiseller', 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo $ms_menu_settings; ?></a></li>
+                                            <?php else:?>
+                                                 <li><a href="<?php echo $this->url->link('extension/module/install', 'token=' . $this->session->data['token'].'&extension=multiseller', 'SSL'); ?>"><?php echo $ms_menu_install; ?></a></li>
+					  <?php endif;?>
 					</ul>
 				</li>
 			]]></add>
