@@ -376,12 +376,9 @@ $(function() {
 	});
 
 	if (msGlobals.config_enable_rte == 1) {
-        $('.ckeditor').each(function () {
-            $(this).summernote({
-                height: 300
-            });
 
-            if(!$(this).val()) $(this).code('');
+        $('.ckeditor').each(function () {
+			CKEDITOR.replace(this);
         });
     }
 });
