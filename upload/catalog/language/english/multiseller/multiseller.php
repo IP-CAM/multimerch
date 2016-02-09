@@ -645,7 +645,7 @@ $_['ms_account_stats_average_order'] = 'Average order';
 $_['ms_account_stats_today'] = 'Today, ';
 $_['ms_account_stats_yesterday'] = 'Yesterday, ';
 $_['ms_account_stats_daily_average'] = 'Daily average for ';
-$_['ms_account_stats_date_month_format'] = 'F Y';
+$_['ms_account_stats_date_month_format'] = 'm/Y';
 $_['ms_account_stats_projected_totals'] = 'Projected totals for ';
 $_['ms_account_stats_grand_total_sales'] = 'Grand total sales';
 
