@@ -1,19 +1,17 @@
 <?xml version="1.0" ?>
 <!DOCTYPE modification [
-<!ENTITY themeFolder "default">
 ]>
 <modification>
 	<id>MultiMerch Core Seller Menu</id>
 	<author>http://multimerch.com/</author>
 
     <!-- simple seller registration - login -->
-	<file name="catalog/view/theme/&themeFolder;/template/account/login.tpl">
+	<file name="catalog/view/theme/default/template/account/login.tpl">
 		<operation error="log">
-			<search position="replace"><![CDATA[
-				<a href="<?php echo $register; ?>" class="btn btn-primary"><?php echo $button_continue; ?></a></div>
+			<search position="before"><![CDATA[
+				<!-- mm register form end -->
 			]]></search>
 			<add><![CDATA[
-			    <a href="<?php echo $register; ?>" class="btn btn-primary"><?php echo $button_continue; ?></a></div>
 			    <?php $this->language->load('multiseller/multiseller'); ?>
 			    <div class="well">
                     <h2><?php echo $this->language->get('ms_account_register_new'); ?></h2>
@@ -26,10 +24,10 @@
 	</file>
 
     <!-- seller account menu in header -->
-	<file name="catalog/view/theme/&themeFolder;/template/common/header.tpl">
+	<file name="catalog/view/theme/default/template/common/header.tpl">
 		<operation error="log">
 			<search position="after"><![CDATA[
-				<li><a href="<?php echo $contact; ?>"><i class="fa fa-phone"></i></a> <span class="hidden-xs hidden-sm hidden-md"><?php echo $telephone; ?></span></li>
+				<!-- mm header menu start -->
 			]]></search>
 			<add><![CDATA[
                 <li class="dropdown"><a href="<?php echo $this->url->link('seller/account-dashboard', '', 'SSL'); ?>" title="<?php echo $ms_account_seller_account; ?>" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $ms_account_seller_account; ?></span> <span class="caret"></span></a>
@@ -64,10 +62,10 @@
 	</file>
 
 	<!-- account area menu -->
-	<file name="catalog/view/theme/&themeFolder;/template/account/account.tpl">
+	<file name="catalog/view/theme/default/template/account/account.tpl">
 		<operation>
 			<search position="before"><![CDATA[
-				<h2><?php echo $text_my_newsletter; ?></h2>
+				<!-- mm account menu newsletter start -->
 			]]></search>
 			<add><![CDATA[
 			    <h2><?php echo $ms_account_seller_account; ?></h2>
@@ -168,10 +166,10 @@
 	</file>
 
 	<!-- account sidebar menu -->
-	<file name="catalog/view/theme/&themeFolder;/template/module/account.tpl">
+	<file name="catalog/view/theme/default/template/module/account.tpl">
 		<operation error="log">
 			<search position="after"><![CDATA[
-				<div class="list-group">
+				<!-- mm account sidebar menu start -->
 			]]></search>
 			<add><![CDATA[
 				<span class="list-group-item"><b><?php echo $ms_account_customer_account; ?></b></span>
@@ -179,8 +177,8 @@
 		</operation>
 
 		<operation error="log">
-			<search position="after" index="1"><![CDATA[
-			</div>
+			<search position="before"><![CDATA[
+			<!-- mm account sidebar menu end -->
 			]]></search>
 			<add><![CDATA[
 			    <div class="list-group">
