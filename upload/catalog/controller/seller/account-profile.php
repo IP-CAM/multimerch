@@ -352,13 +352,12 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 
 	public function index() {
 		$this->document->addScript('catalog/view/javascript/account-seller-profile.js');
-		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
+		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.min.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 
 		// rte
 		if($this->config->get('msconf_enable_rte')) {
-			$this->document->addScript('catalog/view/javascript/multimerch/summernote/summernote.js');
-			$this->document->addStyle('catalog/view/javascript/multimerch/summernote/summernote.css');
+			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
 		}
 
 		$this->load->model('localisation/country');
