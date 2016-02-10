@@ -118,9 +118,10 @@ $(function() {
 		var url = 'jxsubmitproduct';
 
         if (msGlobals.config_enable_rte == 1) {
-            $('.ckeditor').each(function () {
-                $(this).val($(this).code());
-            });
+
+			for (var instance in CKEDITOR.instances) {
+				CKEDITOR.instances[instance].updateElement();
+			}
         }
 
 		$.ajax({
