@@ -352,7 +352,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 
 	public function index() {
 		$this->document->addScript('catalog/view/javascript/account-seller-profile.js');
-		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
+		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.min.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 
 		// rte
