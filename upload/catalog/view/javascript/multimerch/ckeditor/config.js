@@ -8,8 +8,22 @@ CKEDITOR.editorConfig = function( config ) {
 	// For complete reference see:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
 
+    config.toolbar = 'Full';
+
+    config.toolbar_Full =
+    [
+        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv',
+        '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+        { name: 'links', items : [ 'Link','Unlink','Anchor','base64image','VideoDetector' ] },
+        { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+        { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+        { name: 'colors', items : [ 'TextColor','BGColor' ] },
+        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+    ];
+
 	// The toolbar groups arrangement, optimized for a single toolbar row.
-	config.toolbarGroups = [
+	/*config.toolbarGroups = [
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
@@ -23,15 +37,16 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tools' },
 		{ name: 'others' },
 		{ name: 'about' }
-	];
+	];*/
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript';
+	config.removeButtons = 'Anchor,Subscript,Superscript';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = 'link:advanced';
+    config.extraPlugins = 'videodetector,base64image';
 
 	// Remove plugins
-	config.removePlugins = 'uploadimage';
+	config.removePlugins = 'uploadimage,glyphicons,codetag,autosave';
 };
