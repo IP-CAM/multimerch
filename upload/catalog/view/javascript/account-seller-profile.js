@@ -54,129 +54,97 @@ $(function() {
 	
 	$("#sellerinfo_avatar_files, #sellerinfo_banner_files").delegate(".ms-remove", "click", function() {
 		$(this).parent().remove();
-	});	
+	});
 
-	var uploader = new plupload.Uploader({
-		runtimes : 'gears,html5,flash,silverlight',
-		//runtimes : 'flash',
-		multi_selection:false,
-		browse_button: 'ms-file-selleravatar',
-		url: $('base').attr('href') + 'index.php?route=seller/account-profile/jxUploadSellerAvatar',
-		flash_swf_url: 'catalog/view/javascript/plupload/plupload.flash.swf',
-		silverlight_xap_url : 'catalog/view/javascript/plupload/plupload.silverlight.xap',
-		
-	    multipart_params : {
-			'timestamp' : msGlobals.timestamp,
-			'token'     : msGlobals.token,
-			'session_id': msGlobals.session_id
-	    },
-		
-		filters : [
-			//{title : "Image files", extensions : "png,jpg,jpeg"},
-		],
-		
-		init : {
-			FilesAdded: function(up, files) {
-				$('#error_sellerinfo_avatar').html('');
-				up.start();
+	new MSUploader(
+		{
+			runtimes : 'gears,html5,flash,silverlight',
+			multi_selection:false,
+			browse_button: 'ms-file-selleravatar',
+			multipart_params : {
+				'product_id': undefined
 			},
-			
-			FileUploaded: function(up, file, info) {
-				try {
-   					data = $.parseJSON(info.response);
-				} catch(e) {
-					data = []; data.errors = []; data.errors.push(msGlobals.uploadError);
-				}
+			init : {
+				FilesAdded: function (up, files) {
+					$('#error_sellerinfo_avatar').html('');
+					up.start();
+				},
 
-				if (!$.isEmptyObject(data.errors)) {
-					var errorText = '';
-					for (var i = 0; i < data.errors.length; i++) {
-						errorText += data.errors[i] + '<br />';
-					}
-					$('#error_sellerinfo_avatar').append(errorText).hide().fadeIn(2000);
+				Error: function(up, args) {
+					$('#error_sellerinfo_avatar').append(msGlobals.uploadError).hide().fadeIn(2000);
+					console.log('[error] ', args);
 				}
+			}
+		},
+		{
+			paramsId: 'seller_profile',
+			url: 'seller/account-profile/jxUploadSellerAvatar',
+			fileUploadedCb: function (data) {
 
 				if (!$.isEmptyObject(data.files)) {
 					for (var i = 0; i < data.files.length; i++) {
 						$("#sellerinfo_avatar_files").html(
-						'<div class="ms-image">' +
-						'<input type="hidden" value="'+data.files[i].name+'" name="seller[avatar_name]" />' +
-						'<img src="'+data.files[i].thumb+'" />' +
-						'<span class="ms-remove"></span>' +
-						'</div>').children(':last').hide().fadeIn(2000);
+							'<div class="ms-image">' +
+							'<input type="hidden" value="'+data.files[i].name+'" name="seller[avatar_name]" />' +
+							'<img src="'+data.files[i].thumb+'" />' +
+							'<span class="ms-remove"></span>' +
+							'</div>').children(':last').hide().fadeIn(2000);
 					}
+
+					data.cancel = true;
 				}
-				
-				up.stop();
 			},
-			
-			Error: function(up, args) {
-				$('#error_sellerinfo_avatar').append(msGlobals.uploadError).hide().fadeIn(2000);
-				console.log('[error] ', args);
+			dataErrorsCb: function (data) {
+				var errorText = '';
+				for (var i = 0; i < data.errors.length; i++) {
+					errorText += data.errors[i] + '<br />';
+				}
+				$('#error_sellerinfo_avatar').append(errorText).hide().fadeIn(2000);
 			}
-		}
-	}).init();
+		});
 
-    var bannerUploader = new plupload.Uploader({
-		runtimes : 'gears,html5,flash,silverlight',
-		//runtimes : 'flash',
-		multi_selection:false,
-		browse_button: 'ms-file-sellerbanner',
-		url: $('base').attr('href') + 'index.php?route=seller/account-profile/jxUploadSellerAvatar',
-		flash_swf_url: 'catalog/view/javascript/plupload/plupload.flash.swf',
-		silverlight_xap_url : 'catalog/view/javascript/plupload/plupload.silverlight.xap',
+	new MSUploader(
+		{
+			browse_button: 'ms-file-sellerbanner',
+			init : {
+				FilesAdded: function(up, files) {
+					$('#error_sellerinfo_banner').html('');
+					up.start();
+				},
 
-	    multipart_params : {
-			'timestamp' : msGlobals.timestamp,
-			'token'     : msGlobals.token,
-			'session_id': msGlobals.session_id
-	    },
-
-		filters : [
-			//{title : "Image files", extensions : "png,jpg,jpeg"},
-		],
-
-		init : {
-			FilesAdded: function(up, files) {
-				$('#error_sellerinfo_banner').html('');
-				up.start();
-			},
-
-			FileUploaded: function(up, file, info) {
-				try {
-   					data = $.parseJSON(info.response);
-				} catch(e) {
-					data = []; data.errors = []; data.errors.push(msGlobals.uploadError);
+				Error: function(up, args) {
+					$('#error_sellerinfo_banner').append(msGlobals.uploadError).hide().fadeIn(2000);
+					console.log('[error] ', args);
 				}
-
-				if (!$.isEmptyObject(data.errors)) {
-					var errorText = '';
-					for (var i = 0; i < data.errors.length; i++) {
-						errorText += data.errors[i] + '<br />';
-					}
-					$('#error_sellerinfo_banner').append(errorText).hide().fadeIn(2000);
-				}
+			}
+		},
+		{
+			paramsId: 'seller_profile',
+			url: 'seller/account-profile/jxUploadSellerAvatar',
+			fileUploadedCb: function (data) {
 
 				if (!$.isEmptyObject(data.files)) {
 					for (var i = 0; i < data.files.length; i++) {
 						$("#sellerinfo_banner_files").html(
-						'<div class="ms-image">' +
-						'<input type="hidden" value="'+data.files[i].name+'" name="seller[banner_name]" />' +
-						'<img src="'+data.files[i].thumb+'" />' +
-						'<span class="ms-remove"></span>' +
-						'</div>').children(':last').hide().fadeIn(2000);
+							'<div class="ms-image">' +
+							'<input type="hidden" value="'+data.files[i].name+'" name="seller[banner_name]" />' +
+							'<img src="'+data.files[i].thumb+'" />' +
+							'<span class="ms-remove"></span>' +
+							'</div>').children(':last').hide().fadeIn(2000);
 					}
+
+					data.cancel = true;
 				}
-
-				up.stop();
 			},
-
-			Error: function(up, args) {
-				$('#error_sellerinfo_banner').append(msGlobals.uploadError).hide().fadeIn(2000);
-				console.log('[error] ', args);
+			dataErrorsCb: function (data) {
+				var errorText = '';
+				for (var i = 0; i < data.errors.length; i++) {
+					errorText += data.errors[i] + '<br />';
+				}
+				$('#error_sellerinfo_banner').append(errorText).hide().fadeIn(2000);
 			}
-		}
-	}).init();
+		});
+
 
 	if (msGlobals.config_enable_rte == 1) {
 		$('.ckeditor').each(function () {
