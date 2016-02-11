@@ -182,7 +182,6 @@ $(function() {
 		{
 			url: 'seller/account-product/jxUploadImages',
 			initSelectors: { addId: '.product_image_files', addClass: '.image.progress, #error_product_image' },
-			progressbar: false,
 			fileUploadedCb: function (data) {
 				if (!$.isEmptyObject(data.files)) {
 					for (var i = 0; i < data.files.length; i++) {
@@ -204,7 +203,6 @@ $(function() {
 		{
 			url: 'seller/account-product/jxUploadDownloads',
 			initSelectors: {addId: '.product_download_files', addClass: '.download.progress, #error_product_download'},
-			progressbar: true,
 			fileUploadedCb: function (data) {
 				if (!$.isEmptyObject(data.files)) {
 					var lastFileTag =
@@ -252,7 +250,6 @@ $(function() {
 			{
 				url: 'seller/account-product/jxUpdateFile',
 				initSelectors: { addId: '.product_download_files', addClass: '.download.progress, #error_product_download' },
-				progressbar: true,
 				fileUploadedCb: function (data) {
 					if (!$.isEmptyObject(data.fileName)) {
 						parentContainer.find('.ms-download-name').text(data.fileMask);
