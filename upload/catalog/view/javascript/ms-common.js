@@ -17,10 +17,6 @@ function MSUploader(params, userParams) {
         init : {
             FileUploaded: function(up, file, info) {
                 $("#"+file.id).fadeOut(500, function() {
-                    if (userParams.progressbar) {
-                        $(this).progressbar('destroy');
-                    }
-
                     $(this).html("").remove();
                 });
 

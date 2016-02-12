@@ -58,12 +58,7 @@ $(function() {
 
 	new MSUploader(
 		{
-			runtimes : 'gears,html5,flash,silverlight',
-			multi_selection:false,
 			browse_button: 'ms-file-selleravatar',
-			multipart_params : {
-				'product_id': undefined
-			},
 			init : {
 				FilesAdded: function (up, files) {
 					$('#error_sellerinfo_avatar').html('');
