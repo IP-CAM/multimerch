@@ -6,11 +6,11 @@
 	<id>MultiMerch Core Product Page Mods</id>
 	<author>http://multimerch.com/</author>
 	
-	<file name="catalog/view/theme/&themeFolder;/template/product/product.tpl">
+	<file name="catalog/view/theme/default/template/product/product.tpl">
         <!-- seller information on product page -->
 		<operation>
-			<search position="before" offset="1" index="1"><![CDATA[
-			<div class="rating">
+			<search position="after"><![CDATA[
+			<!-- mm attributes end -->
 			]]></search>
 			<add><![CDATA[
 			<?php if (isset($seller) && !empty($seller)) { ?>
@@ -68,9 +68,9 @@
 		</operation>
 		
 		<!-- product attribute tab headers -->
-		<operation>
-			<search position="after"><![CDATA[
-				<li class="active"><a href="#tab-description" data-toggle="tab"><?php echo $tab_description; ?></a></li>
+		<operation error="log">
+			<search position="after" offset="1"><![CDATA[
+				<!-- mm tab header start -->
 			]]></search>
 			<add><![CDATA[
 				<?php foreach ($ms_product_attributes as $attribute) { ?>
@@ -82,9 +82,9 @@
 		</operation>
 		
 		<!-- product attribute tab contents -->
-		<operation>
-			<search position="before" offset="1"><![CDATA[
-				<div class="tab-pane" id="tab-specification">
+		<operation error="log">
+			<search position="after"><![CDATA[
+				<!-- mm tab content start -->
 			]]></search>
 			<add><![CDATA[
 				<?php foreach ($ms_product_attributes as $attribute) { ?>
@@ -97,31 +97,8 @@
 			]]></add>
 		</operation>
 
-		<!-- display attributes multimerch-style -->
-		<operation error="skip">
-			<search position="after"><![CDATA[
-				<li><?php echo $text_stock; ?> <?php echo $stock; ?></li>
-			]]></search>
-			<add><![CDATA[
-				<?php if ($this->config->get('msconf_attribute_display') != 1) { ?>
-				<?php foreach ($ms_product_attributes as $attribute) { ?>
-					<?php if(is_array($attribute['values']) && implode($attribute['values']) != '' && (!isset($attribute['tab_display']) || !$attribute['tab_display'])) { ?>
-						<?php if ($attribute['attribute_type'] == MsAttribute::TYPE_IMAGE) { ?>
-							<?php $attribute['image'] = (!empty($attribute['image']) ? $this->MsLoader->MsFile->resizeImage($attribute['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.png', 50, 50)); ?>
-							<li><?php echo $attribute['name']; ?>: <?php echo implode(',',$attribute['values']); ?></li>
-							<img src="<?php echo $attribute['image']; ?>" style="vertical-align: middle; padding: 1px; border: 1px solid #DDDDDD; margin-bottom: 10px" />
-							<br />
-						<?php } else { ?>
-							<li><?php echo $attribute['name']; ?>:</span> <?php echo implode(',',$attribute['values']); ?></li>
-						<?php } ?>
-					<?php } ?>
-				<?php } ?>
-				<?php } ?>
-			]]></add>
-		</operation>
-
 		<!-- display attributes opencart-style -->
-		<operation error="skip">
+		<operation error="log">
 			<search position="replace"><![CDATA[
 				<?php if ($attribute_groups) { ?>
 			]]></search>

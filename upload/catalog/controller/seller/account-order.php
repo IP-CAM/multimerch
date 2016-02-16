@@ -117,7 +117,9 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		));
 
 		// stop if no order or no products belonging to seller
-		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+		if (!$order_info || empty($products)) {
+			$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+		}
 
 		// load default OC language file for orders
 		$this->data = array_merge($this->data, $this->load->language('account/order'));
@@ -139,50 +141,14 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->data['invoice_no'] = isset($order_info['invoice_no']) ? $order_info['invoice_prefix'] . $order_info['invoice_no'] : '';
 
 		$this->data['order_status_id'] = $order_info['order_status_id'];
-		$this->data['order_id'] = $this->request->get['order_id'];
 		$this->data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
+		$this->data['order_id'] = $this->request->get['order_id'];
+
+		$this->data['order_info'] = $order_info;
 
 		$types = array("payment", "shipping");
 
-		foreach ($types as $key => $type) {
-			if ($order_info[$type . '_address_format']) {
-				$format = $order_info[$type . '_address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}' . "\n" . '{telephone}';
-			}
-
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-				'{address_1}',
-				'{address_2}',
-				'{city}',
-				'{postcode}',
-				'{zone}',
-				'{zone_code}',
-				'{country}',
-				'{telephone}'
-			);
-
-			$replace = array(
-				'firstname' => $order_info[$type . '_firstname'],
-				'lastname'  => $order_info[$type . '_lastname'],
-				'company'   => $order_info[$type . '_company'],
-				'address_1' => $order_info[$type . '_address_1'],
-				'address_2' => $order_info[$type . '_address_2'],
-				'city'      => $order_info[$type . '_city'],
-				'postcode'  => $order_info[$type . '_postcode'],
-				'zone'      => $order_info[$type . '_zone'],
-				'zone_code' => $order_info[$type . '_zone_code'],
-				'country'   => $order_info[$type . '_country'],
-				'telephone'   => $order_info['telephone']
-			);
-
-			$this->data[$type . '_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-
-			$this->data[$type . '_method'] = $order_info[$type . '_method'];
-		}
+		$this->_loadAddressData($types, $order_info);
 
 		// products
 		$this->data['products'] = array();
@@ -206,7 +172,11 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		));
 
 		// totals @todo
-		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId())), $order_info['currency_code'], $order_info['currency_value']);
+		$subordertotal = $this->currency->format(
+			$this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId())),
+			$order_info['currency_code'], $order_info['currency_value']
+		);
+
 		//$this->data['totals'] = $this->model_account_order->getOrderTotals($this->request->get['order_id']);
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
 
@@ -236,45 +206,27 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 	}
 	
 	public function invoice() {
-		$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+		// check order details
+		$customer_id = $this->customer->getId();
+		$order_id = isset($this->request->get['order_id']) ? (int)$this->request->get['order_id'] : 0;
+		$this->load->model('account/order');
 
-		$this->data['title'] = $this->document->getTitle();
-		
-		if($this->customer->isLogged()){
-			$customer_id = $this->customer->getId();
-		}
-		else{
-			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
-		}
-		
-		if ($this->request->server['HTTPS']) {
-			$server = $this->config->get('config_ssl');
-		} else {
-			$server = $this->config->get('config_url');
-		}
-		$this->data['base'] = $server;
-		$this->data['description'] = $this->document->getDescription();
-		$this->data['keywords'] = $this->document->getKeywords();
-		$this->data['links'] = $this->document->getLinks();
-		$this->data['styles'] = $this->document->getStyles();
-		$this->data['scripts'] = $this->document->getScripts();
-		$this->data['lang'] = $this->language->get('code');
-		$this->data['direction'] = $this->language->get('direction');
+		$order_info = $this->model_account_order->getOrder($order_id, 'seller');
+		$products = $this->MsLoader->MsOrderData->getOrderProducts(array(
+			'order_id' => $order_id,
+			'seller_id' => $customer_id
+		));
 
-		if ($this->config->get('config_google_analytics_status')) {
-			$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-		} else {
-			$this->data['google_analytics'] = '';
-		}
-		if (is_file(DIR_IMAGE . $this->config->get('config_icon'))) {
-			$this->data['icon'] = $server . 'image/' . $this->config->get('config_icon');
-		} else {
-			$this->data['icon'] = '';
-		}
+		// stop if no order or no products belonging to seller
+		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+
+		// load seller's information from mixed customer/seller tables @todo
+		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
 		$this->data['phone'] = $this->customer->getTelephone();
 		$this->data['fax'] = $this->customer->getFax();
 		$this->data['mail'] = $this->customer->getEmail();
+
 		$address_id = $this->customer->getAddressId();
 		if($address_id != 0){
 			$this->load->model('account/address');
@@ -310,29 +262,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			$this->data['logo'] = '';
 		}
 
-		$status = true;
 
-		if (isset($this->request->server['HTTP_USER_AGENT'])) {
-			$robots = explode("\n", str_replace(array("\r\n", "\r"), "\n", trim($this->config->get('config_robots'))));
-			foreach ($robots as $robot) {
-				if ($robot && strpos($this->request->server['HTTP_USER_AGENT'], trim($robot)) !== false) {
-					$status = false;
-					break;
-				}
-			}
-		}
-		
-		$order_id = isset($this->request->get['order_id']) ? (int)$this->request->get['order_id'] : 0;
-		$this->load->model('account/order');
-
-		$order_info = $this->model_account_order->getOrder($order_id, 'seller');
-		$products = $this->MsLoader->MsOrderData->getOrderProducts(array(
-			'order_id' => $order_id,
-			'seller_id' => $customer_id
-		));
-
-		// stop if no order or no products belonging to seller
-		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 
 		// load default OC language file for orders
 		$this->data = array_merge($this->data, $this->load->language('account/order'));
@@ -346,38 +276,10 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->data['order_id'] = $this->request->get['order_id'];
 
 		$types = array("payment");
+		$this->_loadAddressData($types, $order_info);
 
-		foreach ($types as $key => $type) {
-			if ($order_info[$type . '_address_format']) {
-				$format = $order_info[$type . '_address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . ", " . '{city}' . "\n" . '{zone}' . ", " . '{country}' . "\n" . '{telephone}';
-			}
-
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-				'{address_1}',
-				'{city}',
-				'{zone}',
-				'{country}',
-				'{telephone}'
-			);
-
-			$replace = array(
-				'firstname'	=> $order_info[$type . '_firstname'],
-				'lastname'	=> $order_info[$type . '_lastname'],
-				'company'	=> $order_info[$type . '_company'],
-				'address_1'	=> $order_info[$type . '_address_1'],
-				'city'		=> $order_info[$type . '_city'],
-				'zone'		=> $order_info[$type . '_zone'],
-				'country'	=> $order_info[$type . '_country'],
-				'telephone'	=> $order_info['telephone']
-			);
-
-			$this->data[$type . '_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-		}
+		// order info
+		$this->data['order_info'] = $order_info;
 
 		// products
 		$this->data['products'] = array();
@@ -386,6 +288,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 				'product_id'=> $product['product_id'],
 				'name'		=> $product['name'],
 				'model'		=> $product['model'],
+				'option'     => $this->model_account_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']),
 				'quantity'	=> $product['quantity'],
 				'price'		=> $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
 				'total'		=> $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
@@ -396,9 +299,31 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		// totals @todo
 		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId() )));
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
+
+		// custom styles
+		$this->MsLoader->MsHelper->addStyle('multimerch/invoice/default');
+		$this->MsLoader->MsHelper->addStyle('stylesheet');
+
+		// OC's default header things
+		$this->data['base'] = $server;
+		$this->data['styles'] = $this->document->getStyles();
+		$this->data['scripts'] = $this->document->getScripts();
+		$this->data['lang'] = $this->language->get('code');
+		$this->data['direction'] = $this->language->get('direction');
 		$this->data['title'] = $this->language->get('heading_invoice_title');
-		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-invoice');
-		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
+
+		// load template parts
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/invoice/header');
+		$head = $this->load->view($template, array_merge($this->data, $children));
+
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/invoice/body-default');
+		$body = $this->load->view($template, array_merge($this->data, $children));
+
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/invoice/footer');
+		$foot = $this->load->view($template, array_merge($this->data, $children));
+
+		// render
+		$this->response->setOutput($head . $body . $foot);
 	}
 		
 	public function index() {
@@ -468,6 +393,33 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		);
 
 		$this->MsLoader->MsMail->sendMails($mails);
+	}
+
+	private function _loadAddressData($types, $order_info) {
+		foreach ($types as $key => $type) {
+
+			$address_data_keys = array(
+				'_firstname',
+				'_lastname',
+				'_company',
+				'_address_1',
+				'_address_2',
+				'_city',
+				'_postcode',
+				'_zone',
+				'_zone_code',
+				'_country',
+			);
+
+			foreach ($address_data_keys as $address_data_key) {
+				$this->data[$type . $address_data_key] = $order_info[$type . $address_data_key];
+			}
+
+
+			$this->data[$type . '_method'] = $order_info[$type . '_method'];
+		}
+
+		$this->data['telephone'] = $order_info['telephone'];
 	}
 }
 

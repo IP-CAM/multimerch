@@ -1055,7 +1055,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->load->model('localisation/language');
 		$this->load->model('account/customer_group');
 
-		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
+		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.min.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 		$this->document->addScript('catalog/view/javascript/account-product-form.js');
 		$this->document->addScript('catalog/view/javascript/multimerch/account-product-form-options.js');
@@ -1063,8 +1063,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 		// rte
 		if ($this->config->get('msconf_enable_rte')) {
-			$this->document->addScript('catalog/view/javascript/multimerch/summernote/summernote.js');
-			$this->document->addStyle('catalog/view/javascript/multimerch/summernote/summernote.css');
+			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
 		}
 
 		$this->data['seller'] = $this->MsLoader->MsSeller->getSeller($this->customer->getId());

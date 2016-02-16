@@ -213,29 +213,15 @@
                 </div>
             </div>
 
-			<!-- deprecated -->
-			<!--
-            <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_notify; ?></label>
-                <div class="col-sm-10">
-                <input type="radio" name="seller[notify]" value="1" />
-                <?php echo $text_yes; ?>
-                <input type="radio" name="seller[notify]" value="0" checked="checked" />
-                <?php echo $text_no; ?>
-                </div>
-            </div>
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">
-                    <span data-toggle="tooltip" title="<?php echo $ms_catalog_sellerinfo_message_note; ?>"><?php echo $ms_catalog_sellerinfo_message; ?></span>
+                    <span data-toggle="tooltip" title="<?php echo $ms_catalog_sellerinfo_notify_note; ?>"><?php echo $ms_catalog_sellerinfo_notify; ?></span>
                 </label>
-
                 <div class="col-sm-10">
-                    <textarea class="form-control" name="seller[message]" disabled="disabled"></textarea>
+                    <input type="checkbox" style="margin-top: 10px" name="seller[notify]" value="1" checked="checked" /><br>
+                    <textarea class="form-control" name="seller[message]" placeholder="<?php echo $ms_catalog_sellerinfo_message_note; ?>"></textarea>
                 </div>
             </div>
-            -->
-
             </fieldset>
 
             </div>
@@ -293,7 +279,6 @@
 	<script type="text/javascript">
 	$(function() {
 		$('input[name^="customer"]').parents('div.form-group').hide();
-		$('[name="seller[notify]"], [name="seller[message]"]').parents('div.form-group').show();
 		$('select[name="customer[customer_id]"]').bind('change', function() {
 			if (this.value == '0') {
 				$('input[name^="customer"]').parents('div.form-group').show();
@@ -303,14 +288,6 @@
 				$('[name="seller[notify]"], [name="seller[message]"]').parents('div.form-group').show();
 			}
 		}).change();
-	
-		$('input[name="seller[notify]"]').change(function() {
-			if ($(this).val() == 0) {
-				$('textarea[name="seller[message]"]').val('').attr('disabled','disabled');
-			} else {
-				$('textarea[name="seller[message]"]').removeAttr('disabled');
-			}
-		});
 	
 		$("#ms-submit-button").click(function() {
 			var button = $(this);

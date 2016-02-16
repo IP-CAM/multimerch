@@ -61,16 +61,40 @@
 		<thead>
 			<tr>
 				<td class="left"><?php echo $text_payment_address; ?></td>
-				<?php if ($shipping_address) { ?>
+				<?php if ($shipping_address_1) { ?>
 				<td class="left"><?php echo $text_shipping_address; ?></td>
 				<?php } ?>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left"><?php echo $payment_address; ?></td>
-				<?php if ($shipping_address) { ?>
-				<td class="left"><?php echo $shipping_address; ?></td>
+				<td class="left">
+					<?php echo $payment_firstname ? $payment_firstname . '<br />' : ''; ?>
+					<?php echo $payment_lastname ? $payment_lastname . '<br />' : ''; ?>
+					<?php echo $payment_company ? $payment_company . '<br />' : ''; ?>
+					<?php echo $payment_address_1 ? $payment_address_1 . '<br />' : ''; ?>
+					<?php echo $payment_address_2 ? $payment_address_2 . '<br />' : ''; ?>
+					<?php echo $payment_city ? $payment_city . '<br />' : ''; ?>
+					<?php echo $payment_postcode ? $payment_postcode . '<br />' : ''; ?>
+					<?php echo $payment_zone ? $payment_zone . '<br />' : ''; ?>
+					<?php echo $payment_zone_code ? $payment_zone_code . '<br />' : ''; ?>
+					<?php echo $payment_country ? $payment_country . '<br />' : ''; ?>
+					<?php echo $telephone ? $telephone . '<br />' : ''; ?>
+				</td>
+				<?php if ($shipping_address_1) { ?>
+					<td class="left">
+						<?php echo $shipping_firstname ? $shipping_firstname . '<br />' : ''; ?>
+						<?php echo $shipping_lastname ? $shipping_lastname . '<br />' : ''; ?>
+						<?php echo $shipping_company ? $shipping_company . '<br />' : ''; ?>
+						<?php echo $shipping_address_1 ? $shipping_address_1 . '<br />' : ''; ?>
+						<?php echo $shipping_address_2 ? $shipping_address_2 . '<br />' : ''; ?>
+						<?php echo $shipping_city ? $shipping_city . '<br />' : ''; ?>
+						<?php echo $shipping_postcode ? $shipping_postcode . '<br />' : ''; ?>
+						<?php echo $shipping_zone ? $shipping_zone . '<br />' : ''; ?>
+						<?php echo $shipping_zone_code ? $shipping_zone_code . '<br />' : ''; ?>
+						<?php echo $shipping_country ? $shipping_country . '<br />' : ''; ?>
+						<?php echo $telephone ? $telephone . '<br />' : ''; ?>
+					</td>
 				<?php } ?>
 			</tr>
 		</tbody>
