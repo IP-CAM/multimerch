@@ -49,4 +49,5 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Remove plugins
 	config.removePlugins = 'uploadimage,glyphicons,codetag,autosave';
+    config.allowedContent = true;
 };
