@@ -148,7 +148,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 
 		$types = array("payment", "shipping");
 
-		$this->loadAddressData($types, $order_info);
+		$this->_loadAddressData($types, $order_info);
 
 		// products
 		$this->data['products'] = array();
@@ -206,45 +206,27 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 	}
 	
 	public function invoice() {
-//		$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+		// check order details
+		$customer_id = $this->customer->getId();
+		$order_id = isset($this->request->get['order_id']) ? (int)$this->request->get['order_id'] : 0;
+		$this->load->model('account/order');
 
-		$this->data['title'] = $this->document->getTitle();
-		
-		if($this->customer->isLogged()){
-			$customer_id = $this->customer->getId();
-		}
-		else{
-			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
-		}
-		
-		if ($this->request->server['HTTPS']) {
-			$server = $this->config->get('config_ssl');
-		} else {
-			$server = $this->config->get('config_url');
-		}
-		$this->data['base'] = $server;
-		$this->data['description'] = $this->document->getDescription();
-		$this->data['keywords'] = $this->document->getKeywords();
-		$this->data['links'] = $this->document->getLinks();
-		$this->data['styles'] = $this->document->getStyles();
-		$this->data['scripts'] = $this->document->getScripts();
-		$this->data['lang'] = $this->language->get('code');
-		$this->data['direction'] = $this->language->get('direction');
+		$order_info = $this->model_account_order->getOrder($order_id, 'seller');
+		$products = $this->MsLoader->MsOrderData->getOrderProducts(array(
+			'order_id' => $order_id,
+			'seller_id' => $customer_id
+		));
 
-		if ($this->config->get('config_google_analytics_status')) {
-			$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-		} else {
-			$this->data['google_analytics'] = '';
-		}
-		if (is_file(DIR_IMAGE . $this->config->get('config_icon'))) {
-			$this->data['icon'] = $server . 'image/' . $this->config->get('config_icon');
-		} else {
-			$this->data['icon'] = '';
-		}
+		// stop if no order or no products belonging to seller
+		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+
+		// load seller's information from mixed customer/seller tables @todo
+		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
 		$this->data['phone'] = $this->customer->getTelephone();
 		$this->data['fax'] = $this->customer->getFax();
 		$this->data['mail'] = $this->customer->getEmail();
+
 		$address_id = $this->customer->getAddressId();
 		if($address_id != 0){
 			$this->load->model('account/address');
@@ -280,29 +262,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			$this->data['logo'] = '';
 		}
 
-		$status = true;
 
-		if (isset($this->request->server['HTTP_USER_AGENT'])) {
-			$robots = explode("\n", str_replace(array("\r\n", "\r"), "\n", trim($this->config->get('config_robots'))));
-			foreach ($robots as $robot) {
-				if ($robot && strpos($this->request->server['HTTP_USER_AGENT'], trim($robot)) !== false) {
-					$status = false;
-					break;
-				}
-			}
-		}
-		
-		$order_id = isset($this->request->get['order_id']) ? (int)$this->request->get['order_id'] : 0;
-		$this->load->model('account/order');
-
-		$order_info = $this->model_account_order->getOrder($order_id, 'seller');
-		$products = $this->MsLoader->MsOrderData->getOrderProducts(array(
-			'order_id' => $order_id,
-			'seller_id' => $customer_id
-		));
-
-		// stop if no order or no products belonging to seller
-		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 
 		// load default OC language file for orders
 		$this->data = array_merge($this->data, $this->load->language('account/order'));
@@ -316,8 +276,10 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->data['order_id'] = $this->request->get['order_id'];
 
 		$types = array("payment");
+		$this->_loadAddressData($types, $order_info);
 
-		$this->loadAddressData($types, $order_info);
+		// order info
+		$this->data['order_info'] = $order_info;
 
 		// products
 		$this->data['products'] = array();
@@ -326,6 +288,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 				'product_id'=> $product['product_id'],
 				'name'		=> $product['name'],
 				'model'		=> $product['model'],
+				'option'     => $this->model_account_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']),
 				'quantity'	=> $product['quantity'],
 				'price'		=> $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
 				'total'		=> $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
@@ -336,9 +299,31 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		// totals @todo
 		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId() )));
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
+
+		// custom styles
+		$this->MsLoader->MsHelper->addStyle('multimerch/invoice/default');
+		$this->MsLoader->MsHelper->addStyle('stylesheet');
+
+		// OC's default header things
+		$this->data['base'] = $server;
+		$this->data['styles'] = $this->document->getStyles();
+		$this->data['scripts'] = $this->document->getScripts();
+		$this->data['lang'] = $this->language->get('code');
+		$this->data['direction'] = $this->language->get('direction');
 		$this->data['title'] = $this->language->get('heading_invoice_title');
-		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('account-invoice');
-		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
+
+		// load template parts
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/invoice/header');
+		$head = $this->load->view($template, array_merge($this->data, $children));
+
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/invoice/body-default');
+		$body = $this->load->view($template, array_merge($this->data, $children));
+
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/invoice/footer');
+		$foot = $this->load->view($template, array_merge($this->data, $children));
+
+		// render
+		$this->response->setOutput($head . $body . $foot);
 	}
 		
 	public function index() {
@@ -410,7 +395,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->MsLoader->MsMail->sendMails($mails);
 	}
 
-	private function loadAddressData($types, $order_info) {
+	private function _loadAddressData($types, $order_info) {
 		foreach ($types as $key => $type) {
 
 			$address_data_keys = array(

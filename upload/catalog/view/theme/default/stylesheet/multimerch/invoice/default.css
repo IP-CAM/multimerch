@@ -12,9 +12,9 @@ a{
 #header_invoice {
 	padding:30px 0px;
 	overflow:hidden;
-	border-bottom:2px solid #333;
-	margin: 0px 0px 30px 0px!important;
+	border-bottom:2px solid #e8e8e8;
 }
+
 #avatar{
 	height:97px;
 }
@@ -34,34 +34,36 @@ a{
 	width: 30px;
 	text-align: center;
 }
-.ms-account-order-info h2{
+
+h2{
 	text-transform:uppercase;
-	font-weight:700;
 	margin:0 0 40px;
-	font-size:72px;
-	line-height:64px;
 }
-.left-pad-5{
-	padding-left: 5px;
-	margin-bottom: 50px;
+
+.row.products, .row.details{
+	margin-top: 50px;
 }
+
 .left-pad-5 h3{
 	font-weight:700;
 	font-size:16px;
 	line-height:48px;
 }
-.left-pad-5 table{
+
+table{
 	width:100%;
 	line-height: 28px;
 	margin: 0 0 50px;
 }
-.left-pad-5 table th{
+
+table th{
 	padding:0 0 15px;
 	font-weight:700;
 	font-size:16px;
 	line-height:48px;
 	background-color: #fff !important;
 }
+
 .td-left{
 	text-align: left;
 }
@@ -78,3 +80,22 @@ a{
 .allwidth{
 	text-align: justify;
 }
+
+tfoot {
+    font-size: 18px;
+    text-align: center;
+    border-top: 1px solid #e8e8e8;
+}
+
+tfoot>tr {
+    height: 75px;
+}
+
+tbody td {
+    padding: 20px 0
+}
+
+.row.no-padding [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
