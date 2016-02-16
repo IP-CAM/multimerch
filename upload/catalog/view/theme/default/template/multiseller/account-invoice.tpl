@@ -60,7 +60,17 @@
 	<!-- TO -->
 	<div class="left-pad-5">
 		<h3>TO:</h3>
-		<?php echo $payment_address; ?>
+		<?php echo $payment_firstname ? $payment_firstname . '<br />' : ''; ?>
+		<?php echo $payment_lastname ? $payment_lastname . '<br />' : ''; ?>
+		<?php echo $payment_company ? $payment_company . '<br />' : ''; ?>
+		<?php echo $payment_address_1 ? $payment_address_1 . '<br />' : ''; ?>
+		<?php echo $payment_address_2 ? $payment_address_2 . '<br />' : ''; ?>
+		<?php echo $payment_city ? $payment_city . '<br />' : ''; ?>
+		<?php echo $payment_postcode ? $payment_postcode . '<br />' : ''; ?>
+		<?php echo $payment_zone ? $payment_zone . '<br />' : ''; ?>
+		<?php echo $payment_zone_code ? $payment_zone_code . '<br />' : ''; ?>
+		<?php echo $payment_country ? $payment_country . '<br />' : ''; ?>
+		<?php echo $telephone ? $telephone . '<br />' : ''; ?>
 	</div>
 	<!-- products -->
 	<div class="left-pad-5">
