@@ -117,7 +117,9 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		));
 
 		// stop if no order or no products belonging to seller
-		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+		if (!$order_info || empty($products)) {
+			$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+		}
 
 		// load default OC language file for orders
 		$this->data = array_merge($this->data, $this->load->language('account/order'));
@@ -139,50 +141,14 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->data['invoice_no'] = isset($order_info['invoice_no']) ? $order_info['invoice_prefix'] . $order_info['invoice_no'] : '';
 
 		$this->data['order_status_id'] = $order_info['order_status_id'];
-		$this->data['order_id'] = $this->request->get['order_id'];
 		$this->data['date_added'] = date($this->language->get('date_format_short'), strtotime($order_info['date_added']));
+		$this->data['order_id'] = $this->request->get['order_id'];
+
+		$this->data['order_info'] = $order_info;
 
 		$types = array("payment", "shipping");
 
-		foreach ($types as $key => $type) {
-			if ($order_info[$type . '_address_format']) {
-				$format = $order_info[$type . '_address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}' . "\n" . '{telephone}';
-			}
-
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-				'{address_1}',
-				'{address_2}',
-				'{city}',
-				'{postcode}',
-				'{zone}',
-				'{zone_code}',
-				'{country}',
-				'{telephone}'
-			);
-
-			$replace = array(
-				'firstname' => $order_info[$type . '_firstname'],
-				'lastname'  => $order_info[$type . '_lastname'],
-				'company'   => $order_info[$type . '_company'],
-				'address_1' => $order_info[$type . '_address_1'],
-				'address_2' => $order_info[$type . '_address_2'],
-				'city'      => $order_info[$type . '_city'],
-				'postcode'  => $order_info[$type . '_postcode'],
-				'zone'      => $order_info[$type . '_zone'],
-				'zone_code' => $order_info[$type . '_zone_code'],
-				'country'   => $order_info[$type . '_country'],
-				'telephone'   => $order_info['telephone']
-			);
-
-			$this->data[$type . '_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-
-			$this->data[$type . '_method'] = $order_info[$type . '_method'];
-		}
+		$this->loadAddressData($types, $order_info);
 
 		// products
 		$this->data['products'] = array();
@@ -206,7 +172,11 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		));
 
 		// totals @todo
-		$subordertotal = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId())), $order_info['currency_code'], $order_info['currency_value']);
+		$subordertotal = $this->currency->format(
+			$this->MsLoader->MsOrderData->getOrderTotal($order_id, array('seller_id' => $this->customer->getId())),
+			$order_info['currency_code'], $order_info['currency_value']
+		);
+
 		//$this->data['totals'] = $this->model_account_order->getOrderTotals($this->request->get['order_id']);
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
 
@@ -236,7 +206,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 	}
 	
 	public function invoice() {
-		$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
+//		$this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 
 		$this->data['title'] = $this->document->getTitle();
 		
@@ -347,37 +317,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 
 		$types = array("payment");
 
-		foreach ($types as $key => $type) {
-			if ($order_info[$type . '_address_format']) {
-				$format = $order_info[$type . '_address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . ", " . '{city}' . "\n" . '{zone}' . ", " . '{country}' . "\n" . '{telephone}';
-			}
-
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-				'{address_1}',
-				'{city}',
-				'{zone}',
-				'{country}',
-				'{telephone}'
-			);
-
-			$replace = array(
-				'firstname'	=> $order_info[$type . '_firstname'],
-				'lastname'	=> $order_info[$type . '_lastname'],
-				'company'	=> $order_info[$type . '_company'],
-				'address_1'	=> $order_info[$type . '_address_1'],
-				'city'		=> $order_info[$type . '_city'],
-				'zone'		=> $order_info[$type . '_zone'],
-				'country'	=> $order_info[$type . '_country'],
-				'telephone'	=> $order_info['telephone']
-			);
-
-			$this->data[$type . '_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-		}
+		$this->loadAddressData($types, $order_info);
 
 		// products
 		$this->data['products'] = array();
@@ -468,6 +408,33 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		);
 
 		$this->MsLoader->MsMail->sendMails($mails);
+	}
+
+	private function loadAddressData($types, $order_info) {
+		foreach ($types as $key => $type) {
+
+			$address_data_keys = array(
+				'_firstname',
+				'_lastname',
+				'_company',
+				'_address_1',
+				'_address_2',
+				'_city',
+				'_postcode',
+				'_zone',
+				'_zone_code',
+				'_country',
+			);
+
+			foreach ($address_data_keys as $address_data_key) {
+				$this->data[$type . $address_data_key] = $order_info[$type . $address_data_key];
+			}
+
+
+			$this->data[$type . '_method'] = $order_info[$type . '_method'];
+		}
+
+		$this->data['telephone'] = $order_info['telephone'];
 	}
 }
 
