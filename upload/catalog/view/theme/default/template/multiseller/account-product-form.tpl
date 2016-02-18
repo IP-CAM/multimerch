@@ -386,6 +386,14 @@
 				</div>
 			</div>
 			<?php } ?>
+            <?php if (in_array('minOrderQty', $this->config->get('msconf_product_included_fields'))) { ?>
+            <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-minimum"><span data-toggle="tooltip" title="" data-original-title="Force a minimum ordered amount">Minimum Quantity</span></label>
+                <div class="col-sm-10">
+                    <input type="text" name="minimum" value="<?php echo $product['minimum'] ;?>" placeholder="Minimum Quantity" id="input-minimum" class="form-control">
+                </div>
+            </div>
+            <?php } ?>
 			<?php if (in_array('sku', $this->config->get('msconf_product_included_fields'))) { ?>
 			<div class="form-group required">
 				<label class="col-sm-2 control-label"><?php echo $ms_account_product_sku; ?></label>

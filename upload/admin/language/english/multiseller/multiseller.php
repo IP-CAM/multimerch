@@ -402,6 +402,7 @@ $_['ms_catalog_products_field_stock_status']     = 'Out Of Stock Status';
 $_['ms_catalog_products_field_tax_class']        = 'Tax Class';
 $_['ms_catalog_products_field_subtract']         = 'Subtract Stock';
 $_['ms_catalog_products_filters']         = 'Filters';
+$_['ms_catalog_products_min_order_qty']         = 'Minimum Order Quantity';
 
 // Catalog - Seller Groups
 $_['ms_catalog_seller_groups_heading'] = 'Seller groups';
