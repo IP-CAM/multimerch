@@ -177,6 +177,7 @@ class MsProduct extends Model {
 		}
 
         $model = isset($data['product_model']) ? $data['product_model'] : $this->db->escape($data['languages'][$first]['product_name']);
+        $minimum = isset($data['minimum']) ? $data['minimum'] : 1;
         $sku = isset($data['product_sku']) ? $data['product_sku'] : '';
         $upc = isset($data['product_upc']) ? $data['product_upc'] : '';
         $ean = isset($data['product_ean']) ? $data['product_ean'] : '';
@@ -190,6 +191,7 @@ class MsProduct extends Model {
 
 		$sql = "INSERT INTO " . DB_PREFIX . "product
 				SET model = '" . $this->db->escape($model) . "',
+				    minimum = '" . (int)$minimum . "',
 				    sku = '" . $this->db->escape($sku) . "',
 				    upc = '" . $this->db->escape($upc) . "',
 				    ean = '" . $this->db->escape($ean) . "',
@@ -451,6 +453,7 @@ class MsProduct extends Model {
 
         $included_field_sql = '';
         isset($data['product_model']) ? $included_field_sql .= " model = '" . $this->db->escape($data['product_model']) . "',"  : '';
+        isset($data['minimum']) ? $included_field_sql .= " minimum = '" . (int)$data['minimum'] . "'," : '';
         isset($data['product_sku']) ? $included_field_sql .= " sku = '" . $this->db->escape($data['product_sku']) . "',"  : '';
         isset($data['product_upc']) ? $included_field_sql .= " upc = '" . $this->db->escape($data['product_upc']) . "',"  : '';
         isset($data['product_ean']) ? $included_field_sql .= " ean = '" . $this->db->escape($data['product_ean']) . "',"  : '';
@@ -853,7 +856,7 @@ class MsProduct extends Model {
 	//todo
 	public function getProduct($product_id) {
 		$sql = "SELECT 	p.price,
-		                p.model, p.sku, p.upc, p.ean, p.jan, p.isbn, p.mpn,
+		                p.model, p.sku, p.upc, p.ean, p.jan, p.isbn, p.mpn, p.minimum,
 		                p.manufacturer_id, p.tax_class_id, p.subtract, p.stock_status_id, p.date_available,
 						p.product_id as 'product_id',
 						mp.product_status as 'mp.product_status',
