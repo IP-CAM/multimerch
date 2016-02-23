@@ -3,7 +3,7 @@ final class MsSetting extends Model {
 	private $_settings = array(
 	);
 
-	public function getSetting($data = array()) {
+	public function getSettings($data = array()) {
 		$sql = "SELECT
 					name,
 					value,
@@ -25,18 +25,21 @@ final class MsSetting extends Model {
 				$setting[$result['name']] = json_decode($result['value'], true);
 			}
 		}
+
+        return $settings;
 	}
 
 	public function createSetting($data = array()) {
 		foreach ($data['settings'] as $name => $value) {
-			$this->db->query("
-				INSERT INTO " . DB_PREFIX . "ms_setting
-				SET seller_id = " . (isset($data['seller_id']) ? (int)$data['seller_id'] : 'NULL') . ",
-					seller_group_id = " . (isset($data['seller_group_id']) ? (int)$data['seller_group_id'] : 'NULL') . ",
+            $sql = "INSERT INTO " . DB_PREFIX . "ms_setting ";
+            $sql .= "SET seller_id = " . (isset($data['seller_id']) ? (int)$data['seller_id'] : 'NULL');
+            $sql .= ", seller_group_id = " . (isset($data['seller_group']) ? (int)$data['seller_group'] : 'NULL');
+            $sql .= ", name = '" . $this->db->escape($name) . "'";
+            $sql .= ", value = '" . $this->db->escape($value) . "'";
 
-					name = '" . $this->db->escape($name) . "',
-					value = '" . is_array($value) ? $this->db->escape(json_encode($value)) : $this->db->escape($value) . "'"
-			);
+            //TODO: next line provides array encoding to json and inserting multiple values
+//            $sql .= ", value = '" . is_array($value) ? $this->db->escape(json_encode($value)) : $this->db->escape($value) . "'";
+			$this->db->query($sql);
 		}
 	}
 

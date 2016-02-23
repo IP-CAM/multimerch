@@ -4,7 +4,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 	public function __construct($registry) {
 		parent::__construct($registry);
 	}
-		
+
 	public function getTableData() {
 		$colMap = array(
 			'seller' => '`c.name`',
@@ -16,9 +16,9 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 
 		$sorts = array('seller', 'email', 'total_sales', 'total_products', 'total_earnings', 'date_created', 'balance', 'status', 'date_created');
 		$filters = array_diff($sorts, array('status'));
-		
+
 		//var_dump($this->request->get);
-		
+
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
 		$filterParams = $this->MsLoader->MsHelper->getFilterParams($filters, $colMap);
 
@@ -73,7 +73,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' data-toggle='tooltip' title='".$this->language->get('button_delete')."'><i class='fa fa-trash-o'></i></a> ";
 
 			$available = $this->MsLoader->MsBalance->getSellerBalance($result['seller_id']) - $this->MsLoader->MsBalance->getReservedSellerFunds($result['seller_id']);
-			
+
 			// build table data
 			$columns[] = array_merge(
 				$result,
@@ -96,20 +96,20 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			'aaData' => $columns
 		)));
 	}
-	
+
 	public function jxSaveSellerInfo() {
 		$this->validate(__FUNCTION__);
 		$data = $this->request->post;
 		$seller = $this->MsLoader->MsSeller->getSeller($data['seller']['seller_id']);
 		$json = array();
 		$this->load->model('sale/customer');
-		
+
 		if (empty($data['seller']['seller_id'])) {
 			// creating new seller
 			if (empty($data['seller']['nickname'])) {
-				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_empty'); 
+				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_empty');
 			} else if (utf8_strlen($data['seller']['nickname']) < 4 || utf8_strlen($data['seller']['nickname']) > 128 ) {
-				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_length');			
+				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_length');
 			} else if ($this->MsLoader->MsSeller->nicknameTaken($data['seller']['nickname'])) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_taken');
 			} else {
@@ -120,14 +120,14 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 							$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_latin');
 						}
 						break;
-						
+
 					case 2:
 						// utf8
 						if(!preg_match("/((?:[\x01-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}){1,100})./x", $data['seller']['nickname'])) {
 							$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_utf8');
 						}
 						break;
-						
+
 					case 0:
 					default:
 						// alnum
@@ -137,25 +137,23 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 						break;
 				}
 			}
-			
 			if (empty($data['customer']['customer_id'])) {
 				// creating new customer
 				$this->language->load('sale/customer');
-
 				if ((utf8_strlen($data['customer']['firstname']) < 1) || (utf8_strlen($data['customer']['firstname']) > 32)) {
 			  		$json['errors']['customer[firstname]'] = $this->language->get('error_firstname');
 				}
-		
+
 				if ((utf8_strlen($data['customer']['lastname']) < 1) || (utf8_strlen($data['customer']['lastname']) > 32)) {
 			  		$json['errors']['customer[lastname]'] = $this->language->get('error_lastname');
 				}
-		
+
 				if ((utf8_strlen($data['customer']['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $data['customer']['email'])) {
 			  		$json['errors']['customer[email]'] = $this->language->get('error_email');
 				}
-				
+
 				$customer_info = $this->model_sale_customer->getCustomerByEmail($data['customer']['email']);
-				
+
 				if (!isset($this->request->get['customer_id'])) {
 					if ($customer_info) {
 						$json['errors']['customer[email]'] = $this->language->get('error_exists');
@@ -165,19 +163,18 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 						$json['errors']['customer[email]'] = $this->language->get('error_exists');
 					}
 				}
-				
+
 				if ($data['customer']['password'] || (!isset($this->request->get['customer_id']))) {
 			  		if ((utf8_strlen($data['customer']['password']) < 4) || (utf8_strlen($data['customer']['password']) > 20)) {
 						$json['errors']['customer[password]'] = $this->language->get('error_password');
 			  		}
-			
+
 			  		if ($data['customer']['password'] != $data['customer']['password_confirm']) {
 						$json['errors']['customer[password_confirm]'] = $this->language->get('error_confirm');
 			  		}
-				}				
+				}
 			}
 		}
-		
 		if (strlen($data['seller']['company']) > 50 ) {
 			$json['errors']['seller[company]'] = 'Company name cannot be longer than 50 characters';
 		}
@@ -201,15 +198,14 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 							)
 						)
 					);
-					
+
 					$customer_info = $this->model_sale_customer->getCustomerByEmail($data['customer']['email']);
 					$this->db->query("UPDATE " . DB_PREFIX . "customer SET approved = '1' WHERE customer_id = '" . (int)$customer_info['customer_id'] . "'");
-					
+
 					$data['seller']['seller_id'] = $customer_info['customer_id'];
 				} else {
 					$data['seller']['seller_id'] = $data['customer']['customer_id'];
 				}
-
 				$this->MsLoader->MsSeller->createSeller(
 					array_merge(
 						$data['seller'],
@@ -238,11 +234,11 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 						$products = $this->MsLoader->MsProduct->getProducts(array(
 							'seller_id' => $seller['seller_id']
 						));
-						
+
 						foreach ($products as $p) {
 							$this->MsLoader->MsProduct->changeStatus($p['product_id'], $data['seller']['status']);
 						}
-						
+
 						$data['seller']['approved'] = 0;
 						break;
 					case MsSeller::STATUS_ACTIVE:
@@ -250,7 +246,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 							$products = $this->MsLoader->MsProduct->getProducts(array(
 								'seller_id' => $seller['seller_id']
 							));
-							
+
 							foreach ($products as $p) {
 								$this->MsLoader->MsProduct->changeStatus($p['product_id'], $data['seller']['status']);
 								if ($this->config->get('msconf_product_validation') == MsProduct::MS_PRODUCT_VALIDATION_NONE) {
@@ -258,42 +254,41 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 								}
 							}
 						}
-						
+
 						$data['seller']['approved'] = 1;
 						break;
 				}
-							
 				$this->MsLoader->MsSeller->adminEditSeller(
 					array_merge(
 						$data['seller'],
 						array(
 							'approved' => 1,
-						)
-					)				
+						),
+                        array('settings' => $data['seller_setting'])
+					)
 				);
 			}
-			
+
 			if (isset($data['seller']['notify']) && $data['seller']['notify']) {
 				$this->MsLoader->MsMail->sendMails($mails);
 			}
-			
 			$this->session->data['success'] = 'Seller account data saved.';
 		}
-		
+
 		$this->response->setOutput(json_encode($json));
-	}	
-	
-	
+	}
+
+
 	// simple paypal balance payout
 	public function jxPayBalance() {
 		$json = array();
 		$seller_id = isset($this->request->get['seller_id']) ? $this->request->get['seller_id'] : 0;
 		$seller = $this->MsLoader->MsSeller->getSeller($seller_id);
-		
+
 		if (!$seller) return;
-		
+
 		$amount = $this->MsLoader->MsBalance->getSellerBalance($seller_id) - $this->MsLoader->MsBalance->getReservedSellerFunds($seller_id);
-		
+
 		if (!$amount) return;
 
 		//create payment
@@ -308,7 +303,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			'currency_code' => $this->currency->getCode($this->config->get('config_currency')),
 			'description' => sprintf($this->language->get('ms_payment_royalty_payout'), $seller['name'], $this->config->get('config_name'))
 		));
-		
+
 		// render paypal form
 		$this->data['payment_data'] = array(
 			'sandbox' => $this->config->get('msconf_paypal_sandbox'),
@@ -322,20 +317,20 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			'notify_url' => HTTP_CATALOG . 'index.php?route=payment/multimerch-paypal/payoutIPN',
 			'custom' => $payment_id
 		);
-		
+
 		list($template, $children) = $this->MsLoader->MsHelper->admLoadTemplate('payment/multimerch-paypal');
 		$json['form'] = $this->load->view($template, $this->data);
 		$json['success'] = 1;
 
 		$this->response->setOutput(json_encode($json));
 	}
-	
+
 	public function delete() {
 		$seller_id = isset($this->request->get['seller_id']) ? $this->request->get['seller_id'] : 0;
 		$this->MsLoader->MsSeller->deleteSeller($seller_id);
 		$this->response->redirect($this->url->link('multiseller/seller', 'token=' . $this->session->data['token'], 'SSL'));
 	}
-	
+
 	public function index() {
 		$this->validate(__FUNCTION__);
 
@@ -345,7 +340,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 		}
 
 		$this->data['total_balance'] = sprintf($this->language->get('ms_catalog_sellers_total_balance'), $this->currency->format($this->MsLoader->MsBalance->getTotalBalanceAmount(), $this->config->get('config_currency')), $this->currency->format($this->MsLoader->MsBalance->getTotalBalanceAmount(array('seller_status' => array(MsSeller::STATUS_ACTIVE))), $this->config->get('config_currency')));
-		
+
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
@@ -357,11 +352,11 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			unset($this->session->data['success']);
 		}
 
-		$this->data['token'] = $this->session->data['token'];		
+		$this->data['token'] = $this->session->data['token'];
 		$this->data['heading'] = $this->language->get('ms_catalog_sellers_heading');
 		$this->data['link_create_seller'] = $this->url->link('multiseller/seller/create', 'token=' . $this->session->data['token'], 'SSL');
 		$this->document->setTitle($this->language->get('ms_catalog_sellers_heading'));
-		
+
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->admSetBreadcrumbs(array(
 			array(
 				'text' => $this->language->get('ms_menu_multiseller'),
@@ -372,13 +367,13 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 				'href' => $this->url->link('multiseller/seller', '', 'SSL'),
 			)
 		));
-		
+
 		$this->data['column_left'] = $this->load->controller('common/column_left');
 		$this->data['footer'] = $this->load->controller('common/footer');
 		$this->data['header'] = $this->load->controller('common/header');
 		$this->response->setOutput($this->load->view('multiseller/seller.tpl', $this->data));
 	}
-	
+
 	public function create() {
 		$this->validate(__FUNCTION__);
 		$this->load->model('localisation/country');
@@ -392,7 +387,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 		$this->data['token'] = $this->session->data['token'];
 		$this->data['heading'] = $this->language->get('ms_catalog_sellerinfo_heading');
 		$this->document->setTitle($this->language->get('ms_catalog_sellerinfo_heading'));
-		
+
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->admSetBreadcrumbs(array(
 			array(
 				'text' => $this->language->get('ms_menu_multiseller'),
@@ -401,28 +396,29 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			array(
 				'text' => $this->language->get('ms_catalog_sellers_breadcrumbs'),
 				'href' => $this->url->link('multiseller/seller', '', 'SSL'),
-			),			
+			),
 			array(
 				'text' => $this->language->get('ms_catalog_sellers_newseller'),
 				'href' => $this->url->link('multiseller/seller/create', 'SSL'),
 			)
-		));		
-		
+		));
+
 		$this->data['column_left'] = $this->load->controller('common/column_left');
 		$this->data['footer'] = $this->load->controller('common/footer');
 		$this->data['header'] = $this->load->controller('common/header');
 		$this->response->setOutput($this->load->view('multiseller/seller-form.tpl', $this->data));
-	}	
-	
+	}
+
 	public function update() {
 		$this->validate(__FUNCTION__);
 		$this->load->model('localisation/country');
 		$this->load->model('tool/image');
-		$this->data['countries'] = $this->model_localisation_country->getCountries();		
+		$this->data['countries'] = $this->model_localisation_country->getCountries();
 
 		$seller = $this->MsLoader->MsSeller->getSeller($this->request->get['seller_id']);
 
-		$this->data['seller_groups'] =$this->MsLoader->MsSellerGroup->getSellerGroups();  
+        $this->data['settings'] = $this->MsLoader->MsSetting->getSettings(array('seller_id' => $this->request->get['seller_id']));
+        $this->data['seller_groups'] = $this->MsLoader->MsSellerGroup->getSellerGroups();
 
 		if (!empty($seller)) {
 			$rates = $this->MsLoader->MsCommission->calculateCommission(array('seller_id' => $this->request->get['seller_id']));
@@ -431,30 +427,43 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 				if ($rate['rate_type'] == MsCommission::RATE_SIGNUP) continue;
 				$actual_fees .= '<span class="fee-rate-' . $rate['rate_type'] . '"><b>' . $this->language->get('ms_commission_short_' . $rate['rate_type']) . ':</b>' . $rate['percent'] . '%+' . $this->currency->getSymbolLeft() .  $this->currency->format($rate['flat'], $this->config->get('config_currency'), '', FALSE) . $this->currency->getSymbolRight() . '&nbsp;&nbsp;';
 			}
-			
+
 			$this->data['seller'] = $seller;
 			$this->data['seller']['actual_fees'] = $actual_fees;
-			
+
 			if (!empty($seller['ms.avatar'])) {
 				$this->data['seller']['avatar']['name'] = $seller['ms.avatar'];
 				$this->data['seller']['avatar']['thumb'] = $this->MsLoader->MsFile->resizeImage($seller['ms.avatar'], $this->config->get('msconf_preview_seller_avatar_image_width'), $this->config->get('msconf_preview_seller_avatar_image_height'));
 				//$this->session->data['multiseller']['files'][] = $seller['avatar'];
 			}
-			
+
 			if (is_null($seller['ms.commission_id']))
 				$rates = NULL;
 			else
 				$rates = $this->MsLoader->MsCommission->getCommissionRates($seller['ms.commission_id']);
-			
-			$this->data['seller']['commission_id'] = $seller['ms.commission_id'];	
+
+			$this->data['seller']['commission_id'] = $seller['ms.commission_id'];
 			$this->data['seller']['commission_rates'] = $rates;
 		}
 
+        //user settings tab
+        $this->data['ms_user_settings'] = $this->language->get('ms_user_settings');
+        $this->data['ms_seller_full_name'] = $this->language->get('ms_seller_full_name');
+        $this->data['ms_seller_address1'] = $this->language->get('ms_seller_address1');
+        $this->data['ms_seller_address1_placeholder'] = $this->language->get('ms_seller_address1_placeholder');
+        $this->data['ms_seller_address2'] = $this->language->get('ms_seller_address2');
+        $this->data['ms_seller_address2_placeholder'] = $this->language->get('ms_seller_address2_placeholder');
+        $this->data['ms_seller_city'] = $this->language->get('ms_seller_city');
+        $this->data['ms_seller_state'] = $this->language->get('ms_seller_state');
+        $this->data['ms_seller_zip'] = $this->language->get('ms_seller_zip');
+        $this->data['ms_seller_country'] = $this->language->get('ms_seller_country');
+        //end user settings tab
+
 		$this->data['currency_code'] = $this->config->get('config_currency');
-		$this->data['token'] = $this->session->data['token'];		
+		$this->data['token'] = $this->session->data['token'];
 		$this->data['heading'] = $this->language->get('ms_catalog_sellerinfo_heading');
 		$this->document->setTitle($this->language->get('ms_catalog_sellerinfo_heading'));
-		
+
 		$this->data['breadcrumbs'] = $this->MsLoader->MsHelper->admSetBreadcrumbs(array(
 			array(
 				'text' => $this->language->get('ms_menu_multiseller'),
@@ -463,13 +472,13 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			array(
 				'text' => $this->language->get('ms_catalog_sellers_breadcrumbs'),
 				'href' => $this->url->link('multiseller/seller', '', 'SSL'),
-			),			
+			),
 			array(
 				'text' => $seller['ms.nickname'],
 				'href' => $this->url->link('multiseller/seller/update', '&seller_id=' . $seller['seller_id'], 'SSL'),
 			)
-		));		
-		
+		));
+
 		$this->data['column_left'] = $this->load->controller('common/column_left');
 		$this->data['footer'] = $this->load->controller('common/footer');
 		$this->data['header'] = $this->load->controller('common/header');

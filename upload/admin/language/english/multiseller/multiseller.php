@@ -67,6 +67,18 @@ $_['ms_description'] = 'Description';
 
 $_['ms_commission'] = 'Commission';
 $_['ms_commissions_fees'] = 'Commissions & fees';
+
+$_['ms_user_settings'] = 'User settings';
+$_['ms_seller_full_name'] = "Full name";
+$_['ms_seller_address1'] = "Address Line 1";
+$_['ms_seller_address1_placeholder'] = 'Street address, P.O. box, company name, c/o';
+$_['ms_seller_address2'] = "Address Line 2";
+$_['ms_seller_address2_placeholder'] = 'Apartment, suite, unit, building, floor etc.';
+$_['ms_seller_city'] = "City";
+$_['ms_seller_state'] = "State/Province/Region";
+$_['ms_seller_zip'] = "ZIP/Postal Code";
+$_['ms_seller_country'] = "Country";
+
 $_['ms_commission_' . MsCommission::RATE_SALE] = 'Sale fee';
 $_['ms_commission_' . MsCommission::RATE_LISTING] = 'Listing fee / method';
 $_['ms_commission_' . MsCommission::RATE_SIGNUP] = 'Signup fee / method';

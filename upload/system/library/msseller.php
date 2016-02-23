@@ -238,9 +238,15 @@ final class MsSeller extends Model {
 		return $res->row['salt'];		
 	}
 	
-	
+
 	public function adminEditSeller($data) {
 		$seller_id = (int)$data['seller_id'];
+
+        //settings block
+        if(!empty($data['settings'])) {
+            $this->MsLoader->MsSetting->createSetting($data);
+        }
+        //end settings block
 
 		// commissions
 		if (!$data['commission_id']) {
