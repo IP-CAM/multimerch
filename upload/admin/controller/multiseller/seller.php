@@ -446,6 +446,18 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 			$this->data['seller']['commission_rates'] = $rates;
 		}
 
+        //user settings tab
+        $this->data['ms_user_settings'] = $this->language->get('ms_user_settings');
+        $this->data['ms_seller_full_name'] = $this->language->get('ms_seller_full_name');
+        $this->data['ms_seller_address1'] = $this->language->get('ms_seller_address1');
+        $this->data['ms_seller_address1_placeholder'] = $this->language->get('ms_seller_address1_placeholder');
+        $this->data['ms_seller_address2'] = $this->language->get('ms_seller_address2');
+        $this->data['ms_seller_address2_placeholder'] = $this->language->get('ms_seller_address2_placeholder');
+        $this->data['ms_seller_city'] = $this->language->get('ms_seller_city');
+        $this->data['ms_seller_state'] = $this->language->get('ms_seller_state');
+        $this->data['ms_seller_zip'] = $this->language->get('ms_seller_zip');
+        $this->data['ms_seller_country'] = $this->language->get('ms_seller_country');
+        //end user settings tab
 
 		$this->data['currency_code'] = $this->config->get('config_currency');
 		$this->data['token'] = $this->session->data['token'];

@@ -28,303 +28,247 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
                 <li><a href="#tab-commission" data-toggle="tab"><?php echo $ms_commissions_fees; ?></a></li>
-                <li><a href="#tab-user-settings" data-toggle="tab"><?php echo $ms_user_settings; ?></a></li>
             </ul>
             <div class="tab-content">
-				<div class="tab-pane active" id="tab-general">
-	
-				<fieldset>
-				<legend><?php echo $ms_catalog_sellerinfo_customer_data; ?></legend>
-				 <div class="form-group required">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer; ?></label>
-	
-					<div class="col-sm-10">
-					<?php if (!$seller['seller_id']) { ?>
-					<select class="form-control" name="customer[customer_id]">
-						<optgroup label="<?php echo $ms_catalog_sellerinfo_customer_new; ?>">
-						<option value="0"><?php echo $ms_catalog_sellerinfo_customer_create_new; ?></option>
-						</optgroup>
-						<?php if (isset($customers)) { ?>
-						<optgroup label="<?php echo $ms_catalog_sellerinfo_customer_existing; ?>">
-						<?php foreach ($customers as $c) { ?>
-						<option value="<?php echo $c['c.customer_id']; ?>"><?php echo $c['c.name']; ?></option>
-						<?php } ?>
-						</optgroup>
-						<?php } ?>
-					</select>
-					<?php } else { ?>
-						<a href="<?php echo $this->url->link('sale/customer/edit', 'token=' . $this->session->data['token'] . '&customer_id=' . $seller['seller_id'], 'SSL'); ?>"><?php echo $seller['name']; ?></a>
-					<?php } ?>
-					</div>
-				</div>
-	
-				<div class="form-group required">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_firstname; ?></label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" name="customer[firstname]" value="" />
-					</div>
-				</div>
-	
-				<div class="form-group required">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_lastname; ?></label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" name="customer[lastname]" value="" />
-					</div>
-				</div>
-	
-				<div class="form-group required">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_email; ?></label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" name="customer[email]" value="" />
-					</div>
-				</div>
-	
-				<div class="form-group required">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_password; ?></label>
-					<div class="col-sm-10">
-						<input type="password" class="form-control" name="customer[password]" value="" />
-					</div>
-				</div>
-	
-				<div class="form-group required">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_password_confirm; ?></label>
-					<div class="col-sm-10">
-						<input type="password" class="form-control" name="customer[password_confirm]" value="" />
-					</div>
-				</div>
-				</fieldset>
-	
-				<fieldset>
-				<legend><?php echo $ms_catalog_sellerinfo_seller_data; ?></legend>
-				<div class="form-group required">
-					<label class="col-sm-2 control-label required"><?php echo $ms_catalog_sellerinfo_nickname; ?></label>
-					<?php if (!empty($seller['ms.nickname'])) { ?>
-						<div class="col-sm-10" style="padding-top: 5px">
-							<b><?php echo $seller['ms.nickname']; ?></b>
-						</div>
-					<?php } else { ?>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" name="seller[nickname]" value="<?php echo $seller['ms.nickname']; ?>" />
-						</div>
-					<?php } ?>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_keyword; ?></label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" name="seller[keyword]" value="<?php echo $seller['keyword']; ?>" />
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_sellergroup; ?></label>
-					<div class="col-sm-10"><select class="form-control" name="seller[seller_group]">
-						<?php foreach ($seller_groups as $group) { ?>
-						<option value="<?php echo $group['seller_group_id']; ?>" <?php if ($seller['ms.seller_group'] == $group['seller_group_id']) { ?>selected="selected"<?php } ?>><?php echo $group['name']; ?></option>
-						<?php } ?>
-					</select>
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label">
-						<span data-toggle="tooltip" title="<?php echo $ms_catalog_sellerinfo_product_validation_note; ?>"><?php echo $ms_catalog_sellerinfo_product_validation; ?></span>
-					</label>
-					<div class="col-sm-10">
-							<select class="form-control" name="seller[product_validation]">
-								<option value="1" <?php if($seller['ms.product_validation'] == 1) { ?> selected="selected" <?php } ?>><?php echo $ms_config_product_validation_none; ?></option>
-							<option value="2" <?php if($seller['ms.product_validation'] == 2) { ?> selected="selected" <?php } ?>><?php echo $ms_config_product_validation_approval; ?></option>
-						</select>
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_description; ?></label>
-					<div class="col-sm-10">
-						<textarea class="form-control" name="seller[description]"><?php echo $seller['ms.description']; ?></textarea>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_company; ?></label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" name="seller[company]" value="<?php echo $seller['ms.company']; ?>" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_country; ?></label>
-					<div class="col-sm-10"><select class="form-control" name="seller[country]">
-							<?php if (1==1) { ?>
-						<option value="" selected="selected"><?php echo $ms_catalog_sellerinfo_country_dont_display; ?></option>
-						<?php } else { ?>
-						<option value=""><?php echo $ms_catalog_sellerinfo_country_dont_display; ?></option>
-						<?php } ?>
-	
-						<?php foreach ($countries as $country) { ?>
-						<?php if ($seller['ms.country_id'] == $country['country_id']) { ?>
-						<option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
-						<?php } else { ?>
-						<option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
-						<?php } ?>
-						<?php } ?>
-					</select>
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_zone; ?></label>
-					<div class="col-sm-10">
-						<select class="form-control" name="seller[zone]">
-						</select>
-						<p class="ms-note"><?php echo $ms_catalog_sellerinfo_zone_note; ?></p>
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_paypal; ?></label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" name="seller[paypal]" value="<?php echo $seller['ms.paypal']; ?>" />
-					</div>
-				</div>
-	
-				<!--
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_avatar; ?></label>
-					<div class="col-sm-10">
-						<div id="sellerinfo_avatar_files">
-							<?php if (!empty($seller['avatar'])) { ?>
-							<input type="hidden" name="seller[avatar_name]" value="<?php echo $seller['avatar']['name']; ?>" />
-							<img src="<?php echo $seller['avatar']['thumb']; ?>" />
-							<?php } ?>
-						</div>
-					</div>
-				</div>
-				-->
-	
-				<?php $msSeller = new ReflectionClass('MsSeller'); ?>
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_status; ?></label>
-					<div class="col-sm-10">
-						<select class="form-control" name="seller[status]">
-						<?php foreach ($msSeller->getConstants() as $cname => $cval) { ?>
-							<?php if (strpos($cname, 'STATUS_') !== FALSE) { ?>
-								<option value="<?php echo $cval; ?>" <?php if ($seller['ms.seller_status'] == $cval) { ?>selected="selected"<?php } ?>><?php echo $this->language->get('ms_seller_status_' . $cval); ?></option>
-							<?php } ?>
-						<?php } ?>
-					</select>
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label">
-						<span data-toggle="tooltip" title="<?php echo $ms_catalog_sellerinfo_notify_note; ?>"><?php echo $ms_catalog_sellerinfo_notify; ?></span>
-					</label>
-					<div class="col-sm-10">
-						<input type="checkbox" style="margin-top: 10px" name="seller[notify]" value="1" checked="checked" /><br>
-						<textarea class="form-control" name="seller[message]" placeholder="<?php echo $ms_catalog_sellerinfo_message_note; ?>"></textarea>
-					</div>
-				</div>
-				</fieldset>
-	
-				</div>
-	
-				<div class="tab-pane" id="tab-commission">
-				<table class="form">
-				<input type="hidden" name="seller[commission_id]" value="<?php echo $seller['commission_id']; ?>" />
-				<?php if (isset($seller['actual_fees'])) { ?>
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $ms_commission_actual; ?></label>
-					<div class="col-sm-10"><?php echo $seller['actual_fees']; ?></div>
-				</div>
-				<?php } ?>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $this->language->get('ms_commission_' . MsCommission::RATE_SALE); ?></label>
-					<div class="col-sm-10 control-inline">
-						<input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][rate_id]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['rate_id']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['rate_id'] : ''; ?>" />
-						<input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][rate_type]" value="<?php echo MsCommission::RATE_SALE; ?>" />
-						<?php echo $this->currency->getSymbolLeft(); ?>
-						<input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][flat]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_SALE]['flat'], $this->config->get('config_currency'), '', FALSE) : '' ?>" size="3"/>
-						<?php echo $this->currency->getSymbolRight(); ?>
-						+<input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][percent]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['percent']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['percent'] : ''; ?>" size="3"/>%
-					</div>
-				</div>
-	
-				<div class="form-group">
-					<label class="col-sm-2 control-label"><?php echo $this->language->get('ms_commission_' . MsCommission::RATE_LISTING); ?></label>
-					<div class="col-sm-10 control-inline">
-						<input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][rate_id]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['rate_id']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['rate_id'] : ''; ?>" />
-						<input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][rate_type]" value="<?php echo MsCommission::RATE_LISTING; ?>" />
-						<?php echo $this->currency->getSymbolLeft(); ?>
-						<input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][flat]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_LISTING]['flat'], $this->config->get('config_currency'), '', FALSE) : '' ?>" size="3"/>
-						<?php echo $this->currency->getSymbolRight(); ?>
-						+<input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][percent]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['percent']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['percent'] : ''; ?>" size="3"/>%
-						<select class="form-control" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][payment_method]">
-							<optgroup label="<?php echo $ms_payment_method; ?>">
-								<option value="0" <?php if(isset($seller['commission_rates'][MsCommission::RATE_LISTING]) && $seller['commission_rates'][MsCommission::RATE_LISTING]['payment_method'] == 0) { ?> selected="selected" <?php } ?>><?php echo $ms_payment_method_inherit; ?></option>
-								<option value="<?php echo MsPayment::METHOD_BALANCE; ?>" <?php if(isset($seller['commission_rates'][MsCommission::RATE_LISTING]) && $seller['commission_rates'][MsCommission::RATE_LISTING]['payment_method'] == MsPayment::METHOD_BALANCE) { ?> selected="selected" <?php } ?>><?php echo $ms_payment_method_balance; ?></option>
-								<option value="<?php echo MsPayment::METHOD_PAYPAL; ?>" <?php if(isset($seller['commission_rates'][MsCommission::RATE_LISTING]) && $seller['commission_rates'][MsCommission::RATE_LISTING]['payment_method'] == MsPayment::METHOD_PAYPAL) { ?> selected="selected" <?php } ?>><?php echo $ms_payment_method_paypal; ?></option>
-							</optgroup>
-						</select>
-					</div>
-				</div>
-				</table>
-				</div>
-				
-				<div class="tab-pane" id="tab-user-settings">
-					<fieldset>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_full_name; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="seller_setting[slr_full_name]" value="<?php echo (isset($settings['slr_full_name'])) ? $settings['slr_full_name'] : '' ; ?>" placeholder="<?php echo $ms_seller_full_name; ?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_address1; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="seller_setting[slr_address_line1]" value="<?php echo (isset($settings['slr_address_line1'])) ? $settings['slr_address_line1'] : '' ; ?>" placeholder="<?php echo $ms_seller_address1_placeholder ;?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_address2; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="seller_setting[slr_address_line2]" value="<?php echo (isset($settings['slr_address_line2'])) ? $settings['slr_address_line2'] : '' ; ?>" placeholder="<?php echo $ms_seller_address2_placeholder ;?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_city; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="seller_setting[slr_city]" value="<?php echo (isset($settings['slr_city'])) ? $settings['slr_city'] : '' ; ?>" placeholder="<?php echo $ms_seller_city; ?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_state; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="seller_setting[slr_state]" value="<?php echo (isset($settings['slr_state'])) ? $settings['slr_state'] : '' ; ?>" placeholder="<?php echo $ms_seller_state ;?>">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_zip; ?></label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="seller_setting[slr_zip]" value="<?php echo (isset($settings['slr_zip'])) ? $settings['slr_zip'] : '' ; ?>" placeholder="<?php echo $ms_seller_zip ;?>">
-							</div>
-						</div>
+            <div class="tab-pane active" id="tab-general">
 
-						<div class="form-group">
-							<label class="col-sm-2 control-label"><?php echo $ms_seller_country; ?></label>
-							<div class="col-sm-10">
-								<select class="form-control" name="seller_setting[slr_country]">
-									<?php foreach($countries as $country) :?>
-										<?php if($settings['slr_country'] == $country['country_id']) :?>
-											<option value="<?php echo $country['country_id'] ;?>" selected><?php echo $country['name'] ;?></option>
-										<?php else :?>
-											<option value="<?php echo $country['country_id'] ;?>"><?php echo $country['name'] ;?></option>
-										<?php endif ;?>
-									<?php endforeach ;?>
-								</select>
-							</div>
-						</div>
-					</fieldset>
-				</div>
+            <fieldset>
+            <legend><?php echo $ms_catalog_sellerinfo_customer_data; ?></legend>
+             <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer; ?></label>
+
+                <div class="col-sm-10">
+                <?php if (!$seller['seller_id']) { ?>
+                <select class="form-control" name="customer[customer_id]">
+                    <optgroup label="<?php echo $ms_catalog_sellerinfo_customer_new; ?>">
+                    <option value="0"><?php echo $ms_catalog_sellerinfo_customer_create_new; ?></option>
+                    </optgroup>
+                    <?php if (isset($customers)) { ?>
+                    <optgroup label="<?php echo $ms_catalog_sellerinfo_customer_existing; ?>">
+                    <?php foreach ($customers as $c) { ?>
+                    <option value="<?php echo $c['c.customer_id']; ?>"><?php echo $c['c.name']; ?></option>
+                    <?php } ?>
+                    </optgroup>
+                    <?php } ?>
+                </select>
+                <?php } else { ?>
+                    <a href="<?php echo $this->url->link('sale/customer/edit', 'token=' . $this->session->data['token'] . '&customer_id=' . $seller['seller_id'], 'SSL'); ?>"><?php echo $seller['name']; ?></a>
+                <?php } ?>
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_firstname; ?></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="customer[firstname]" value="" />
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_lastname; ?></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="customer[lastname]" value="" />
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_email; ?></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="customer[email]" value="" />
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_password; ?></label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="customer[password]" value="" />
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_customer_password_confirm; ?></label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="customer[password_confirm]" value="" />
+                </div>
+            </div>
+            </fieldset>
+
+            <fieldset>
+            <legend><?php echo $ms_catalog_sellerinfo_seller_data; ?></legend>
+            <div class="form-group required">
+                <label class="col-sm-2 control-label required"><?php echo $ms_catalog_sellerinfo_nickname; ?></label>
+                <?php if (!empty($seller['ms.nickname'])) { ?>
+                    <div class="col-sm-10" style="padding-top: 5px">
+                        <b><?php echo $seller['ms.nickname']; ?></b>
+                    </div>
+                <?php } else { ?>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="seller[nickname]" value="<?php echo $seller['ms.nickname']; ?>" />
+                    </div>
+                <?php } ?>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_keyword; ?></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="seller[keyword]" value="<?php echo $seller['keyword']; ?>" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_sellergroup; ?></label>
+                <div class="col-sm-10"><select class="form-control" name="seller[seller_group]">
+                    <?php foreach ($seller_groups as $group) { ?>
+                    <option value="<?php echo $group['seller_group_id']; ?>" <?php if ($seller['ms.seller_group'] == $group['seller_group_id']) { ?>selected="selected"<?php } ?>><?php echo $group['name']; ?></option>
+                    <?php } ?>
+                </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                    <span data-toggle="tooltip" title="<?php echo $ms_catalog_sellerinfo_product_validation_note; ?>"><?php echo $ms_catalog_sellerinfo_product_validation; ?></span>
+                </label>
+                <div class="col-sm-10">
+                        <select class="form-control" name="seller[product_validation]">
+                            <option value="1" <?php if($seller['ms.product_validation'] == 1) { ?> selected="selected" <?php } ?>><?php echo $ms_config_product_validation_none; ?></option>
+                        <option value="2" <?php if($seller['ms.product_validation'] == 2) { ?> selected="selected" <?php } ?>><?php echo $ms_config_product_validation_approval; ?></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_description; ?></label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" name="seller[description]"><?php echo $seller['ms.description']; ?></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_company; ?></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="seller[company]" value="<?php echo $seller['ms.company']; ?>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_country; ?></label>
+                <div class="col-sm-10"><select class="form-control" name="seller[country]">
+                        <?php if (1==1) { ?>
+                    <option value="" selected="selected"><?php echo $ms_catalog_sellerinfo_country_dont_display; ?></option>
+                    <?php } else { ?>
+                    <option value=""><?php echo $ms_catalog_sellerinfo_country_dont_display; ?></option>
+                    <?php } ?>
+
+                    <?php foreach ($countries as $country) { ?>
+                    <?php if ($seller['ms.country_id'] == $country['country_id']) { ?>
+                    <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
+                    <?php } else { ?>
+                    <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_zone; ?></label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="seller[zone]">
+                    </select>
+                    <p class="ms-note"><?php echo $ms_catalog_sellerinfo_zone_note; ?></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_paypal; ?></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="seller[paypal]" value="<?php echo $seller['ms.paypal']; ?>" />
+                </div>
+            </div>
+
+			<!--
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_catalog_sellerinfo_avatar; ?></label>
+                <div class="col-sm-10">
+                    <div id="sellerinfo_avatar_files">
+                        <?php if (!empty($seller['avatar'])) { ?>
+                        <input type="hidden" name="seller[avatar_name]" value="<?php echo $seller['avatar']['name']; ?>" />
+                        <img src="<?php echo $seller['avatar']['thumb']; ?>" />
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+			-->
+
+            <?php $msSeller = new ReflectionClass('MsSeller'); ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_status; ?></label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="seller[status]">
+                    <?php foreach ($msSeller->getConstants() as $cname => $cval) { ?>
+                        <?php if (strpos($cname, 'STATUS_') !== FALSE) { ?>
+                            <option value="<?php echo $cval; ?>" <?php if ($seller['ms.seller_status'] == $cval) { ?>selected="selected"<?php } ?>><?php echo $this->language->get('ms_seller_status_' . $cval); ?></option>
+                        <?php } ?>
+                    <?php } ?>
+                </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                    <span data-toggle="tooltip" title="<?php echo $ms_catalog_sellerinfo_notify_note; ?>"><?php echo $ms_catalog_sellerinfo_notify; ?></span>
+                </label>
+                <div class="col-sm-10">
+                    <input type="checkbox" style="margin-top: 10px" name="seller[notify]" value="1" checked="checked" /><br>
+                    <textarea class="form-control" name="seller[message]" placeholder="<?php echo $ms_catalog_sellerinfo_message_note; ?>"></textarea>
+                </div>
+            </div>
+            </fieldset>
+
+            </div>
+
+            <div class="tab-pane" id="tab-commission">
+            <table class="form">
+            <input type="hidden" name="seller[commission_id]" value="<?php echo $seller['commission_id']; ?>" />
+            <?php if (isset($seller['actual_fees'])) { ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $ms_commission_actual; ?></label>
+                <div class="col-sm-10"><?php echo $seller['actual_fees']; ?></div>
+            </div>
+            <?php } ?>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $this->language->get('ms_commission_' . MsCommission::RATE_SALE); ?></label>
+                <div class="col-sm-10 control-inline">
+                    <input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][rate_id]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['rate_id']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['rate_id'] : ''; ?>" />
+                    <input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][rate_type]" value="<?php echo MsCommission::RATE_SALE; ?>" />
+                    <?php echo $this->currency->getSymbolLeft(); ?>
+                    <input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][flat]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_SALE]['flat'], $this->config->get('config_currency'), '', FALSE) : '' ?>" size="3"/>
+                    <?php echo $this->currency->getSymbolRight(); ?>
+                    +<input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_SALE; ?>][percent]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['percent']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['percent'] : ''; ?>" size="3"/>%
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><?php echo $this->language->get('ms_commission_' . MsCommission::RATE_LISTING); ?></label>
+                <div class="col-sm-10 control-inline">
+                    <input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][rate_id]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['rate_id']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['rate_id'] : ''; ?>" />
+                    <input type="hidden" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][rate_type]" value="<?php echo MsCommission::RATE_LISTING; ?>" />
+                    <?php echo $this->currency->getSymbolLeft(); ?>
+                    <input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][flat]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_LISTING]['flat'], $this->config->get('config_currency'), '', FALSE) : '' ?>" size="3"/>
+                    <?php echo $this->currency->getSymbolRight(); ?>
+                    +<input type="text" class="form-control" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][percent]" value="<?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['percent']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['percent'] : ''; ?>" size="3"/>%
+                    <select class="form-control" name="seller[commission][<?php echo MsCommission::RATE_LISTING; ?>][payment_method]">
+                        <optgroup label="<?php echo $ms_payment_method; ?>">
+                            <option value="0" <?php if(isset($seller['commission_rates'][MsCommission::RATE_LISTING]) && $seller['commission_rates'][MsCommission::RATE_LISTING]['payment_method'] == 0) { ?> selected="selected" <?php } ?>><?php echo $ms_payment_method_inherit; ?></option>
+                            <option value="<?php echo MsPayment::METHOD_BALANCE; ?>" <?php if(isset($seller['commission_rates'][MsCommission::RATE_LISTING]) && $seller['commission_rates'][MsCommission::RATE_LISTING]['payment_method'] == MsPayment::METHOD_BALANCE) { ?> selected="selected" <?php } ?>><?php echo $ms_payment_method_balance; ?></option>
+                            <option value="<?php echo MsPayment::METHOD_PAYPAL; ?>" <?php if(isset($seller['commission_rates'][MsCommission::RATE_LISTING]) && $seller['commission_rates'][MsCommission::RATE_LISTING]['payment_method'] == MsPayment::METHOD_PAYPAL) { ?> selected="selected" <?php } ?>><?php echo $ms_payment_method_paypal; ?></option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            </table>
+            </div>
+            <!--  end commission tab -->
 			</div>
         </div>
         </form>
