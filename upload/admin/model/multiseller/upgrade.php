@@ -100,6 +100,10 @@ class ModelMultisellerUpgrade extends Model {
 				PRIMARY KEY (`id`)
 				) DEFAULT CHARSET=utf8;");
 
+            $this->db->query("
+                CREATE UNIQUE INDEX slr_id_name
+                ON " . DB_PREFIX ."ms_setting (seller_id, name)");
+
 			$this->_createSchemaEntry('1.0.2.2');
 		}
 
