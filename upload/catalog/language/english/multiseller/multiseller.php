@@ -599,6 +599,18 @@ $_['ms_account_dashboard_nav_balance'] = 'View your financial records';
 $_['ms_account_dashboard_nav_payout'] = 'Request your payout';
 $_['ms_account_sellersetting_breadcrumbs'] = 'Seller Settings';
 
+//Account - Settings
+$_['ms_user_settings'] = 'User settings';
+$_['ms_seller_full_name'] = "Full name";
+$_['ms_seller_address1'] = "Address Line 1";
+$_['ms_seller_address1_placeholder'] = 'Street address, P.O. box, company name, c/o';
+$_['ms_seller_address2'] = "Address Line 2";
+$_['ms_seller_address2_placeholder'] = 'Apartment, suite, unit, building, floor etc.';
+$_['ms_seller_city'] = "City";
+$_['ms_seller_state'] = "State/Province/Region";
+$_['ms_seller_zip'] = "ZIP/Postal Code";
+$_['ms_seller_country'] = "Country";
+
 
 // Account - Request withdrawal
 $_['ms_account_withdraw_heading'] = 'Request Payout';
