@@ -221,40 +221,17 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 
 		// load seller's information from mixed customer/seller tables @todo
+        //get seller settings
+        $this->data['settings'] = $this->MsLoader->MsSetting->getSettings();
+        
 		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
 		$this->data['phone'] = $this->customer->getTelephone();
 		$this->data['fax'] = $this->customer->getFax();
 		$this->data['mail'] = $this->customer->getEmail();
-
-		$address_id = $this->customer->getAddressId();
-		if($address_id != 0){
-			$this->load->model('account/address');
-			$address_fields = $this->model_account_address->getAddress($address_id);
-			if(isset($address_fields['address_1']) && $address_fields['address_1']){
-				$adr1 = $address_fields['address_1'].', ';
-			} else{
-				$adr1 = '';
-			}
-			if(isset($address_fields['city']) && $address_fields['city']){
-				$adr2 = $address_fields['city'].', ';
-			} else{
-				$adr2 = '';
-			}
-			if(isset($address_fields['zone']) && $address_fields['zone']){
-				$adr3 = $address_fields['zone'].', ';
-			} else{
-				$adr3 = '';
-			}
-			if(isset($address_fields['country']) && $address_fields['country']){
-				$adr4 = $address_fields['country'];
-			} else{
-				$adr4 = '';
-			}
-
-			$this->data['address'] = $adr1.$adr2.$adr3.$adr4;
-		}
-		
+        $this->data['address'] = isset($this->data['settings']['slr_address_line1']) ? $this->data['settings']['slr_address_line1'] : false;
+        $this->data['address'] .= isset($this->data['settings']['slr_address_line2']) ? ', ' . $this->data['settings']['slr_address_line2'] : false;
+        
 		$avatar = $this->MsLoader->MsSeller->getSellerAvatar($customer_id);
 		if (is_file(DIR_IMAGE . $avatar['avatar'])) {
 			$this->data['logo'] = $server . 'image/' . $avatar['avatar'];

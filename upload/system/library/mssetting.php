@@ -25,7 +25,6 @@ final class MsSetting extends Model {
 				$setting[$result['name']] = json_decode($result['value'], true);
 			}
 		}
-
         return $settings;
 	}
 
