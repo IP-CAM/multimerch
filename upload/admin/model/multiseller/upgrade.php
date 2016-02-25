@@ -99,11 +99,7 @@ class ModelMultisellerUpgrade extends Model {
 				`is_encoded` smallint(1) unsigned DEFAULT NULL,
 				PRIMARY KEY (`id`)
 				) DEFAULT CHARSET=utf8;");
-
-            $this->db->query("
-                CREATE UNIQUE INDEX slr_id_name
-                ON " . DB_PREFIX ."ms_setting (seller_id, name)");
-
+            
 			$this->_createSchemaEntry('1.0.2.2');
 		}
 
@@ -114,5 +110,13 @@ class ModelMultisellerUpgrade extends Model {
 
 			$this->_createSchemaEntry('1.0.3.1');
 		}
-	}
+
+        if (version_compare($version, '1.0.3.2') < 0) {
+            $this->db->query("
+                CREATE UNIQUE INDEX IF NOT EXISTS slr_id_name
+                ON " . DB_PREFIX ."ms_setting (seller_id, name)");
+
+            $this->_createSchemaEntry('1.0.3.2');
+        }
+    }
 }
