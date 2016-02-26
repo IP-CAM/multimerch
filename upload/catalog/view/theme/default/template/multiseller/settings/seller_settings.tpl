@@ -81,19 +81,40 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label"><?php echo $ms_seller_website; ?></label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="seller_setting[slr_website]" value="<?php echo (isset($settings['slr_website'])) ? $settings['slr_website'] : '' ; ?>" placeholder="<?php echo $ms_seller_website ;?>">
+									<input type="text" class="form-control" name="settings[slr_website]" value="<?php echo (isset($settings['slr_website'])) ? $settings['slr_website'] : '' ; ?>" placeholder="<?php echo $ms_seller_website ;?>">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label"><?php echo $ms_seller_company; ?></label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="seller_setting[slr_company]" value="<?php echo (isset($settings['slr_company'])) ? $settings['slr_company'] : '' ; ?>" placeholder="<?php echo $ms_seller_company ;?>">
+									<input type="text" class="form-control" name="settings[slr_company]" value="<?php echo (isset($settings['slr_company'])) ? $settings['slr_company'] : '' ; ?>" placeholder="<?php echo $ms_seller_company ;?>">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label"><?php echo $ms_seller_phone; ?></label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" name="seller_setting[slr_phone]" value="<?php echo (isset($settings['slr_phone'])) ? $settings['slr_phone'] : '' ; ?>" placeholder="<?php echo $ms_seller_phone ;?>">
+									<input type="text" class="form-control" name="settings[slr_phone]" value="<?php echo (isset($settings['slr_phone'])) ? $settings['slr_phone'] : '' ; ?>" placeholder="<?php echo $ms_seller_phone ;?>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_avatar; ?></label>
+								<div class="col-sm-10">
+									<div class="buttons">
+										<a name="ms-file-selleravatar" id="ms-file-selleravatar" class="btn btn-primary"><span><?php echo $ms_button_select_image; ?></span></a>
+									</div>
+
+									<p class="ms-note"><?php echo $ms_account_sellerinfo_avatar_note; ?></p>
+									<p class="error" id="error_sellerinfo_avatar"></p>
+
+									<div id="sellerinfo_avatar_files">
+										<?php if (!empty($settings['slr_avatar'])) { ?>
+										<div class="ms-image">
+											<input type="hidden" name="seller[avatar_name]" value="<?php echo $seller['avatar']['name']; ?>" />
+											<img src="<?php echo $settings['slr_thumb']; ?>" />
+											<span class="ms-remove"></span>
+										</div>
+										<?php } ?>
+									</div>
 								</div>
 							</div>
 						</fieldset>
@@ -109,7 +130,6 @@
 <script>
 	$("#ms-submit-button").click(function() {
 		var data = $('#ms-sellersettings').serialize();
-		
 		$.ajax({
 			url: 'index.php?route=seller/account-setting/jxsavesellerinfo',
 			data: data,
@@ -123,5 +143,19 @@
 			}
 		});
 	});
+</script>
+<?php $timestamp = time(); ?>
+<script>
+	var msGlobals = {
+		timestamp: '<?php echo $timestamp; ?>',
+		token : '<?php echo md5($salt . $timestamp); ?>',
+		session_id: '<?php echo session_id(); ?>',
+		zone_id: '<?php echo $seller["ms.zone_id"] ?>',
+			uploadError: '<?php echo htmlspecialchars($ms_error_file_upload_error, ENT_QUOTES, "UTF-8"); ?>',
+			formError: '<?php echo htmlspecialchars($ms_error_form_submit_error, ENT_QUOTES, "UTF-8"); ?>',
+			config_enable_rte: '<?php echo $this->config->get('msconf_enable_rte'); ?>',
+			zoneSelectError: '<?php echo htmlspecialchars($ms_account_sellerinfo_zone_select, ENT_QUOTES, "UTF-8"); ?>',
+			zoneNotSelectedError: '<?php echo htmlspecialchars($ms_account_sellerinfo_zone_not_selected, ENT_QUOTES, "UTF-8"); ?>'
+	};
 </script>
 <?php echo $footer; ?>

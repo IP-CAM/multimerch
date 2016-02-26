@@ -29,8 +29,20 @@ final class MsSetting extends Model {
 	}
 
 	public function createSetting($data = array()) {
-		foreach ($data['settings'] as $name => $value) {
+        $avatar = isset($data['settings']['slr_avatar']) ? $this->MsLoader->MsFile->moveImage($data['settings']['slr_avatar']) : '';
+        $sql = "INSERT INTO " . DB_PREFIX . "ms_setting
+             SET seller_id = " . (isset($data['seller_id']) ? (int)$data['seller_id'] : 'NULL') . ",
+                seller_group_id = " . (isset($data['seller_group']) ? (int)$data['seller_group'] : 'NULL') . ",
+                name = 'slr_avatar',
+                value = '" . $avatar . "'
+                ON DUPLICATE KEY UPDATE
+                value = '" . $avatar . "'";
+        $this->db->query($sql);
+        unset($data['settings']['slr_avatar']);
+
+        foreach ($data['settings'] as $name => $value) {
             $value = is_array($value) ? json_encode($value) : $this->db->escape($value);
+            $sql = '';
             $sql = "INSERT INTO " . DB_PREFIX . "ms_setting
              SET seller_id = " . (isset($data['seller_id']) ? (int)$data['seller_id'] : 'NULL') . ",
                 seller_group_id = " . (isset($data['seller_group']) ? (int)$data['seller_group'] : 'NULL') . ",
