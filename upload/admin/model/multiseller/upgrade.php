@@ -124,20 +124,20 @@ class ModelMultisellerUpgrade extends Model {
                 $company = $row['company'];
                 $website = $row['website'];
                 $seller_id = $row['seller_id'];
-                $seller_group = $this->MsLoader->MsSellerGroup->getSellerGroupBySellerId($seller_id);
+//                $seller_group = $this->MsLoader->MsSellerGroup->getSellerGroupBySellerId($seller_id);
                 
                 $insertDataQuery =
                     "INSERT INTO " . DB_PREFIX . "ms_setting 
-                    SET seller_id = " . (int)$seller_id . ", seller_group_id = " . $seller_group . ", name = 'slr_company', value = '$company' 
+                    SET seller_id = " . (int)$seller_id . ", name = 'slr_company', value = '" . $this->db->escape($company) . "' 
                     ON DUPLICATE KEY UPDATE
-                    value = '$company'";
+                    value = '" . $this->db->escape($company) . "'";
                 $this->db->query($insertDataQuery);
-                $insertDataQuery = '';
+                
                 $insertDataQuery =
                     "INSERT INTO " . DB_PREFIX . "ms_setting 
-                    SET seller_id = " . (int)$seller_id . ", seller_group_id = " . $seller_group . ", name = 'slr_website', value = '$website' 
+                    SET seller_id = " . (int)$seller_id . ", name = 'slr_website', value = '" . $this->db->escape($website) . "' 
                     ON DUPLICATE KEY UPDATE
-                    value = '$website'";
+                    value = '" . $this->db->escape($website) . "'";
                 $this->db->query($insertDataQuery);
             }
 
