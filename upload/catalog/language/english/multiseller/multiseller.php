@@ -6,6 +6,7 @@
 $_['ms_viewinstore'] = 'View in store';
 $_['ms_view'] = 'View';
 $_['ms_view_modify'] = 'View / Modify';
+$_['ms_view_invoice'] = 'View invoice';
 $_['ms_publish'] = 'Publish';
 $_['ms_unpublish'] = 'Unpublish';
 $_['ms_edit'] = 'Edit';
@@ -571,6 +572,7 @@ $_['ms_account_orders_nohistory'] = 'There is no history for this order yet!';
 $_['ms_account_orders_change_status']    = 'Change order status';
 $_['ms_account_orders_add_comment']    = 'Add order comment...';
 $_['ms_account_orders_add_history']    = 'Add History';
+
 
 $_['ms_account_order_information'] = 'Order Information';
 
