@@ -226,15 +226,17 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
         
 		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
-		$this->data['phone'] = $this->customer->getTelephone();
+
+        $this->data['phone'] = $this->customer->getTelephone();
 		$this->data['fax'] = $this->customer->getFax();
 		$this->data['mail'] = $this->customer->getEmail();
-        $this->data['address'] = isset($this->data['settings']['slr_address_line1']) ? $this->data['settings']['slr_address_line1'] : false;
-        $this->data['address'] .= isset($this->data['settings']['slr_address_line2']) ? ', ' . $this->data['settings']['slr_address_line2'] : false;
+        $this->load->model('localisation/country');
+        $this->data['settings']['slr_country'] = $this->model_localisation_country->getCountry($this->data['settings']['slr_country']);
+        $this->data['settings']['slr_country'] = $this->data['settings']['slr_country']['name'];
         
-		$avatar = $this->MsLoader->MsSeller->getSellerAvatar($customer_id);
-		if (is_file(DIR_IMAGE . $avatar['avatar'])) {
-			$this->data['logo'] = $server . 'image/' . $avatar['avatar'];
+		$avatar = $this->MsLoader->MsSeller->getSellerLogo($customer_id);
+		if (is_file(DIR_IMAGE . $avatar['value'])) {
+			$this->data['logo'] = $server . 'image/' . $avatar['value'];
 		} else {
 			$this->data['logo'] = '';
 		}

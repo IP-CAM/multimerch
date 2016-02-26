@@ -103,7 +103,7 @@
 										<a name="ms-file-selleravatar" id="ms-file-selleravatar" class="btn btn-primary"><span><?php echo $ms_button_select_image; ?></span></a>
 									</div>
 
-									<p class="ms-note"><?php echo $ms_account_sellerinfo_avatar_note; ?></p>
+									<p class="ms-note"><?php echo $ms_account_sellerinfo_logo_note; ?></p>
 									<p class="error" id="error_sellerinfo_avatar"></p>
 
 									<div id="sellerinfo_avatar_files">

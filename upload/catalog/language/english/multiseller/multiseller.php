@@ -614,6 +614,7 @@ $_['ms_seller_country'] = "Country";
 $_['ms_seller_company'] = 'Company';
 $_['ms_seller_website'] = 'Website';
 $_['ms_seller_phone'] = 'Phone';
+$_['ms_account_sellerinfo_logo_note'] = "Select your logo";
 
 
 // Account - Request withdrawal
