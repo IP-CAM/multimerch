@@ -115,6 +115,31 @@ class ModelMultisellerUpgrade extends Model {
             $this->db->query("
                 CREATE UNIQUE INDEX slr_id_name
                 ON " . DB_PREFIX ."ms_setting (seller_id, name)");
+            
+            
+            //replace data from ms_seller to ms_setting
+            $getDataQuery = "SELECT seller_id, company, website FROM " . DB_PREFIX . "ms_seller WHERE 1 GROUP BY seller_id";
+            $seller_data = $this->db->query($getDataQuery)->rows;
+            foreach($seller_data as $row) {
+                $company = $row['company'];
+                $website = $row['website'];
+                $seller_id = $row['seller_id'];
+                $seller_group = $this->MsLoader->MsSellerGroup->getSellerGroupBySellerId($seller_id);
+                
+                $insertDataQuery =
+                    "INSERT INTO " . DB_PREFIX . "ms_setting 
+                    SET seller_id = " . (int)$seller_id . ", seller_group_id = " . $seller_group . ", name = 'slr_company', value = '$company' 
+                    ON DUPLICATE KEY UPDATE
+                    value = '$company'";
+                $this->db->query($insertDataQuery);
+                $insertDataQuery = '';
+                $insertDataQuery =
+                    "INSERT INTO " . DB_PREFIX . "ms_setting 
+                    SET seller_id = " . (int)$seller_id . ", seller_group_id = " . $seller_group . ", name = 'slr_website', value = '$website' 
+                    ON DUPLICATE KEY UPDATE
+                    value = '$website'";
+                $this->db->query($insertDataQuery);
+            }
 
             $this->_createSchemaEntry('1.0.3.2');
         }
