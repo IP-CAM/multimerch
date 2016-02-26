@@ -22,7 +22,7 @@
 				<div class="col-sm-9">
 					<form id="ms-sellersettings" class="ms-form form-horizontal" method="POST">
 						<input type="hidden" name="seller_id" value="<?php echo $seller_id ;?>">
-						<input type="hidden" name="seller_group" value="<?php echo $seller_group_id['seller_group'] ;?>">
+						<!--<input type="hidden" name="seller_group" value="<?php echo $seller_group_id['seller_group'] ;?>"> -->
 						<div class="form-group">
 							<label class="col-sm-2 control-label"><?php echo $ms_seller_full_name; ?></label>
 							<div class="col-sm-10">

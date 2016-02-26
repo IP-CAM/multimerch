@@ -21,7 +21,7 @@ class ControllerSellerAccountSetting extends ControllerSellerAccount {
             )
         ));
         $this->data['seller_id'] = $this->customer->getId();
-        $this->data['seller_group_id'] = $this->MsLoader->MsSellerGroup->getSellerGroupBySellerId($this->data['seller_id']);
+//        $this->data['seller_group_id'] = $this->MsLoader->MsSellerGroup->getSellerGroupBySellerId($this->data['seller_id']);
         $this->data['countries'] = $this->model_localisation_country->getCountries();
         $this->data['settings'] = $this->MsLoader->MsSetting->getSettings(array('seller_id' => $this->data['seller_id']));
         
