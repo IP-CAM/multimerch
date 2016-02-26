@@ -30,18 +30,25 @@ class ControllerSellerAccountSetting extends ControllerSellerAccount {
         $this->data['countries'] = $this->model_localisation_country->getCountries();
         $this->data['settings'] = $this->MsLoader->MsSetting->getSettings(array('seller_id' => $this->data['seller_id']));
         
-        $this->data['settings']['slr_thumb'] = $this->MsLoader->MsFile->resizeImage($this->data['settings']['slr_avatar'], $this->config->get('msconf_preview_seller_avatar_image_width'), $this->config->get('msconf_preview_seller_avatar_image_height'));
+        $this->data['settings']['slr_thumb'] = $this->MsLoader->MsFile->resizeImage($this->data['settings']['slr_logo'], $this->config->get('msconf_preview_seller_avatar_image_width'), $this->config->get('msconf_preview_seller_avatar_image_height'));
         list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('multiseller/settings/seller_settings');
         $this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
     
     public function jxSaveSellerInfo() {
         $data = $this->request->post;
+
+        if (isset($data['settings']['slr_logo']) && !empty($data['settings']['slr_logo'])) {
+            $data['settings']['slr_logo'] = $this->MsLoader->MsFile->moveImage($data['settings']['slr_logo']);
+            if (!$this->MsLoader->MsFile->checkFileAgainstSession($data['settings']['slr_logo'])) {
+                $json['errors']['settings[slr_logo]'] = $this->language->get('ms_error_file_upload_error');
+            }
+        }
         $this->MsLoader->MsSetting->createSetting($data);
         $this->response->redirect($this->url->link('seller/account-dashboard', '', 'SSL'));
     }
 
-    public function jxUploadSellerAvatar() {
+    public function jxUploadSellerLogo() {
         $json = array();
         $file = array();
 

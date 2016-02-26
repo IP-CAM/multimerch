@@ -16,14 +16,14 @@ $(document).ready(function(){
         },
         {
             paramsId: 'seller_profile',
-            url: 'seller/account-setting/jxUploadSellerAvatar',
+            url: 'seller/account-setting/jxUploadSellerLogo',
             fileUploadedCb: function (data) {
 
                 if (!$.isEmptyObject(data.files)) {
                     for (var i = 0; i < data.files.length; i++) {
                         $("#sellerinfo_avatar_files").html(
                             '<div class="ms-image">' +
-                            '<input type="hidden" value="'+data.files[i].name+'" name="settings[slr_avatar]" />' +
+                            '<input type="hidden" value="'+data.files[i].name+'" name="settings[slr_logo]" />' +
                             '<img src="'+data.files[i].thumb+'" />' +
                             '<span class="ms-remove"></span>' +
                             '</div>').children(':last').hide().fadeIn(2000);

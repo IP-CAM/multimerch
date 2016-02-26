@@ -107,9 +107,8 @@
 									<p class="error" id="error_sellerinfo_avatar"></p>
 
 									<div id="sellerinfo_avatar_files">
-										<?php if (!empty($settings['slr_avatar'])) { ?>
+										<?php if (!empty($settings['slr_logo'])) { ?>
 										<div class="ms-image">
-											<input type="hidden" name="seller[avatar_name]" value="<?php echo $seller['avatar']['name']; ?>" />
 											<img src="<?php echo $settings['slr_thumb']; ?>" />
 											<span class="ms-remove"></span>
 										</div>
@@ -128,7 +127,7 @@
 	<?php echo $column_right; ?></div>
 </div>
 <script>
-	$("#ms-submit-button").click(function() {
+	$("#ms-submit-button").click(function(e) {
 		var data = $('#ms-sellersettings').serialize();
 		$.ajax({
 			url: 'index.php?route=seller/account-setting/jxsavesellerinfo',
@@ -153,9 +152,6 @@
 		zone_id: '<?php echo $seller["ms.zone_id"] ?>',
 			uploadError: '<?php echo htmlspecialchars($ms_error_file_upload_error, ENT_QUOTES, "UTF-8"); ?>',
 			formError: '<?php echo htmlspecialchars($ms_error_form_submit_error, ENT_QUOTES, "UTF-8"); ?>',
-			config_enable_rte: '<?php echo $this->config->get('msconf_enable_rte'); ?>',
-			zoneSelectError: '<?php echo htmlspecialchars($ms_account_sellerinfo_zone_select, ENT_QUOTES, "UTF-8"); ?>',
-			zoneNotSelectedError: '<?php echo htmlspecialchars($ms_account_sellerinfo_zone_not_selected, ENT_QUOTES, "UTF-8"); ?>'
 	};
 </script>
 <?php echo $footer; ?>
