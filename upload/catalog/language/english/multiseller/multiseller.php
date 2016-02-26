@@ -610,6 +610,10 @@ $_['ms_seller_city'] = "City";
 $_['ms_seller_state'] = "State/Province/Region";
 $_['ms_seller_zip'] = "ZIP/Postal Code";
 $_['ms_seller_country'] = "Country";
+$_['ms_seller_country'] = "Country";
+$_['ms_seller_company'] = 'Company';
+$_['ms_seller_website'] = 'Website';
+$_['ms_seller_phone'] = 'Phone';
 
 
 // Account - Request withdrawal

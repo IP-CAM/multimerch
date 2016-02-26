@@ -324,6 +324,27 @@
 							</div>
 						</div>
 					</fieldset>
+					<fieldset>
+						<legend>Information</legend>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"><?php echo $ms_seller_website; ?></label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="seller_setting[slr_website]" value="<?php echo (isset($settings['slr_website'])) ? $settings['slr_website'] : '' ; ?>" placeholder="<?php echo $ms_seller_website ;?>">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"><?php echo $ms_seller_company; ?></label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="seller_setting[slr_company]" value="<?php echo (isset($settings['slr_company'])) ? $settings['slr_company'] : '' ; ?>" placeholder="<?php echo $ms_seller_company ;?>">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"><?php echo $ms_seller_phone; ?></label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="seller_setting[slr_phone]" value="<?php echo (isset($settings['slr_phone'])) ? $settings['slr_phone'] : '' ; ?>" placeholder="<?php echo $ms_seller_phone ;?>">
+							</div>
+						</div>
+					</fieldset>
 				</div>
 			</div>
         </div>
