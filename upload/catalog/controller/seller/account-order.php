@@ -92,12 +92,11 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'suborder_status' => $status_name,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
 					'total_amount' => $this->currency->format($order['total_amount'], $order['currency_code'], $order['currency_value']),
-					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" class="ms-button ms-button-view" title="' . $this->language->get('ms_view_modify') . '"></a>'
+					'invoice' => '<a href="' . $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_invoice') . '"><i class="fa fa-file-text-o"></i></a>',
+					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_modify') . '"><i class="fa fa-search"></i></a>'
 				)
 			);
 		}
-
-
 
 		$this->response->setOutput(json_encode(array(
 			'iTotalRecords' => $total_orders,
@@ -221,43 +220,22 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 
 		// load seller's information from mixed customer/seller tables @todo
+        //get seller settings
+        $this->data['settings'] = $this->MsLoader->MsSetting->getSettings();
+        
 		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
-		$this->data['phone'] = $this->customer->getTelephone();
+
+        $this->data['phone'] = $this->customer->getTelephone();
 		$this->data['fax'] = $this->customer->getFax();
 		$this->data['mail'] = $this->customer->getEmail();
-
-		$address_id = $this->customer->getAddressId();
-		if($address_id != 0){
-			$this->load->model('account/address');
-			$address_fields = $this->model_account_address->getAddress($address_id);
-			if(isset($address_fields['address_1']) && $address_fields['address_1']){
-				$adr1 = $address_fields['address_1'].', ';
-			} else{
-				$adr1 = '';
-			}
-			if(isset($address_fields['city']) && $address_fields['city']){
-				$adr2 = $address_fields['city'].', ';
-			} else{
-				$adr2 = '';
-			}
-			if(isset($address_fields['zone']) && $address_fields['zone']){
-				$adr3 = $address_fields['zone'].', ';
-			} else{
-				$adr3 = '';
-			}
-			if(isset($address_fields['country']) && $address_fields['country']){
-				$adr4 = $address_fields['country'];
-			} else{
-				$adr4 = '';
-			}
-
-			$this->data['address'] = $adr1.$adr2.$adr3.$adr4;
-		}
-		
-		$avatar = $this->MsLoader->MsSeller->getSellerAvatar($customer_id);
-		if (is_file(DIR_IMAGE . $avatar['avatar'])) {
-			$this->data['logo'] = $server . 'image/' . $avatar['avatar'];
+        $this->load->model('localisation/country');
+        $this->data['settings']['slr_country'] = $this->model_localisation_country->getCountry($this->data['settings']['slr_country']);
+        $this->data['settings']['slr_country'] = $this->data['settings']['slr_country']['name'];
+        
+		$avatar = $this->MsLoader->MsSeller->getSellerLogo($customer_id);
+		if (is_file(DIR_IMAGE . $avatar['value'])) {
+			$this->data['logo'] = $server . 'image/' . $avatar['value'];
 		} else {
 			$this->data['logo'] = '';
 		}

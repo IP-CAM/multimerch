@@ -8,10 +8,13 @@
 		<!-- contacts and addresses -->
 		<div class="col-xs-8">
 			<ul>
-				<?php if(isset($phone) && $phone){ echo '<li><i class="fa fa-phone"></i>'.$phone.'</li>'; }?>
-				<?php if(isset($fax) && $fax){ echo '<li><i class="fa fa-fax"></i>'.$fax.'</li>'; }?>
 				<?php if(isset($mail) && $mail){ echo '<li><i class="fa fa-envelope"></i>'.$mail.'</li>'; }?>
-				<?php if(isset($address) && $address){ echo '<li><i class="fa fa-map-marker"></i>'.$address.'</li>'; }?>
+				<?php if(isset($settings["slr_company"]) && $settings["slr_company"]){ echo '<li><i class="fa fa-users"></i>'.$settings["slr_company"].'</li>'; }?>
+				<?php if(isset($settings["slr_address_line1"]) && $settings["slr_address_line1"]){ echo '<li><i class="fa fa-map-marker"></i>'.$settings["slr_address_line1"].'</li>'; }?>
+				<?php if(isset($settings["slr_address_line2"]) && $settings["slr_address_line2"]){ echo '<li><i class="fa fa-home"></i>'.$settings["slr_address_line2"].'</li>'; }?>
+				<?php if(isset($settings['slr_city']) && isset($settings['slr_zip']) && $settings['slr_city']){ echo '<li><i class="fa fa-map"></i>'.$settings['slr_city'].', '.$settings['slr_zip'].'</li>'; }?>
+				<?php if(isset($settings['slr_country']) && $settings['slr_country']){ echo '<li><i class="fa fa-map"></i>'.$settings['slr_country'].'</li>'; }?>
+				<?php if(isset($settings["slr_phone"]) && $settings["slr_phone"]){ echo '<li><i class="fa fa-phone"></i>'.$settings["slr_phone"].'</li>'; }?>
 			</ul>
 		</div>
 	</header>

@@ -183,6 +183,13 @@ final class MsSeller extends Model {
 		
 		return $query->row;
 	}
+    
+    public function getSellerLogo($seller_id) {
+        $sql = "SELECT value FROM " . DB_PREFIX . "ms_setting WHERE name = 'slr_logo' AND seller_id = " . (int)$seller_id;
+        $query = $this->db->query($sql);
+        
+        return $query->row;
+    }
 
 	public function getSellerBanner($seller_id) {
 		$query = $this->db->query("SELECT banner as banner FROM " . DB_PREFIX . "ms_seller WHERE seller_id = '" . (int)$seller_id . "'");

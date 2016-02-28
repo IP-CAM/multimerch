@@ -259,6 +259,10 @@ class ModelMultisellerInstall extends Model {
 		`is_encoded` smallint(1) unsigned DEFAULT NULL,
 		PRIMARY KEY (`id`)
 		) DEFAULT CHARSET=utf8;");
+
+        $this->db->query("
+                CREATE UNIQUE INDEX slr_id_name
+                ON " . DB_PREFIX ."ms_setting (seller_id, name)");
 	}
 	
 	public function createData() {
