@@ -275,10 +275,10 @@
 		
 		<operation>
 			<search position="replace"><![CDATA[
-			<td colspan="4" class="text-right"><?php echo $totals['title']; ?>:</td>
+			<td colspan="4" class="text-right"><?php echo $total['title']; ?>:</td>
 			]]></search>
 			<add><![CDATA[
-			<td colspan="5" class="text-right"><?php echo $totals['title']; ?>:</td>
+			<td colspan="5" class="text-right"><?php echo $total['title']; ?>:</td>
 			]]></add>
 		</operation>
 	</file>
