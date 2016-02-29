@@ -16,17 +16,17 @@
     <div id="content" class="<?php echo $class; ?> ms-account-order"><?php echo $content_top; ?>
 		<h1><?php echo $ms_account_orders_heading; ?></h1>
 
-		<div class="table-responsive">
+		<div class="table-responsive" style="overflow-x: initial">
         <table class="list table table-bordered table-hover" id="list-orders">
 		<thead>
 			<tr>
 				<td class="tiny"><?php echo $ms_account_orders_id; ?></td>
 				<td class="large"><?php echo $ms_account_orders_customer; ?></td>
-				<td><?php echo $ms_status; ?></td>
+				<td class="small"><?php echo $ms_status; ?></td>
 				<td><?php echo $ms_account_orders_products; ?></td>
 				<td class="medium"><?php echo $ms_date_created; ?></td>
 				<td class="small"><?php echo $ms_account_orders_total; ?></td>
-				<td class="small"><?php echo $ms_action; ?></td>
+				<td class="medium"><?php echo $ms_action; ?></td>
 			</tr>
 			<tr class="filter">
 				<td><input type="text"/></td>
@@ -61,7 +61,7 @@
 				{ "mData": "products", "bSortable": false, "sClass": "products" },
 				{ "mData": "date_created" },
 				{ "mData": "total_amount" },
-				{ "mData": "view_order" }
+				{ "mData": "view_order", "bSortable": false }
 			],
 			"aaSorting":  [[4,'desc']]
 		});

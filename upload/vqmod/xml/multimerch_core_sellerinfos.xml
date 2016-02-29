@@ -143,6 +143,7 @@
                 ));
 
                 $suborder_status = isset($suborder['order_status_id']) ? $suborder['order_status_id'] : $order_info['order_status_id'];
+                $suborder_status_text = '';
                 foreach ($data['order_statuses'] as $order_status) {
                     if ($order_status['order_status_id'] == $suborder_status) $suborder_status_text = isset($suborder['order_status_id']) ? $order_status['name'] : "<i>${order_status['name']}</i>";
                 }

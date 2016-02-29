@@ -99,7 +99,7 @@ class ModelMultisellerUpgrade extends Model {
 				`is_encoded` smallint(1) unsigned DEFAULT NULL,
 				PRIMARY KEY (`id`)
 				) DEFAULT CHARSET=utf8;");
-
+            
 			$this->_createSchemaEntry('1.0.2.2');
 		}
 
@@ -110,5 +110,38 @@ class ModelMultisellerUpgrade extends Model {
 
 			$this->_createSchemaEntry('1.0.3.1');
 		}
-	}
+
+        if (version_compare($version, '1.0.3.2') < 0) {
+            $this->db->query("
+                CREATE UNIQUE INDEX slr_id_name
+                ON " . DB_PREFIX ."ms_setting (seller_id, name)");
+            
+            
+            //replace data from ms_seller to ms_setting
+            $getDataQuery = "SELECT seller_id, company, website FROM " . DB_PREFIX . "ms_seller WHERE 1 GROUP BY seller_id";
+            $seller_data = $this->db->query($getDataQuery)->rows;
+            foreach($seller_data as $row) {
+                $company = $row['company'];
+                $website = $row['website'];
+                $seller_id = $row['seller_id'];
+//                $seller_group = $this->MsLoader->MsSellerGroup->getSellerGroupBySellerId($seller_id);
+                
+                $insertDataQuery =
+                    "INSERT INTO " . DB_PREFIX . "ms_setting 
+                    SET seller_id = " . (int)$seller_id . ", name = 'slr_company', value = '" . $this->db->escape($company) . "' 
+                    ON DUPLICATE KEY UPDATE
+                    value = '" . $this->db->escape($company) . "'";
+                $this->db->query($insertDataQuery);
+                
+                $insertDataQuery =
+                    "INSERT INTO " . DB_PREFIX . "ms_setting 
+                    SET seller_id = " . (int)$seller_id . ", name = 'slr_website', value = '" . $this->db->escape($website) . "' 
+                    ON DUPLICATE KEY UPDATE
+                    value = '" . $this->db->escape($website) . "'";
+                $this->db->query($insertDataQuery);
+            }
+
+            $this->_createSchemaEntry('1.0.3.2');
+        }
+    }
 }

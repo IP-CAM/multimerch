@@ -1,5 +1,13 @@
 <?php
 class MsSellerGroup extends Model {
+    
+    public function getSellerGroupBySellerId($seller_id) {
+        $sql = "SELECT seller_group FROM " . DB_PREFIX . "ms_seller WHERE seller_id = " . (int)$seller_id;
+        $res = $this->db->query($sql);
+        
+        return $res->row;
+    }
+    
 	public function getSellerGroup($seller_group_id, $data = array()) {
 		$sql = "SELECT *,
 						msg.commission_id as 'msg.commission_id'

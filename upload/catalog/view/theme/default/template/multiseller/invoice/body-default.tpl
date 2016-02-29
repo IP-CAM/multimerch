@@ -2,16 +2,19 @@
 	<header id="header_invoice" class="row no-padding">
 		<!-- logo -->
 		<div class="col-xs-4">
-			<img id="avatar" alt="<?php echo $company; ?>" title="<?php echo $company; ?>" src="<?php echo $logo; ?>">
+			<img id="avatar" src="<?php echo $logo; ?>">
 		</div>
 
 		<!-- contacts and addresses -->
 		<div class="col-xs-8">
 			<ul>
-				<?php if(isset($phone) && $phone){ echo '<li><i class="fa fa-phone"></i>'.$phone.'</li>'; }?>
-				<?php if(isset($fax) && $fax){ echo '<li><i class="fa fa-fax"></i>'.$fax.'</li>'; }?>
-				<?php if(isset($mail) && $mail){ echo '<li><i class="fa fa-envelope"></i>'.$mail.'</li>'; }?>
-				<?php if(isset($address) && $address){ echo '<li><i class="fa fa-map-marker"></i>'.$address.'</li>'; }?>
+				<?php echo $settings["slr_full_name"] ? $settings["slr_full_name"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_company"] ? $settings["slr_company"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_address_line1"] ? $settings["slr_address_line1"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_address_line2"] ? $settings["slr_address_line2"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_city"] ? $settings["slr_city"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_country"] ? $settings["slr_country"]["name"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_phone"] ? $settings["slr_phone"] . '<br />' : ''; ?>
 			</ul>
 		</div>
 	</header>

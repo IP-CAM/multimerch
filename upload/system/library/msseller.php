@@ -183,7 +183,7 @@ final class MsSeller extends Model {
 		
 		return $query->row;
 	}
-
+    
 	public function getSellerBanner($seller_id) {
 		$query = $this->db->query("SELECT banner as banner FROM " . DB_PREFIX . "ms_seller WHERE seller_id = '" . (int)$seller_id . "'");
 
@@ -238,9 +238,15 @@ final class MsSeller extends Model {
 		return $res->row['salt'];		
 	}
 	
-	
+
 	public function adminEditSeller($data) {
 		$seller_id = (int)$data['seller_id'];
+
+        //settings block
+        if(!empty($data['settings'])) {
+            $this->MsLoader->MsSetting->createSetting($data);
+        }
+        //end settings block
 
 		// commissions
 		if (!$data['commission_id']) {

@@ -67,6 +67,21 @@ $_['ms_description'] = 'Description';
 
 $_['ms_commission'] = 'Commission';
 $_['ms_commissions_fees'] = 'Commissions & fees';
+
+$_['ms_user_settings'] = 'User settings';
+$_['ms_seller_full_name'] = "Full name";
+$_['ms_seller_address1'] = "Address Line 1";
+$_['ms_seller_address1_placeholder'] = 'Street address, P.O. box, company name, c/o';
+$_['ms_seller_address2'] = "Address Line 2";
+$_['ms_seller_address2_placeholder'] = 'Apartment, suite, unit, building, floor etc.';
+$_['ms_seller_city'] = "City";
+$_['ms_seller_state'] = "State/Province/Region";
+$_['ms_seller_zip'] = "ZIP/Postal Code";
+$_['ms_seller_country'] = "Country";
+$_['ms_seller_company'] = 'Company';
+$_['ms_seller_website'] = 'Website';
+$_['ms_seller_phone'] = 'Phone';
+
 $_['ms_commission_' . MsCommission::RATE_SALE] = 'Sale fee';
 $_['ms_commission_' . MsCommission::RATE_LISTING] = 'Listing fee / method';
 $_['ms_commission_' . MsCommission::RATE_SIGNUP] = 'Signup fee / method';
@@ -402,6 +417,7 @@ $_['ms_catalog_products_field_stock_status']     = 'Out Of Stock Status';
 $_['ms_catalog_products_field_tax_class']        = 'Tax Class';
 $_['ms_catalog_products_field_subtract']         = 'Subtract Stock';
 $_['ms_catalog_products_filters']         = 'Filters';
+$_['ms_catalog_products_min_order_qty']         = 'Minimum Order Quantity';
 
 // Catalog - Seller Groups
 $_['ms_catalog_seller_groups_heading'] = 'Seller groups';
