@@ -70,7 +70,7 @@ class ControllerMultisellerSeller extends ControllerMultisellerBase {
 
 			$actions .= "<a class='btn btn-primary' href='" . $this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' data-toggle='tooltip' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil'></i></a> ";
 
-			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&`seller_id=' . $result['seller_id'], 'SSL') . "' data-toggle='tooltip' title='".$this->language->get('button_delete')."'><i class='fa fa-trash-o'></i></a> ";
+			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/seller/delete', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL') . "' data-toggle='tooltip' title='".$this->language->get('button_delete')."'><i class='fa fa-trash-o'></i></a> ";
 
 			$available = $this->MsLoader->MsBalance->getSellerBalance($result['seller_id']) - $this->MsLoader->MsBalance->getReservedSellerFunds($result['seller_id']);
 
