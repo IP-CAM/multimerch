@@ -10,9 +10,13 @@ final class MsSetting extends Model {
         'slr_country' => 0,
         'slr_company' => '',
         'slr_website' => '',
+		'slr_phone' => '',
         'slr_logo' => '',
 	);
 
+	public function getDefaults() {
+		return $this->_settings;
+	}
 	public function getSettings($data = array()) {
 		$sql = "SELECT
 					name,
@@ -28,25 +32,21 @@ final class MsSetting extends Model {
 		$res = $this->db->query($sql);
 
 		$settings = array();
+
 		foreach ($res->rows as $result) {
-            if(empty($result['name'])){
-                $settings[$result['name']] = $this->_settings[$result['name']];
+            if (!$result['is_encoded']) {
+                $settings[$result['name']] = $result['value'];
             } else {
-                if (!$result['is_encoded']) {
-                    $settings[$result['name']] = $result['value'];
-                } else {
-                    $setting[$result['name']] = json_decode($result['value'], true);
-                }
+                $setting[$result['name']] = json_decode($result['value'], true);
             }
 		}
+
         return $settings;
 	}
 
 	public function createSetting($data = array()) {
-
         foreach ($data['settings'] as $name => $value) {
             $value = is_array($value) ? json_encode($value) : $this->db->escape($value);
-            $sql = '';
             $sql = "INSERT INTO " . DB_PREFIX . "ms_setting
              SET seller_id = " . (isset($data['seller_id']) ? (int)$data['seller_id'] : 'NULL') . ",
                 seller_group_id = " . (isset($data['seller_group']) ? (int)$data['seller_group'] : 'NULL') . ",

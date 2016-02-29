@@ -2,19 +2,19 @@
 	<header id="header_invoice" class="row no-padding">
 		<!-- logo -->
 		<div class="col-xs-4">
-			<img id="avatar" alt="<?php echo $company; ?>" title="<?php echo $company; ?>" src="<?php echo $logo; ?>">
+			<img id="avatar" src="<?php echo $logo; ?>">
 		</div>
 
 		<!-- contacts and addresses -->
 		<div class="col-xs-8">
 			<ul>
-				<?php if(isset($mail) && $mail){ echo '<li><i class="fa fa-envelope"></i>'.$mail.'</li>'; }?>
-				<?php if(isset($settings["slr_company"]) && $settings["slr_company"]){ echo '<li><i class="fa fa-users"></i>'.$settings["slr_company"].'</li>'; }?>
-				<?php if(isset($settings["slr_address_line1"]) && $settings["slr_address_line1"]){ echo '<li><i class="fa fa-map-marker"></i>'.$settings["slr_address_line1"].'</li>'; }?>
-				<?php if(isset($settings["slr_address_line2"]) && $settings["slr_address_line2"]){ echo '<li><i class="fa fa-home"></i>'.$settings["slr_address_line2"].'</li>'; }?>
-				<?php if(isset($settings['slr_city']) && isset($settings['slr_zip']) && $settings['slr_city']){ echo '<li><i class="fa fa-map"></i>'.$settings['slr_city'].', '.$settings['slr_zip'].'</li>'; }?>
-				<?php if(isset($settings['slr_country']) && $settings['slr_country']){ echo '<li><i class="fa fa-map"></i>'.$settings['slr_country'].'</li>'; }?>
-				<?php if(isset($settings["slr_phone"]) && $settings["slr_phone"]){ echo '<li><i class="fa fa-phone"></i>'.$settings["slr_phone"].'</li>'; }?>
+				<?php echo $settings["slr_full_name"] ? $settings["slr_full_name"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_company"] ? $settings["slr_company"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_address_line1"] ? $settings["slr_address_line1"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_address_line2"] ? $settings["slr_address_line2"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_city"] ? $settings["slr_city"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_country"] ? $settings["slr_country"]["name"] . '<br />' : ''; ?>
+				<?php echo $settings["slr_phone"] ? $settings["slr_phone"] . '<br />' : ''; ?>
 			</ul>
 		</div>
 	</header>

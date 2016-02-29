@@ -602,7 +602,8 @@ $_['ms_account_dashboard_nav_payout'] = 'Request your payout';
 $_['ms_account_sellersetting_breadcrumbs'] = 'Seller Settings';
 
 //Account - Settings
-$_['ms_user_settings'] = 'User settings';
+$_['ms_seller_information'] = "Information";
+$_['ms_seller_address'] = "Address (for invoicing purposes)";
 $_['ms_seller_full_name'] = "Full name";
 $_['ms_seller_address1'] = "Address Line 1";
 $_['ms_seller_address1_placeholder'] = 'Street address, P.O. box, company name, c/o';
@@ -612,11 +613,14 @@ $_['ms_seller_city'] = "City";
 $_['ms_seller_state'] = "State/Province/Region";
 $_['ms_seller_zip'] = "ZIP/Postal Code";
 $_['ms_seller_country'] = "Country";
-$_['ms_seller_country'] = "Country";
+$_['ms_success_settings_saved'] = "Settings successfully saved!";
+
 $_['ms_seller_company'] = 'Company';
 $_['ms_seller_website'] = 'Website';
 $_['ms_seller_phone'] = 'Phone';
-$_['ms_account_sellerinfo_logo_note'] = "Select your logo";
+$_['ms_seller_logo'] = 'Logo';
+
+$_['ms_account_sellerinfo_logo_note'] = "Select your logo (displayed in your invoices)";
 
 
 // Account - Request withdrawal

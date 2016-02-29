@@ -1,6 +1,7 @@
 .control-inline input, .control-inline select, .input-auto, .ms-product input[type='text'].input-auto {
     width: auto;
     display: inline;
+	min-width: 0;
 }
 
 /* table alignment style override */
@@ -158,7 +159,7 @@ table.list tbody td, table.list thead td  {
 	height: 100px;
 }
 
-.ms-product .ms-image {
+.ms-product .ms-image, form .ms-image {
 	position:relative;
 	display: inline-block;
 	border: 1px solid #EEEEEE;
@@ -337,7 +338,7 @@ input.option_quantity {
 	background-image: url(../image/ms-arrowdown-bw.png);
 }
 
-.ms-product .ms-remove {
+.ms-product .ms-remove, form .ms-remove {
 	position: absolute;
 	bottom: 3px;
 	right: 3px;

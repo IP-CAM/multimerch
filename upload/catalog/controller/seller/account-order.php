@@ -83,6 +83,10 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 				$status_name .= ' (' . $this->MsLoader->MsHelper->getStatusName(array('order_status_id' => $suborder['order_status_id'])) . ')';
 			}
 
+			$actions = '<a class="btn btn-primary" href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_modify') . '"><i class="fa fa-search"></i></a>';
+			$actions .= '<a class="btn btn-default" href="' . $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_invoice') . '"><i class="fa fa-file-text-o"></i></a>';
+
+
 			$columns[] = array_merge(
 				$order,
 				array(
@@ -92,8 +96,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 					'suborder_status' => $status_name,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($order['date_added'])),
 					'total_amount' => $this->currency->format($order['total_amount'], $order['currency_code'], $order['currency_value']),
-					'invoice' => '<a href="' . $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_invoice') . '"><i class="fa fa-file-text-o"></i></a>',
-					'view_order' => '<a href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_modify') . '"><i class="fa fa-search"></i></a>'
+					'view_order' => $actions
 				)
 			);
 		}
@@ -219,28 +222,22 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		// stop if no order or no products belonging to seller
 		if (!$order_info || empty($products)) $this->response->redirect($this->url->link('seller/account-order', '', 'SSL'));
 
-		// load seller's information from mixed customer/seller tables @todo
         //get seller settings
-        $this->data['settings'] = $this->MsLoader->MsSetting->getSettings();
-        
-		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
-		$this->data['company'] = $this->MsLoader->MsSeller->getCompany();
+		$seller_settings = $this->MsLoader->MsSetting->getSettings(array('seller_id' => $customer_id));
+		$defaults = $this->MsLoader->MsSetting->getDefaults();
+		$this->data['settings'] = array_merge($defaults, $seller_settings);
 
-        $this->data['phone'] = $this->customer->getTelephone();
-		$this->data['fax'] = $this->customer->getFax();
-		$this->data['mail'] = $this->customer->getEmail();
+		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
+
         $this->load->model('localisation/country');
         $this->data['settings']['slr_country'] = $this->model_localisation_country->getCountry($this->data['settings']['slr_country']);
-        $this->data['settings']['slr_country'] = $this->data['settings']['slr_country']['name'];
-        
-		$avatar = $this->MsLoader->MsSeller->getSellerLogo($customer_id);
-		if (is_file(DIR_IMAGE . $avatar['value'])) {
-			$this->data['logo'] = $server . 'image/' . $avatar['value'];
+
+		$this->load->model('tool/image');
+		if (is_file(DIR_IMAGE . $this->data['settings']['slr_logo'])) {
+			$this->data['logo'] = $this->MsLoader->MsFile->resizeImage($this->data['settings']['slr_logo'], 80, 80);
 		} else {
 			$this->data['logo'] = '';
 		}
-
-
 
 		// load default OC language file for orders
 		$this->data = array_merge($this->data, $this->load->language('account/order'));
