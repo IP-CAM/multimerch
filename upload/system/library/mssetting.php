@@ -1,6 +1,16 @@
 <?php
 final class MsSetting extends Model {
 	private $_settings = array(
+        'slr_full_name' => '',
+        'slr_address_line1' => '',
+        'slr_address_line2' => '',
+        'slr_city' => '',
+        'slr_state' => '',
+        'slr_zip' => '',
+        'slr_country' => 0,
+        'slr_company' => '',
+        'slr_website' => '',
+        'slr_logo' => '',
 	);
 
 	public function getSettings($data = array()) {
@@ -19,11 +29,15 @@ final class MsSetting extends Model {
 
 		$settings = array();
 		foreach ($res->rows as $result) {
-			if (!$result['is_encoded']) {
-				$settings[$result['name']] = $result['value'];
-			} else {
-				$setting[$result['name']] = json_decode($result['value'], true);
-			}
+            if(empty($result['name'])){
+                $settings[$result['name']] = $this->_settings[$result['name']];
+            } else {
+                if (!$result['is_encoded']) {
+                    $settings[$result['name']] = $result['value'];
+                } else {
+                    $setting[$result['name']] = json_decode($result['value'], true);
+                }
+            }
 		}
         return $settings;
 	}
