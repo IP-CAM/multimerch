@@ -84,7 +84,7 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 			}
 
 			$actions = '<a class="btn btn-primary" href="' . $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_modify') . '"><i class="fa fa-search"></i></a>';
-			$actions .= '<a class="btn btn-default" href="' . $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_invoice') . '"><i class="fa fa-file-text-o"></i></a>';
+			$actions .= '<a class="btn btn-default" target="_blank" href="' . $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id'], 'SSL') . '" title="' . $this->language->get('ms_view_invoice') . '"><i class="fa fa-file-text-o"></i></a>';
 
 
 			$columns[] = array_merge(

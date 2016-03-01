@@ -199,7 +199,7 @@ class MsProduct extends Model {
 				    isbn = '" . $this->db->escape($isbn) . "',
 				    mpn = '" . $this->db->escape($mpn) . "',
 				    manufacturer_id = '" . (int)$manufacturer_id . "',
-				    price = " . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($data['product_price']) . ",
+				    price = " . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($this->MsLoader->MsHelper->trueCurrencyFormat($data['product_price'])) . ",
 					image = '" .  $this->db->escape($thumbnail)  . "',
 					subtract = " . (int)$data['product_subtract'] . ",
                     tax_class_id = '" . $this->db->escape($tax_class_id) . "',
@@ -466,7 +466,7 @@ class MsProduct extends Model {
         isset($data['product_date_available']) ? $included_field_sql .= " date_available = '" . $this->db->escape($data['product_date_available']) . "',"  : '';
 
 		$sql = "UPDATE " . DB_PREFIX . "product
-				SET" . $included_field_sql . " price = " . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($data['product_price']) . ",
+				SET" . $included_field_sql . " price = " . (float)$this->MsLoader->MsHelper->uniformDecimalPoint($this->MsLoader->MsHelper->trueCurrencyFormat($data['product_price'])) . ",
 					status = " . (int)$data['enabled'] . ",
 					image = '" . $this->db->escape($thumbnail) . "',
 					subtract = " . (int)$data['product_subtract'] . ",
