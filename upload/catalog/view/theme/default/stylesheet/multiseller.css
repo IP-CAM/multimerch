@@ -661,6 +661,10 @@ div.ms-jquery-dialog.ui-widget-content,
 }
 
 
+.ms-account-order td .btn, .seller-account-dashboard td .btn {
+	margin: 0 2px;
+}
+
 .ms-account-order .products p,
 .ms-account-dashboard .products p {
 	display: inline-block;
