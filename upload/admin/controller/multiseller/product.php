@@ -46,9 +46,9 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 			$shop_url = $this->config->get('config_url') . "index.php?route=product/product&product_id=" . $result['product_id'];
 			// actions
 			$actions = "";
-			$actions .= "<a class='ms-button' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil''></i></a>";
-			$actions .= "<a class='ms-button' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'><i class='fa fa-times'></i></a>";
-			$actions .= "<a target='_blank' class='ms-button' href='" . $shop_url . "' title='".$this->language->get('ms_view_in_store')."'><i class='fa fa-search'></i></a>";
+			$actions .= "<a class='btn btn-info' target='_blank' class='ms-button' href='" . $shop_url . "' title='".$this->language->get('ms_view_in_store')."'><i class='fa fa-search'></i></a>";
+			$actions .= "<a class='btn btn-primary' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil''></i></a>";
+			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'><i class='fa fa-times'></i></a>";
 			// seller select
 			$sellerselect = "";
 			$sellerselect .= "
@@ -70,7 +70,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 					'checkbox' => "<input type='checkbox' name='selected[]' value='{$result['product_id']}' />",
 					'name' => $result['pd.name'],
 					'seller' => $sellerselect,
-					'price' => $result['p.price'],
+					'price' => $this->currency->format($result['p.price'], $this->config->get('config_currency')),
 					'quantity' => $result['p.quantity'],
 					'sales' => $result['mp.number_sold'],
 					'status' => $result['mp.product_status'] ? $this->language->get('ms_product_status_' . $result['mp.product_status']) : '',

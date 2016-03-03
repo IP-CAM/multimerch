@@ -72,13 +72,13 @@
               	<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
               	<td><?php echo $ms_product; ?></td>
 				<td><?php echo $ms_seller; ?></td>
-				<td><?php echo $ms_price ;?></td>
-				<td><?php echo $ms_quantity ;?></td>
-				<td><?php echo $ms_sales ;?></td>
+				<td class="small"><?php echo $ms_price ;?></td>
+				<td class="small"><?php echo $ms_quantity ;?></td>
+				<td class="small"><?php echo $ms_sales ;?></td>
 				<td class="medium"><?php echo $ms_status; ?></td>
 				<td class="medium"><?php echo $ms_date_created; ?></td>
 				<td class="medium"><?php echo $ms_date_modified; ?></td>
-				<td class="medium"><?php echo $ms_action; ?></td>
+				<td class="large"><?php echo $ms_action; ?></td>
             </tr>
 			<tr class="filter">
 				<td></td>
@@ -116,7 +116,7 @@ $(document).ready(function() {
 			{ "mData": "status" },
 			{ "mData": "date_added" },
 			{ "mData": "date_modified" },
-			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
+			{ "mData": "actions", "bSortable": false}
 		]
 	});
 
@@ -221,18 +221,20 @@ $(document).ready(function() {
 	
 	$(document).on('click', '#delete-seller-product', function(e) {
 		e.preventDefault();
-		if(confirm('Are you sure?')) {
-			var form = $('#form').serialize();
-			$.ajax({
-				url: 'index.php?route=multiseller/product/delete&token=<?php echo $token; ?>',
-				data: form,
-				type: 'post',
-				dataType: 'json',
-				complete: function(response) {
-					console.log(response);
-					window.location.reload();
-				}
-			});
+		var form = $('#form').serialize();
+		if(form) {
+			if(confirm('Are you sure?')) {
+				$.ajax({
+					url: 'index.php?route=multiseller/product/delete&token=<?php echo $token; ?>',
+					data: form,
+					type: 'post',
+					dataType: 'json',
+					complete: function(response) {
+						console.log(response);
+						window.location.reload();
+					}
+				});
+			}
 		}
 	});
 });
