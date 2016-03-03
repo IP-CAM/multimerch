@@ -42,18 +42,13 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 
 		$columns = array();
 		foreach ($results as $result) {
-			// image
-			if ($result['p.image'] && file_exists(DIR_IMAGE . $result['p.image'])) {
-				$image = $this->MsLoader->MsFile->resizeImage($result['p.image'], 40, 40);
-			} else {
-				$image = $this->MsLoader->MsFile->resizeImage('no_image.png', 40, 40);
-			}
 
+			$shop_url = $this->config->get('config_url') . "index.php?route=product/product&product_id=" . $result['product_id'];
 			// actions
 			$actions = "";
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'></a>";
-			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'></a>";
-
+			$actions .= "<a class='ms-button' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil''></i></a>";
+			$actions .= "<a class='ms-button' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'><i class='fa fa-times'></i></a>";
+			$actions .= "<a target='_blank' class='ms-button' href='" . $shop_url . "' title='".$this->language->get('ms_view_in_store')."'><i class='fa fa-search'></i></a>";
 			// seller select
 			$sellerselect = "";
 			$sellerselect .= "
@@ -69,14 +64,15 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 			</select>
 			<button type='button' data-toggle='tooltip' title='' class='ms-assign-seller btn btn-primary' data-original-title='" . $this->language->get('ms_apply') . "'><i class='fa fa-fw fa-check'></i></button>
 			";
-			
 			$columns[] = array_merge(
 				$result,
 				array(
 					'checkbox' => "<input type='checkbox' name='selected[]' value='{$result['product_id']}' />",
-					'image' => "<img src='$image' style='padding: 1px; border: 1px solid #DDDDDD' />",
 					'name' => $result['pd.name'],
 					'seller' => $sellerselect,
+					'price' => $result['p.price'],
+					'quantity' => $result['p.quantity'],
+					'sales' => $result['mp.number_sold'],
 					'status' => $result['mp.product_status'] ? $this->language->get('ms_product_status_' . $result['mp.product_status']) : '',
 					'date_added' => date($this->language->get('date_format_short'), strtotime($result['p.date_added'])),
 					'date_modified' => date($this->language->get('date_format_short'), strtotime($result['p.date_modified'])),
@@ -95,7 +91,8 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	public function index() {
 		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
 		$this->validate(__FUNCTION__);
-		
+		$this->data['add'] = $this->url->link('catalog/product/add', 'token=' . $this->session->data['token'], 'SSL');
+
 		if (isset($this->session->data['error'])) {
 			$this->data['error_warning'] = $this->session->data['error'];
 			unset($this->session->data['error']);
@@ -243,9 +240,19 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	}
 	
 	public function delete() {
-		$product_id = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : 0;
-		$this->MsLoader->MsProduct->deleteProduct($product_id);
-		$this->response->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
+		$product_id = 0;
+		if(isset($this->request->post['selected'])){
+			$product_ids = $this->request->post['selected'];
+			$this->MsLoader->MsProduct->deleteProduct($product_ids);
+			
+			echo json_encode(array('result' => 'success'));
+			die;
+		} else if($this->request->get['product_id']) {
+			$product_ids =  $this->request->get['product_id'];
+			$product_ids = array($product_id);
+			$this->MsLoader->MsProduct->deleteProduct($product_ids);
+			$this->response->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
+		}
 	}	
 }
 ?>

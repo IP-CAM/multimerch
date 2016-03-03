@@ -3,6 +3,10 @@
   <div class="page-header">
     <div class="container-fluid">
       <h1><?php echo $ms_catalog_products_heading; ?></h1>
+		<div class="pull-right">
+			<a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+			<button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" id="delete-seller-product"><i class="fa fa-trash-o"></i></button>
+		</div>
       <ul class="breadcrumb">
         <?php foreach ($breadcrumbs as $breadcrumb) { ?>
         <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
@@ -66,9 +70,11 @@
           <thead>
             <tr>
               	<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
-              	<td><?php echo $ms_image; ?></td>
               	<td><?php echo $ms_product; ?></td>
 				<td><?php echo $ms_seller; ?></td>
+				<td><?php echo $ms_price ;?></td>
+				<td><?php echo $ms_quantity ;?></td>
+				<td><?php echo $ms_sales ;?></td>
 				<td class="medium"><?php echo $ms_status; ?></td>
 				<td class="medium"><?php echo $ms_date_created; ?></td>
 				<td class="medium"><?php echo $ms_date_modified; ?></td>
@@ -76,10 +82,12 @@
             </tr>
 			<tr class="filter">
 				<td></td>
-				<td></td>
 				<td><input type="text"/></td>
 				<td><input type="text"/></td>
-				<td></td>
+				<td><input type="text"/></td>
+				<td><input type="text"/></td>
+				<td><input type="text"/></td>
+				<td><input type="text"/></td>
 				<td><input type="text"/></td>
 				<td><input type="text"/></td>
 				<td></td>
@@ -100,9 +108,11 @@ $(document).ready(function() {
 		"sAjaxSource": "index.php?route=multiseller/product/getTableData&token=<?php echo $token; ?>",
 		"aoColumns": [
 			{ "mData": "checkbox", "bSortable": false },
-			{ "mData": "image", "bSortable": false },
 			{ "mData": "name" },
 			{ "mData": "seller" },
+			{ "mData": "price"},
+			{ "mData": "quantity"},
+			{ "mData": "sales"},
 			{ "mData": "status" },
 			{ "mData": "date_added" },
 			{ "mData": "date_modified" },
@@ -207,6 +217,33 @@ $(document).ready(function() {
 
 	$(document).on('click', '.ms-button-delete', function() {
 	return confirm("<?php echo $this->language->get('text_confirm'); ?>");
+	});
+	
+	$(document).on('click', '#delete-seller-product', function() {
+		if(confirm('Are you sure?')) {
+			var checkboxes = $("#form input[name='selected[]']");
+			var values = [];
+			for(var i = 0; i < checkboxes.length; i++) {
+				if(checkboxes[i].checked) {
+					values.push(checkboxes[i].value);
+				}
+			}
+			
+			if(values.length > 0 ) {
+				$.ajax({
+					url: 'index.php?route=multiseller/product/delete&token=<?php echo $token; ?>',
+					data: {'selected' : values},
+					type: 'post',
+					dataType: 'json',
+					success: function(response) {
+						window.location.reload();
+					},
+					error: function(error) {
+						console.log(error);
+					}
+				});
+			}
+		}
 	});
 });
 </script>
