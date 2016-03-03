@@ -240,19 +240,17 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	}
 	
 	public function delete() {
-		$product_id = 0;
 		if(isset($this->request->post['selected'])){
 			$product_ids = $this->request->post['selected'];
-			$this->MsLoader->MsProduct->deleteProduct($product_ids);
-			
-			echo json_encode(array('result' => 'success'));
-			die;
 		} else if($this->request->get['product_id']) {
-			$product_ids =  $this->request->get['product_id'];
+			$product_id =  $this->request->get['product_id'];
 			$product_ids = array($product_id);
-			$this->MsLoader->MsProduct->deleteProduct($product_ids);
-			$this->response->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
 		}
+		foreach($product_ids as $product_id) {
+			$this->MsLoader->MsProduct->deleteProduct($product_id);
+		}
+
+		$this->response->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
 	}	
 }
 ?>

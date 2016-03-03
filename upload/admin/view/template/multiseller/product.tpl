@@ -219,30 +219,20 @@ $(document).ready(function() {
 	return confirm("<?php echo $this->language->get('text_confirm'); ?>");
 	});
 	
-	$(document).on('click', '#delete-seller-product', function() {
+	$(document).on('click', '#delete-seller-product', function(e) {
+		e.preventDefault();
 		if(confirm('Are you sure?')) {
-			var checkboxes = $("#form input[name='selected[]']");
-			var values = [];
-			for(var i = 0; i < checkboxes.length; i++) {
-				if(checkboxes[i].checked) {
-					values.push(checkboxes[i].value);
+			var form = $('#form').serialize();
+			$.ajax({
+				url: 'index.php?route=multiseller/product/delete&token=<?php echo $token; ?>',
+				data: form,
+				type: 'post',
+				dataType: 'json',
+				complete: function(response) {
+					console.log(response);
+					window.location.reload();
 				}
-			}
-			
-			if(values.length > 0 ) {
-				$.ajax({
-					url: 'index.php?route=multiseller/product/delete&token=<?php echo $token; ?>',
-					data: {'selected' : values},
-					type: 'post',
-					dataType: 'json',
-					success: function(response) {
-						window.location.reload();
-					},
-					error: function(error) {
-						console.log(error);
-					}
-				});
-			}
+			});
 		}
 	});
 });
