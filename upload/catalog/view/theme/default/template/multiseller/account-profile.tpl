@@ -60,35 +60,6 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_company; ?></label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control"  name="seller[company]" value="<?php echo $seller['ms.company']; ?>" />
-				<p class="ms-note"><?php echo $ms_account_sellerinfo_company_note; ?></p>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_country; ?></label>
-			<div class="col-sm-10">
-				<select name="seller[country]" class="form-control">
-					<option value="" selected="selected"><?php echo $ms_account_sellerinfo_country_dont_display; ?></option>
-					<?php foreach ($countries as $country) { ?>
-					<option value="<?php echo $country['country_id']; ?>" <?php if ($seller['ms.country_id'] == $country['country_id'] || $country_id == $country['country_id']) { ?>selected="selected"<?php } ?>><?php echo $country['name']; ?></option>
-					<?php } ?>
-				</select>
-				<p class="ms-note"><?php echo $ms_account_sellerinfo_country_note; ?></p>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_zone; ?></label>
-			<div class="col-sm-10">
-				<select name="seller[zone]" class="form-control"></select>
-				<p class="ms-note"><?php echo $ms_account_sellerinfo_zone_note; ?></p>
-			</div>
-		</div>
-
-		<div class="form-group">
 			<label class="col-sm-2 control-label"><?php echo $ms_account_sellerinfo_paypal; ?></label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control"  name="seller[paypal]" value="<?php echo $seller['ms.paypal']; ?>" />
