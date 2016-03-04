@@ -31,8 +31,8 @@ class ControllerMultisellerAttribute extends ControllerMultisellerBase {
 		foreach ($results as $result) {
 			// actions
 			$actions = "";
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('multiseller/attribute/update', 'token=' . $this->session->data['token'] . '&attribute_id=' . $result['attribute_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'></a>";
-			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/attribute/delete', 'token=' . $this->session->data['token'] . '&attribute_id=' . $result['attribute_id'], 'SSL') . "' title='".$this->language->get('button_delete')."'></a>";
+			$actions .= "<a class='btn btn-primary' href='" . $this->url->link('multiseller/attribute/update', 'token=' . $this->session->data['token'] . '&attribute_id=' . $result['attribute_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil''></i></a>";
+			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/attribute/delete', 'token=' . $this->session->data['token'] . '&attribute_id=' . $result['attribute_id'], 'SSL') . "' title='".$this->language->get('button_delete')."'><i class='fa fa-trash-o''></i></a>";
 			
 			$columns[] = array_merge(
 				$result,
