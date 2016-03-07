@@ -414,12 +414,6 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			$json['errors']['product_price'] = $this->language->get('ms_error_product_price_high');
 		}
 
-
-
-
-		var_dump($this->MsLoader->MsHelper->uniformDecimalPoint($data['product_price']));
-		var_dump((float)$this->MsLoader->MsHelper->uniformDecimalPoint($data['product_price']));
-		var_dump($this->MsLoader->MsHelper->uniformDecimalPoint($this->MsLoader->MsHelper->trueCurrencyFormat($data['product_price'])));
 		$msconf_downloads_limits = $this->config->get('msconf_downloads_limits');
 		if (!isset($data['product_downloads'])) {
 			if ($msconf_downloads_limits[0] > 0) {
