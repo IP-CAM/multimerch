@@ -1,141 +1,171 @@
 <?php
 
 class MsValidator {
-	
-	private $validation_rules = array();
-	private $field;
-	private $phone_reg = "/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/";
-	public $errors = array();
 
-	public function addField($field) {
-		$this->field = $field;
-		if(is_array($this->field['value'])) {
-			$this->field['is_array'] = true;
-		} else {
-			$this->field['is_array'] = false;
+	public function validate(array $input, array $ruleset)
+	{
+		$this->errors = array();
+
+		foreach ($ruleset as $key => $item) {
+			$rules = explode('|', $item['rule']);
+
+			foreach ($rules as $rule) {
+				$method = null;
+				$param = null;
+				$error_message = null;
+
+				if (strstr($rule, ',') !== false) {
+					$rule   = explode(',', $rule);
+					$method = 'validate_'.$rule[0];
+					$param  = $rule[1];
+					$rule   = $rule[0];
+				} else {
+					$method = 'validate_'.$rule;
+					if (isset($item['error_message'])) {
+						$error_message = $item['error_message'];
+					}
+				}
+
+				if (is_callable(array($this, $method))) {
+					$result = $this->$method($input, $param, $error_message);
+					if (is_array($result)) {
+						$this->errors[] = $result;
+					}
+				} else {
+					throw new Exception("Validator method '$method' does not exist.");
+				}
+			}
 		}
-		
-		return $this;
+		return (count($this->errors) > 0) ? $this->errors : true;
 	}
-	
-	//validator chains
-	public function between($min, $max) {
-		if(!$this->field['is_array']) {
-			$length = strlen($this->field['value']);
-			if(($length < $min) || ($length > $max)) {
-				$this->errors[$this->field['name']][] = 'Length is less or more!';
+
+	public function get_errors()
+	{
+		$response = array();
+
+		foreach ($this->errors as $e) {
+			switch ($e['rule']) {
+				case 'validate_required' :
+					$default_message = "The '" . $e['field'] . "' field is required";
+					break;
+				case 'validate_alpha_numeric':
+					$default_message = "The '" . $e['field'] . "' field may only contain alpha-numeric characters";
+					break;
+				case 'validate_max_len':
+					$default_message = "The '" . $e['field'] . "' field needs to be '" . $e['param'] . "' or shorter in length";
+					break;
+				case 'validate_min_len':
+					$default_message = "The '" . $e['field'] . "' field needs to be '" . $e['param'] . "' or longer in length";
+					break;
+				default:
+					$default_message = "The '" . $e['field'] . "' field is invalid";
+			}
+			$response[] = (isset($e['error_message'])) ? $e['error_message'] : $default_message;
+		}
+		return $response;
+	}
+
+	protected function validate_required($input, $param = null, $message = null)
+	{
+		if (isset($input['value']) && ($input['value'] === false || $input['value'] === 0 || $input['value'] === 0.0 || $input['value'] === '0' || !empty($input['value']))) {
+			return;
+		}
+
+		return array(
+			'field' => $input['name'],
+			'value' => $input['value'],
+			'rule' => __FUNCTION__,
+			'param' => $param,
+		);
+	}
+
+	protected function validate_alpha_numeric($input, $param = null, $message = null)
+	{
+		if (!isset($input['value']) || empty($input['value'])) {
+			return;
+		}
+
+		if (!preg_match('/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ])+$/i', $input['value']) !== false) {
+			return array(
+				'field' => $input['name'],
+				'value' => $input['value'],
+				'rule' => __FUNCTION__,
+				'param' => $param,
+				'error_message' => $message
+			);
+		}
+	}
+
+	protected function validate_max_len($input, $param = null, $message = null)
+	{
+		if (!isset($input['value'])) {
+			return;
+		}
+
+		if (function_exists('mb_strlen')) {
+			if (mb_strlen($input['value']) <= (int) $param) {
+				return;
 			}
 		} else {
-			$count = count($this->field['value']);
-			if($count > $max || $count < $min) {
-				$this->errors[$this->field['name']][] = "Amount of elements is less or more";
+			if (strlen($input['value']) <= (int) $param) {
+				return;
 			}
 		}
-		
-		return $this;
+
+		return array(
+			'field' => $input['name'],
+			'value' => $input['value'],
+			'rule' => __FUNCTION__,
+			'param' => $param,
+			'error_message' => $message
+		);
 	}
-	
-	public function required() {
-		if(!isset($this->field['value']) || empty($this->field['value'])) {
-			$this->errors[$this->field['name']][] = 'Field is empty!';
+
+	protected function validate_min_len($input, $param = null, $message = null)
+	{
+		if (!isset($input['value'])) {
+			return;
 		}
-		
-		return $this;
-	}
-	
-	public function alphaNumeric() {
-		if(count($this->errors) == 0) {
-			if(!$this->field['is_array']) {
-				if (!ctype_alnum($this->field['value'])) {
-					$this->errors[$this->field['name']][] = 'Field is not alphanumeric';
-				}
+
+		if (function_exists('mb_strlen')) {
+			if (mb_strlen($input['value']) >= (int) $param) {
+				return;
+			}
+		} else {
+			if (strlen($input['value']) >= (int) $param) {
+				return;
 			}
 		}
-		
-		return $this;
+
+		return array(
+			'field' => $input['name'],
+			'value' => $input['value'],
+			'rule' => __FUNCTION__,
+			'param' => $param,
+			'error_message' => $message
+		);
 	}
-	
-	public function isNumeric() {
-		if(count($this->errors) == 0) {
-			if (!$this->field['is_array']) {
-				if (!is_numeric($this->field['value'])) {
-					$this->errors[$this->field['name']][] = 'Is not a number!';
-				}
-			}
-		}
-		
-		return $this;
-	}
-	
-	public function isPhone() {
-		if(count($this->errors) == 0) {
-			if (!$this->field['is_array']) {
-				if (!preg_match($this->phone_reg, $this->field['value'])) {
-					$this->errors[$this->field['name']][] = 'Not a phone number';
-				}
-			}
-		}
-		
-		return $this;
-	}
-	
-	public function minLength($min) {
-		if(count($this->errors) == 0) {
-			if(!$this->field['is_array']) {
-				$length = strlen($this->field['value']);
-				if ($length < $min) {
-					$this->errors[$this->field['name']][] = 'Field is less then ' . $min;
-				}
-			} else {
-				$count = count($this->field['value']);
-				if($count > $min) {
-					$this->errors[$this->field['name']][] = 'Amount of elements is less then ' . $min;
-				}
-			}
-		}
-		
-		return $this;
-	}
-	
-	public function maxLength($max) {
-		if(count($this->errors) == 0) {
-			if(!$this->field['is_array']) {
-				$length = strlen($this->field['value']);
-				if ($length > $max) {
-					$this->errors[$this->field['name']][] = 'Field is more then ' . $max;
-				}
-			} else {
-				$count = count($this->field['value']);
-				if($count > $max) {
-					$this->errors[$this->field['name']][] = 'Amount of elements is more then ' . $max;
-				}
-			}
-		}
-		
-		return $this;
-	}
-	
-	public function isEmail(){
-		if(count($this->errors) == 0) {
-			if (!$this->field['is_array']) {
-				if (filter_var($this->field['value'], FILTER_VALIDATE_EMAIL) === FALSE) {
-					$this->errors[$this->field['name']][] = "Email is invalid!";
-				}
-			}
-		}
-		
-		return $this;
-	}	
 }
 
 $validator = new MsValidator();
 
-$field = array
-	(
-		'name' => 'password',
-		'value' => '880-0555-3535'
-	);
-$validator->addField($field)->required()->between(1,3)->alphaNumeric()->isNumeric()->isPhone()->isEmail();
-print_r($validator->errors);
-die;
+$field = array(
+	'name' => 'password',
+	// 'value' => 'paSSworD2016' // valid
+	'value' => 'p@SSworD+2016-test_pAss' // invalid
+);
 
+$ruleset = array(
+	array('rule' => 'required', 'error_message' => "Please fill '" . $field['name'] . "' field."),
+	array('rule' => 'max_len,15|min_len,6'),
+	array('rule' => 'alpha_numeric', 'error_message' => "Field '" . $field['name'] . "' must be only alpha-numeric characters")
+);
+
+$is_valid = $validator->validate($field, $ruleset);
+
+if($is_valid === true) {
+	echo "The field is valid";
+} else {
+	print_r($validator->get_errors());
+}
+die();
