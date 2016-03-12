@@ -80,6 +80,8 @@ class ControllerMultisellerDebug extends ControllerMultisellerBase {
 			usort($files, create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
 			$log = array_shift($files);
 			$this->data['vqmod_log'] = $this->_readLog($log, 150);
+		} else {
+			$this->data['vqmod_log'] = '';
 		}
 
 		$this->data['token'] = $this->session->data['token'];

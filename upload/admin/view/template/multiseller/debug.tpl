@@ -16,7 +16,7 @@
         <h3 class="panel-title"><i class="fa fa-exclamation-triangle"></i> <?php echo $ms_debug_info; ?></h3>
       </div>
       <div class="panel-body">
-        <textarea wrap="off" rows="15" readonly class="form-control" style="white-space: normal">
+        <textarea wrap="off" rows="15" readonly class="form-control" style="white-space: pre-line">
 		Version information:
 		====================
 		OpenCart: <?php echo VERSION; ?>
