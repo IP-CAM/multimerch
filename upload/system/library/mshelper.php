@@ -126,11 +126,11 @@ class MsHelper extends Model {
 		return array($template, $children);
 	}
 	
-	public function addStyle($style) {
+	public function addStyle($style, $rel = 'stylesheet', $media = 'screen') {
 		if (file_exists("catalog/view/theme/" . $this->config->get('config_template') . "/stylesheet/{$style}.css")) {
-			$this->document->addStyle("catalog/view/theme/" . $this->config->get('config_template') . "/stylesheet/{$style}.css");
+			$this->document->addStyle("catalog/view/theme/" . $this->config->get('config_template') . "/stylesheet/{$style}.css", $rel, $media);
 		} else {
-			$this->document->addStyle("catalog/view/theme/default/stylesheet/{$style}.css");
+			$this->document->addStyle("catalog/view/theme/default/stylesheet/{$style}.css", $rel, $media);
 		}
 	}
 	

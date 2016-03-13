@@ -276,8 +276,8 @@ class ControllerSellerAccountOrder extends ControllerSellerAccount {
 		$this->data['totals'][0] = array('text' => $subordertotal, 'title' => 'Total');
 
 		// custom styles
-		$this->MsLoader->MsHelper->addStyle('multimerch/invoice/default');
-		$this->MsLoader->MsHelper->addStyle('stylesheet');
+		$this->MsLoader->MsHelper->addStyle('multimerch/invoice/default', 'stylesheet', 'all');
+		$this->MsLoader->MsHelper->addStyle('stylesheet', 'stylesheet', 'all');
 
 		// OC's default header things
 		$this->data['base'] = $server;
