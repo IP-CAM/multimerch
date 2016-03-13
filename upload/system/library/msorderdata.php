@@ -13,20 +13,18 @@ class MsOrderData extends Model {
 				}
 			}
 		}
-		
+
 		$sql = "SELECT
 					SQL_CALC_FOUND_ROWS
 					*,"
 					// additional columns
 					. (isset($cols['total_amount']) ? "
-						(SELECT SUM(seller_net_amt) AS total
-						FROM `" . DB_PREFIX . "order_product` op
-						LEFT JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
-						USING (order_product_id)
-						WHERE op.order_id = o.order_id
-						AND seller_id = " . (int)$data['seller_id'] . ") as total_amount,
-					" : "")
-					
+						(SELECT IFNULL(
+							(SELECT SUM(opd2.seller_net_amt) as 'total' FROM `" . DB_PREFIX . "order_product` op JOIN `" . DB_PREFIX . "ms_order_product_data` opd2 ON (op.order_id = opd2.order_id AND op.product_id = opd2.product_id AND opd2.order_product_id IS NULL) WHERE op.order_id=o.order_id" . (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '') . "),
+							(SELECT SUM(opd.seller_net_amt) as 'total' FROM `" . DB_PREFIX . "order_product` op JOIN `" . DB_PREFIX . "ms_order_product_data` opd ON (op.order_product_id = opd.order_product_id AND opd.order_product_id IS NOT NULL) WHERE op.order_id=o.order_id" . (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '') . ")
+						)) as total_amount,
+						" : "")
+
 					// product names for filtering
 					. (isset($cols['products']) ? "
 						(SELECT GROUP_CONCAT(name)
@@ -60,20 +58,10 @@ class MsOrderData extends Model {
 	}
 
 	public function getOrderTotal($order_id, $data) {
-		/* SELECT SUM(seller_net_amt) as 'total_amt',
-				  SUM(store_commission_pct) as 'total_pct',
-				  SUM(store_commission_flat) as 'total_flat' */
-		/*$sql = "SELECT SUM(seller_net_amt) as 'total'
-				FROM `" . DB_PREFIX . "ms_order_product_data` mopd
-				WHERE order_id = " . (int)$order_id
-				. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : ''); */
-
-		$sql = "SELECT SUM(seller_net_amt) as 'total'
-				FROM `" . DB_PREFIX . "order_product` op
-				LEFT JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
-				USING (order_product_id)
-				WHERE op.order_id = " . (int)$order_id
-				. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '');
+		$sql = "SELECT IFNULL(
+					(SELECT SUM(opd.seller_net_amt) as 'total' FROM `" . DB_PREFIX . "order_product` op JOIN `" . DB_PREFIX . "ms_order_product_data` opd ON (op.order_product_id = opd.order_product_id AND opd.order_product_id IS NOT NULL) WHERE op.order_id=" . (int)$order_id . (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '') . "),
+					(SELECT SUM(opd2.seller_net_amt) as 'total' FROM `" . DB_PREFIX . "order_product` op JOIN `" . DB_PREFIX . "ms_order_product_data` opd2 ON (op.order_id = opd2.order_id AND op.product_id = opd2.product_id AND opd2.order_product_id IS NULL) WHERE op.order_id=" . (int)$order_id . (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '') . ")
+				) as total";
 
 		$res = $this->db->query($sql);
 
