@@ -33,7 +33,6 @@
 							<input type="text" class="form-control" name="settings[slr_full_name]"
 								   value="<?php echo $settings['slr_full_name']; ?>"
 								   placeholder="<?php echo $ms_seller_full_name; ?>">
-							<p class="error" id="error_slr_full_name"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -43,7 +42,6 @@
 							<input type="text" class="form-control" name="settings[slr_address_line1]"
 								   value="<?php echo $settings['slr_address_line1']; ?>"
 								   placeholder="<?php echo $ms_seller_address1_placeholder ;?>">
-							<p class="error" id="error_slr_address_line1"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -53,7 +51,6 @@
 							<input type="text" class="form-control" name="settings[slr_address_line2]"
 								   value="<?php echo $settings['slr_address_line2']; ?>"
 								   placeholder="<?php echo $ms_seller_address2_placeholder ;?>">
-							<p class="error" id="error_slr_address_line2"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -72,7 +69,6 @@
 							<input type="text" class="form-control" name="settings[slr_state]"
 								   value="<?php echo $settings['slr_state']; ?>"
 								   placeholder="<?php echo $ms_seller_state ;?>">
-							<p class="error" id="error_slr_state"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -111,7 +107,6 @@
 						<div class="col-sm-10">
 							<input type="text" class="form-control" name="settings[slr_website]"
 								   value="<?php echo $settings['slr_website']; ?>">
-							<p class="error" id="error_slr_website"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -120,7 +115,6 @@
 						<div class="col-sm-10">
 							<input type="text" class="form-control" name="settings[slr_company]"
 								   value="<?php echo $settings['slr_company']; ?>">
-							<p class="error" id="error_slr_company"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -129,7 +123,6 @@
 						<div class="col-sm-10">
 							<input type="text" class="form-control" name="settings[slr_phone]"
 								   value="<?php echo $settings['slr_phone']; ?>">
-							<p class="error" id="error_slr_phone"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -181,9 +174,9 @@
 						if ($('#error_' + error).length > 0) {
 							$('#error_' + error).text(jsonData.errors[error]);
 							$('#error_' + error).parents('.form-group').addClass('has-error');
-						} else if ($('[name="' + error + '"]').length > 0) {
-							$('[name="' + error + '"]').parents('.form-group').addClass('has-error');
-							$('[name="' + error + '"]').parents('div:first').append('<p class="error">' + jsonData.errors[error] + '</p>');
+						} else if ($('[name="settings[' + error + ']"]').length > 0) {
+							$('[name="settings[' + error + ']"]').parents('.form-group').addClass('has-error');
+							$('[name="settings[' + error + ']"]').parents('div:first').append('<p class="error" id="error_' + error + '">' + jsonData.errors[error] + '</p>');
 						} else $(".warning.main").append("<p>" + jsonData.errors[error] + "</p>").show();
 					}
 				} else {

@@ -121,8 +121,7 @@ class ControllerSellerAccountSetting extends ControllerSellerAccount {
 			'value' => $data['settings']['slr_phone']
 			),
 			array(
-				array('rule' => 'phone_number'),
-				array('rule' => 'max_len,25')
+				array('rule' => 'phone_number')
 			)
 		);
 		if(!$is_valid) $json['errors']['slr_phone'] = $validator->get_errors();
