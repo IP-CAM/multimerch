@@ -53,9 +53,39 @@ class ControllerSellerAccountSetting extends ControllerSellerAccount {
 
 		}
 
-		$this->MsLoader->MsSetting->createSetting($data);
+		$validator = $this->MsLoader->MsValidator;
 
-		$this->session->data['success'] = $this->language->get('ms_success_settings_saved');
+		$is_valid = $validator->validate(array(
+			'name' => 'Website',
+			'value' => $data['settings']['slr_website']
+			),
+			array(
+				array('rule' => 'valid_url')
+			)
+		);
+
+		if($is_valid !== true){
+			$json['errors']['slr_website'] = $validator->get_errors();
+		}
+
+		$is_valid = $validator->validate(array(
+			'name' => 'Phone',
+			'value' => $data['settings']['slr_phone']
+			),
+			array(
+				array('rule' => 'phone_number')
+			)
+		);
+
+		if($is_valid !== true){
+			$json['errors']['slr_phone'] = $validator->get_errors();
+		}
+
+		if (!isset($json['errors'])) {
+			$this->MsLoader->MsSetting->createSetting($data);
+			$this->session->data['success'] = $this->language->get('ms_success_settings_saved');
+		}
+
 		$this->response->setOutput(json_encode($json));
 	}
 

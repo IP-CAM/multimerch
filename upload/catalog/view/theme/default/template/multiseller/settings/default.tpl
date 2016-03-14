@@ -107,6 +107,7 @@
 						<div class="col-sm-10">
 							<input type="text" class="form-control" name="settings[slr_website]"
 								   value="<?php echo $settings['slr_website']; ?>">
+							<p class="error" id="error_slr_website"></p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -123,6 +124,7 @@
 						<div class="col-sm-10">
 							<input type="text" class="form-control" name="settings[slr_phone]"
 								   value="<?php echo $settings['slr_phone']; ?>">
+							<p class="error" id="error_slr_phone"></p>
 						</div>
 					</div>
 					<div class="form-group">

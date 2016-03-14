@@ -1,11 +1,11 @@
 <?php
 
-class MsValidator {
+class MsValidator extends Model {
+
+	private $errors = array();
 
 	public function validate(array $input, array $ruleset)
 	{
-		$this->errors = array();
-
 		foreach ($ruleset as $key => $item) {
 			$rules = explode('|', $item['rule']);
 
@@ -46,22 +46,29 @@ class MsValidator {
 		foreach ($this->errors as $e) {
 			switch ($e['rule']) {
 				case 'validate_required' :
-					$default_message = "The '" . $e['field'] . "' field is required";
+					$default_message = sprintf($this->language->get('ms_validate_required'), $e['field']);
 					break;
 				case 'validate_alpha_numeric':
-					$default_message = "The '" . $e['field'] . "' field may only contain alpha-numeric characters";
+					$default_message = sprintf($this->language->get('ms_validate_alpha_numeric'), $e['field']);
 					break;
 				case 'validate_max_len':
-					$default_message = "The '" . $e['field'] . "' field needs to be '" . $e['param'] . "' or shorter in length";
+					$default_message = sprintf($this->language->get('ms_validate_max_len'), $e['field'], $e['param']);
 					break;
 				case 'validate_min_len':
-					$default_message = "The '" . $e['field'] . "' field needs to be '" . $e['param'] . "' or longer in length";
+					$default_message = sprintf($this->language->get('ms_validate_min_len'), $e['field'], $e['param']);
+					break;
+				case 'validate_phone_number':
+					$default_message = sprintf($this->language->get('ms_validate_phone_number'), $e['field']);
+					break;
+				case 'validate_valid_url':
+					$default_message = sprintf($this->language->get('validate_valid_url'), $e['field']);
 					break;
 				default:
-					$default_message = "The '" . $e['field'] . "' field is invalid";
+					$default_message = sprintf($this->language->get('ms_validate_default'), $e['field']);
 			}
 			$response[] = (isset($e['error_message'])) ? $e['error_message'] : $default_message;
 		}
+		$this->errors = [];
 		return $response;
 	}
 
@@ -76,6 +83,7 @@ class MsValidator {
 			'value' => $input['value'],
 			'rule' => __FUNCTION__,
 			'param' => $param,
+			'error_message' => $message
 		);
 	}
 
@@ -85,7 +93,7 @@ class MsValidator {
 			return;
 		}
 
-		if (!preg_match('/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ])+$/i', $input['value']) !== false) {
+		if (!preg_match('/^([A-Za-z0-9])+$/i', $input['value']) !== false) {
 			return array(
 				'field' => $input['name'],
 				'value' => $input['value'],
@@ -145,27 +153,39 @@ class MsValidator {
 			'error_message' => $message
 		);
 	}
+
+	protected function validate_phone_number($input, $param = null, $message = null)
+	{
+		if (!isset($input['value']) || empty($input['value'])) {
+			return;
+		}
+
+		$regex = '/^(\d[\s-]?)?[\(\[\s-]{0,2}?\d{3}[\)\]\s-]{0,2}?\d{3}[\s-]?\d{4}$/i';
+		if (!preg_match($regex, $input['value'])) {
+			return array(
+				'field' => $input['name'],
+				'value' => $input['value'],
+				'rule' => __FUNCTION__,
+				'param' => $param,
+				'error_message' => $message
+			);
+		}
+	}
+
+	protected function validate_valid_url($input, $param = null, $message = null)
+	{
+		if (!isset($input['value']) || empty($input['value'])) {
+			return;
+		}
+
+		if (!preg_match('#[-a-zA-Z0-9@:%_\+.~\#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~\#?&//=]*)?#si', $input['value'])) {
+			return array(
+				'field' => $input['name'],
+				'value' => $input['value'],
+				'rule' => __FUNCTION__,
+				'param' => $param,
+				'error_message' => $message
+			);
+		}
+	}
 }
-
-$validator = new MsValidator();
-
-$field = array(
-	'name' => 'password',
-	// 'value' => 'paSSworD2016' // valid
-	'value' => 'p@SSworD+2016-test_pAss' // invalid
-);
-
-$ruleset = array(
-	array('rule' => 'required', 'error_message' => "Please fill '" . $field['name'] . "' field."),
-	array('rule' => 'max_len,15|min_len,6'),
-	array('rule' => 'alpha_numeric', 'error_message' => "Field '" . $field['name'] . "' must be only alpha-numeric characters")
-);
-
-$is_valid = $validator->validate($field, $ruleset);
-
-if($is_valid === true) {
-	echo "The field is valid";
-} else {
-	print_r($validator->get_errors());
-}
-die();
