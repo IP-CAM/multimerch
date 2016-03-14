@@ -36,7 +36,7 @@ class MsValidator extends Model {
 				}
 			}
 		}
-		return (count($this->errors) > 0) ? $this->errors : true;
+		return (count($this->errors) > 0) ? false : true;
 	}
 
 	public function get_errors()
@@ -61,7 +61,7 @@ class MsValidator extends Model {
 					$default_message = sprintf($this->language->get('ms_validate_phone_number'), $e['field']);
 					break;
 				case 'validate_valid_url':
-					$default_message = sprintf($this->language->get('validate_valid_url'), $e['field']);
+					$default_message = sprintf($this->language->get('ms_validate_valid_url'), $e['field']);
 					break;
 				default:
 					$default_message = sprintf($this->language->get('ms_validate_default'), $e['field']);
@@ -160,7 +160,7 @@ class MsValidator extends Model {
 			return;
 		}
 
-		$regex = '/^(\d[\s-]?)?[\(\[\s-]{0,2}?\d{3}[\)\]\s-]{0,2}?\d{3}[\s-]?\d{4}$/i';
+		$regex = '/^[0-9]{5,25}$/';
 		if (!preg_match($regex, $input['value'])) {
 			return array(
 				'field' => $input['name'],

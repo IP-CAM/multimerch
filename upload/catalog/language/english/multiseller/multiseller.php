@@ -740,5 +740,6 @@ $_['ms_validate_alpha_numeric'] = 'The \'%s\' field may only contain alpha-numer
 $_['ms_validate_max_len'] = 'The \'%s\' field needs to be \'%s\' or shorter in length';
 $_['ms_validate_min_len'] = 'The \'%s\' field needs to be \'%s\' or longer in length';
 $_['ms_validate_phone_number'] = 'The \'%s\' field is not phone';
+$_['ms_validate_valid_url'] = 'The \'%s\' field is required to be a valid URL';
 
 ?>

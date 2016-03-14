@@ -56,30 +56,76 @@ class ControllerSellerAccountSetting extends ControllerSellerAccount {
 		$validator = $this->MsLoader->MsValidator;
 
 		$is_valid = $validator->validate(array(
-			'name' => 'Website',
+			'name' => $this->language->get('ms_seller_full_name'),
+			'value' => $data['settings']['slr_full_name']
+			),
+			array(
+				array('rule' => 'max_len,100')
+			)
+		);
+		if(!$is_valid) $json['errors']['slr_full_name'] = $validator->get_errors();
+
+		$is_valid = $validator->validate(array(
+			'name' => $this->language->get('ms_seller_address1'),
+			'value' => $data['settings']['slr_address_line1']
+			),
+			array(
+				array('rule' => 'max_len,100')
+			)
+		);
+		if(!$is_valid) $json['errors']['slr_address_line1'] = $validator->get_errors();
+
+		$is_valid = $validator->validate(array(
+			'name' => $this->language->get('ms_seller_address2'),
+			'value' => $data['settings']['slr_address_line2']
+			),
+			array(
+				array('rule' => 'max_len,100')
+			)
+		);
+		if(!$is_valid) $json['errors']['slr_address_line2'] = $validator->get_errors();
+
+		$is_valid = $validator->validate(array(
+			'name' => $this->language->get('ms_seller_state'),
+			'value' => $data['settings']['slr_state']
+			),
+			array(
+				array('rule' => 'max_len,50')
+			)
+		);
+		if(!$is_valid) $json['errors']['slr_state'] = $validator->get_errors();
+
+		$is_valid = $validator->validate(array(
+			'name' => $this->language->get('ms_seller_website'),
 			'value' => $data['settings']['slr_website']
 			),
 			array(
-				array('rule' => 'valid_url')
+				array('rule' => 'valid_url'),
+				array('rule' => 'max_len,128')
 			)
 		);
-
-		if($is_valid !== true){
-			$json['errors']['slr_website'] = $validator->get_errors();
-		}
+		if(!$is_valid) $json['errors']['slr_website'] = $validator->get_errors();
 
 		$is_valid = $validator->validate(array(
-			'name' => 'Phone',
+			'name' => $this->language->get('ms_seller_company'),
+			'value' => $data['settings']['slr_company']
+			),
+			array(
+				array('rule' => 'max_len,50')
+			)
+		);
+		if(!$is_valid) $json['errors']['slr_company'] = $validator->get_errors();
+
+		$is_valid = $validator->validate(array(
+			'name' => $this->language->get('ms_seller_phone'),
 			'value' => $data['settings']['slr_phone']
 			),
 			array(
-				array('rule' => 'phone_number')
+				array('rule' => 'phone_number'),
+				array('rule' => 'max_len,25')
 			)
 		);
-
-		if($is_valid !== true){
-			$json['errors']['slr_phone'] = $validator->get_errors();
-		}
+		if(!$is_valid) $json['errors']['slr_phone'] = $validator->get_errors();
 
 		if (!isset($json['errors'])) {
 			$this->MsLoader->MsSetting->createSetting($data);
