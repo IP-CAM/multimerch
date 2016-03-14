@@ -306,6 +306,7 @@ $_['ms_account_transactions'] = 'Transactions';
 $_['ms_account_orders'] = 'Orders';
 $_['ms_account_withdraw'] = 'Request payout';
 $_['ms_account_stats'] = 'Statistics';
+$_['ms_account_settings'] = 'Settings';
 
 // Account - New product
 $_['ms_account_newproduct_heading'] = 'New Product';
