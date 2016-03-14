@@ -306,6 +306,7 @@ $_['ms_account_transactions'] = 'Transactions';
 $_['ms_account_orders'] = 'Orders';
 $_['ms_account_withdraw'] = 'Request payout';
 $_['ms_account_stats'] = 'Statistics';
+$_['ms_account_settings'] = 'Settings';
 
 // Account - New product
 $_['ms_account_newproduct_heading'] = 'New Product';
@@ -732,5 +733,14 @@ $_['ms_autocomplete'] = '(Autocomplete)';
 
 // Invoices
 $_['heading_invoice_title']         = 'Order Invoice';
+
+// Validation
+$_['ms_validate_default'] = 'The \'%s\' field is invalid';
+$_['ms_validate_required'] = 'The \'%s\' field is required';
+$_['ms_validate_alpha_numeric'] = 'The \'%s\' field may only contain alpha-numeric characters';
+$_['ms_validate_max_len'] = 'The \'%s\' field needs to be \'%s\' or shorter in length';
+$_['ms_validate_min_len'] = 'The \'%s\' field needs to be \'%s\' or longer in length';
+$_['ms_validate_phone_number'] = 'The \'%s\' field is not a phone number';
+$_['ms_validate_valid_url'] = 'The \'%s\' field must be a valid URL';
 
 ?>

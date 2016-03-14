@@ -103,6 +103,11 @@
 			<img src="catalog/view/theme/<?php echo $this->config->get('config_template'); ?>/image/ms-stats.png" />
 			<span><?php echo $ms_account_stats; ?></span>
 		</a>
+
+		<a href="<?php echo $this->url->link('seller/account-setting', '', 'SSL'); ?>">
+			<img src="catalog/view/theme/<?php echo $this->config->get('config_template'); ?>/image/ms-gear.png" />
+			<span><?php echo $ms_account_settings; ?></span>
+		</a>
 	</div>
     </div>
 
