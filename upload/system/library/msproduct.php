@@ -811,7 +811,7 @@ class MsProduct extends Model {
 	public function deleteProduct($product_id) {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "ms_product WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "ms_product_attribute WHERE product_id = '" . (int)$product_id . "'");
-		
+
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_attribute WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_description WHERE product_id = '" . (int)$product_id . "'");
@@ -829,7 +829,7 @@ class MsProduct extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_store WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "review WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "'");
-		
+
 		$this->registry->get('cache')->delete('product');		
 	}
 	
@@ -925,6 +925,7 @@ class MsProduct extends Model {
 					."p.product_id as 'product_id',
 					p.image as 'p.image',
 					p.price as 'p.price',
+					p.quantity as 'p.quantity',
 					pd.name as 'pd.name',
 					ms.seller_id as 'seller_id',
 					ms.nickname as 'ms.nickname',
@@ -1031,6 +1032,7 @@ class MsProduct extends Model {
 				GROUP BY op.order_product_id";
 
 		$res = $this->db->query($sql);
+		
 		return $res->num_rows ? $res->row : FALSE;
 	}
 	

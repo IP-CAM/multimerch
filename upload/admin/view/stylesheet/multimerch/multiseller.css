@@ -55,6 +55,7 @@ table.list td.comment {
 	height: 32px;
 	display: inline-block;
 	margin: 0 1px;
+	font-size: 20px;
 }
 
 .ms-button-small {

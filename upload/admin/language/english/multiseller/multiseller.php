@@ -52,6 +52,9 @@ $_['ms_seller'] = 'Seller';
 $_['ms_all_sellers'] = 'All sellers';
 $_['ms_amount'] = 'Amount';
 $_['ms_product'] = 'Product';
+$_['ms_quantity'] = 'Quantity';
+$_['ms_sales'] = 'Sales';
+$_['ms_price'] = 'Price';
 $_['ms_net_amount'] = 'Net amount';
 $_['ms_days'] = 'days';
 $_['ms_from'] = 'From';
@@ -101,6 +104,7 @@ $_['ms_enable'] = 'Enable';
 $_['ms_disable'] = 'Disable';
 $_['ms_edit'] = 'Edit';
 $_['ms_delete'] = 'Delete';
+$_['ms_view_in_store'] = 'View in store';
 
 $_['ms_button_pay_masspay'] = 'Pay via MassPay';
 $_['ms_button_pay_masspay_all'] = 'All Pay via MassPay';

@@ -88,10 +88,6 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 		}
 
-		if (utf8_strlen($data['seller']['company']) > 50 ) {
-			$json['errors']['seller[company]'] = $this->language->get('ms_error_sellerinfo_company_length');
-		}
-
 		if (utf8_strlen($data['seller']['description']) > 1000) {
 			$json['errors']['seller[description]'] = $this->language->get('ms_error_sellerinfo_description_length');
 		}
@@ -360,8 +356,6 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
 		}
 
-		$this->load->model('localisation/country');
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
 
 		$seller = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 
@@ -384,7 +378,6 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 
 			$this->data['seller'] = $seller; unset($this->data['seller']['banner']);
-			$this->data['country_id'] = $seller['ms.country_id'];
 
 			if (!empty($seller['ms.avatar'])) {
 				$this->data['seller']['avatar']['name'] = $seller['ms.avatar'];
@@ -417,7 +410,6 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			$this->data['ms_account_sellerinfo_terms_note'] = '';
 		} else {
 			$this->data['seller'] = FALSE;
-			$this->data['country_id'] = $this->config->get('config_country_id');
 
 
 			$this->data['statustext'] = $this->language->get('ms_account_status_please_fill_in');

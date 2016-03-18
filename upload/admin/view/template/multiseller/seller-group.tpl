@@ -65,7 +65,7 @@ $(document).ready(function() {
 			{ "mData": "name" },
 			{ "mData": "description" },
 			{ "mData": "rates", "bSortable": false },
-			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
+			{ "mData": "actions", "bSortable": false, "sClass": "large text-right" }
 		]
 	});
 
