@@ -174,9 +174,9 @@
 						if ($('#error_' + error).length > 0) {
 							$('#error_' + error).text(jsonData.errors[error]);
 							$('#error_' + error).parents('.form-group').addClass('has-error');
-						} else if ($('[name="' + error + '"]').length > 0) {
-							$('[name="' + error + '"]').parents('.form-group').addClass('has-error');
-							$('[name="' + error + '"]').parents('div:first').append('<p class="error">' + jsonData.errors[error] + '</p>');
+						} else if ($('[name="settings[' + error + ']"]').length > 0) {
+							$('[name="settings[' + error + ']"]').parents('.form-group').addClass('has-error');
+							$('[name="settings[' + error + ']"]').parents('div:first').append('<p class="error" id="error_' + error + '">' + jsonData.errors[error] + '</p>');
 						} else $(".warning.main").append("<p>" + jsonData.errors[error] + "</p>").show();
 					}
 				} else {
