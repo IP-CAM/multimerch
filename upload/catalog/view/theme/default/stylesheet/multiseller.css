@@ -1,3 +1,9 @@
+.control-inline input, .control-inline select, .input-auto, .ms-product input[type='text'].input-auto {
+    width: auto;
+    display: inline;
+	min-width: 0;
+}
+
 /* table alignment style override */
 #content .content table.list .left {
 	width: auto;
@@ -57,12 +63,14 @@ table.list tbody td, table.list thead td  {
 	margin-top: 5px;
 }
 
-.ms-product div.error p {
+.ms-product div.error p,
+.register-seller p.error {
 	margin: 0;
 }
 
 .ms-account-product-form p.warning.main,
-.ms-account-profile p.warning.main {
+.ms-account-profile p.warning.main,
+.register-seller .warning.main {
 	display: none;
 }
 
@@ -134,8 +142,12 @@ table.list tbody td, table.list thead td  {
 	vertical-align: top;
 }
 
-.ms-product input[type='text'] {
+.ms-product input[type='text'], .ms-product .input-group.date {
 	width: 200px;
+}
+
+.ms-product .table .input-group.date {
+	margin: 0 auto;
 }
 
 .ms-product select {
@@ -147,7 +159,7 @@ table.list tbody td, table.list thead td  {
 	height: 100px;
 }
 
-.ms-product .ms-image {
+.ms-product .ms-image, form .ms-image {
 	position:relative;
 	display: inline-block;
 	border: 1px solid #EEEEEE;
@@ -326,7 +338,7 @@ input.option_quantity {
 	background-image: url(../image/ms-arrowdown-bw.png);
 }
 
-.ms-product .ms-remove {
+.ms-product .ms-remove, form .ms-remove {
 	position: absolute;
 	bottom: 3px;
 	right: 3px;
@@ -358,10 +370,6 @@ input.option_quantity {
 	color: black;
 	border-bottom: 0;
 	width: auto;
-}
-
-.ms-sellerprofile.description span {
-	color: #38B0E3;
 }
 
 .ms-pending {
@@ -458,122 +466,22 @@ input.option_quantity {
     width: 100%
 }
 
-
 /* seller list */
-.seller-filter {
-	margin-bottom: 5px;
+.catalog-seller .caption {
+    min-height: 150px;
 }
 
-.ms-sellerlist {
-	width: 100%;
+.catalog-seller .caption p {
+    margin: 0
 }
 
-.ms-sellerlist > div + div {
-    border-top: 1px solid #EEEEEE;
-    padding-top: 16px;
-}
-
-.ms-sellerlist > div {
-    margin-bottom: 15px;
-    overflow: auto;
+.catalog-seller .product-grid .seller-description {
+    display: none;
 }
 
 
-.ms-sellerlist .seller-data {
-	width: 100%;
-	clear: both;
-	margin-bottom: 15px;
-	display: inline-block;
-}
+.catalog-seller .product-list {
 
-.ms-sellerlist .seller-data > div {
-	display: inline;
-	float: left;
-}
-
-.ms-sellerlist .seller-data div.avatar-box {
-	width: 10%;
-	text-align: center
-}
-
-.ms-sellerlist .seller-data div.avatar-box .name {
-	margin-bottom: 3px;
-}
-
-.ms-sellerlist .seller-data div.avatar-box .name a {
-    color: #38B0E3;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.ms-sellerlist .seller-data div.info-box {
-	width: 20%;	
-	margin: 15px 0 0 15px;
-}
-
-.ms-sellerlist .seller-data div.info-box p {
-	margin: 5px 0;
-}
-
-.ms-sellerlist .seller-description {
-	width: 60%;
-	margin: 15px 0 0 15px;
-	text-align: justify;
-}
-
-
-/* seller grid */
-.ms-sellergrid {
-	width: 100%;
-}
-
-.ms-sellergrid > div {
-    margin-bottom: 15px;
-    overflow: auto;
-}
-
-.ms-sellergrid .seller-data {
-    display: inline-block;
-    margin-bottom: 15px;
-    margin-right: 20px;
-    vertical-align: top;
-    width: 130px;
-}
-
-
-.ms-sellergrid .seller-data > div {
-	display: inline;
-	float: left;
-}
-
-.ms-sellergrid .seller-data div.avatar-box {
-	width: 100%;
-	text-align: left;
-}
-
-.ms-sellergrid .seller-data div.avatar-box .name {
-	margin-bottom: 3px;
-}
-
-.ms-sellergrid .seller-data div.avatar-box .name a {
-    color: #38B0E3;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.ms-sellergrid .seller-data div.info-box {
-	width: 100%;	
-	margin: 15px 0 0 0;
-}
-
-.ms-sellergrid .seller-data div.info-box p {
-	margin: 5px 0;
-}
-
-.ms-sellergrid .seller-description {
-	width: 60%;
-	margin: 15px 0 0 15px;
-	text-align: justify;
 }
 
 .ms-carousel ul li a {
@@ -709,12 +617,23 @@ div.ms-jquery-dialog.ui-widget-content,
 	margin: 3px 0;
 }
 
+.ms-account-product-form #product-filter {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background-color: inherit;
+	width: 50%;
+}
+
+
 .ms-account-product-form .ms-button-delete {
 	background-image: url(../image/ms-cross.png);
 }
 
 .ms-button-view {
 	background-image: url(../image/ms-magnifier.png);
+}
+.ms-button-print {
+	background-image: url(../image/ms-printer.png);
 }
 
 .ms-button-publish {
@@ -741,6 +660,10 @@ div.ms-jquery-dialog.ui-widget-content,
 	background-image: url(../image/ms-cross.png);
 }
 
+
+.ms-account-order td .btn, .seller-account-dashboard td .btn {
+	margin: 0 2px;
+}
 
 .ms-account-order .products p,
 .ms-account-dashboard .products p {
@@ -789,11 +712,6 @@ ul.ms-sellermenu.graphical li a {
 	margin: 10px;
 }
 
-.ms-account-dashboard .stats p, .ms-account-dashboard .stats h3,
-.ms-account-dashboard .nav a, .ms-account-dashboard .nav h3 {
-	padding-left: 40px;
-}
-
 .ms-account-dashboard .overview .nickname {
 	font-weight: bold;
 	margin-bottom: 10px;
@@ -832,6 +750,20 @@ ul.ms-sellermenu.graphical li a {
  *
  */
 
+.dataTables_wrapper .dataTables_processing {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin:0;
+    background: rgba(255,255,255,.90);
+    border: 1px solid #efefef;
+}
+
+.dataTables_wrapper .dataTables_processing i {
+    margin-top: 15px;
+}
+
 .dataTables_length, .dataTables_filter {
 	display: inline-block;
 	margin-bottom: 5px;
@@ -864,15 +796,15 @@ table .tiny {
 	width: 50px;
 }
 
-table .small {
+table .small, input.small, input[type='text'].small {
 	width: 75px;
 }
 
-table .medium {
+table .medium, input.medium, input[type='text'].medium {
 	width: 125px;
 }
 
-table .large {
+table .large, input.large, input[type='text'].large {
 	width: 200px;
 }
 
@@ -954,4 +886,17 @@ table.list thead td.right {
 
 .inline {
     display:inline;
+}
+
+.module .product-thumb .caption {
+    padding: 0 20px;
+    min-height: 50px;
+    text-align: center;
+}
+
+.ms-account-order-info table thead,
+.ms-account-order-info table tfoot {
+    color: #595959;
+    border-color: #e8e8e8;
+    background: #fcfcfc;
 }

@@ -63,7 +63,7 @@
           </div>
 
           <div class="form-group <?php if($seller_group['seller_group_id'] == $this->config->get('msconf_default_seller_group_id')) { ?>required<?php } ?>">
-              <label class="col-sm-2 control-label"><?php echo $ms_product_period; ?></label>
+              <label class="col-sm-2 control-label"><?php echo $ms_product_quantity; ?></label>
               <div class="col-sm-10 control-inline">
                   <input class="form-control" type="text" name="seller_group[product_quantity]" value="<?php echo isset($seller_group['product_quantity']) ? $seller_group['product_quantity'] : '' ?>" size="5"/>
               </div>

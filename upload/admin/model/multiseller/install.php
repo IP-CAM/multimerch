@@ -68,6 +68,7 @@ class ModelMultisellerInstall extends Model {
 		`country_id` INT(11) NOT NULL DEFAULT '0',
 		`zone_id` INT(11) NOT NULL DEFAULT '0',
 		`avatar` VARCHAR(255) DEFAULT NULL,
+		`banner` VARCHAR(255) DEFAULT NULL,
 		`paypal` VARCHAR(255) DEFAULT NULL,
 		`date_created` DATETIME NOT NULL,
 		`seller_status` TINYINT NOT NULL,
@@ -83,6 +84,7 @@ class ModelMultisellerInstall extends Model {
 		`seller_id` int(11) NOT NULL,
 		`order_id` int(11) DEFAULT NULL,
 		`product_id` int(11) DEFAULT NULL,
+		`order_product_id` int(11) DEFAULT NULL,
 		`withdrawal_id` int(11) DEFAULT NULL,
 		`balance_type` int(11) DEFAULT NULL,
 		`amount` DECIMAL(15,4) NOT NULL,
@@ -97,6 +99,7 @@ class ModelMultisellerInstall extends Model {
 		`order_product_data_id` int(11) NOT NULL AUTO_INCREMENT,
 		`order_id` int(11) NOT NULL,
 		`product_id` int(11) NOT NULL,
+		`order_product_id` int(11) DEFAULT NULL,
 		`seller_id` int(11) DEFAULT NULL,
 		`store_commission_flat` DECIMAL(15,4) NOT NULL,
 		`store_commission_pct` DECIMAL(15,4) NOT NULL,
@@ -235,6 +238,31 @@ class ModelMultisellerInstall extends Model {
 		`order_status_id` int(11) NOT NULL,
 		PRIMARY KEY (`suborder_id`)
 		) DEFAULT CHARSET=utf8");
+
+		$this->db->query("
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_suborder_history` (
+		`suborder_history_id` int(5) NOT NULL AUTO_INCREMENT,
+		`suborder_id` int(5) NOT NULL,
+		`order_status_id` int(5) NOT NULL,
+		`comment` text NOT NULL DEFAULT '',
+		`date_added` datetime NOT NULL,
+		PRIMARY KEY (`suborder_history_id`)
+		) DEFAULT CHARSET=utf8");
+		
+		$this->db->query("
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ms_setting` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`seller_id` int(11) unsigned DEFAULT NULL,
+		`seller_group_id` int(11) unsigned DEFAULT NULL,
+		`name` varchar(50) DEFAULT NULL,
+		`value` varchar(250) DEFAULT NULL,
+		`is_encoded` smallint(1) unsigned DEFAULT NULL,
+		PRIMARY KEY (`id`)
+		) DEFAULT CHARSET=utf8;");
+
+        $this->db->query("
+                CREATE UNIQUE INDEX slr_id_name
+                ON " . DB_PREFIX ."ms_setting (seller_id, name)");
 	}
 	
 	public function createData() {
@@ -261,16 +289,16 @@ class ModelMultisellerInstall extends Model {
 		}
 	
 		// multimerch routes
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller Account'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Seller Account Pages'");
 		$layout_id = $this->db->getLastId();
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/account'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller List'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/account-%'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Sellers List'");
 		$layout_id = $this->db->getLastId();
 		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/catalog-seller'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller Profile'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Seller Profile Page'");
 		$layout_id = $this->db->getLastId();
 		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/catalog-seller/profile'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = 'MultiMerch Seller Products'");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "layout SET name = '[MultiMerch] Seller Products List'");
 		$layout_id = $this->db->getLastId();
 		$this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_id . "', route = 'seller/catalog-seller/products'");
 	}
@@ -284,6 +312,7 @@ class ModelMultisellerInstall extends Model {
 		`" . DB_PREFIX . "ms_seller_group`,
 		`" . DB_PREFIX . "ms_seller_group_description`,
 		`" . DB_PREFIX . "ms_seller_group_criteria`,
+		`" . DB_PREFIX . "ms_setting`,
 		`" . DB_PREFIX . "ms_commission_rate`,
 		`" . DB_PREFIX . "ms_commission`,
 		`" . DB_PREFIX . "ms_criteria`,
@@ -298,6 +327,8 @@ class ModelMultisellerInstall extends Model {
 		`" . DB_PREFIX . "ms_product_attribute`,
 		`" . DB_PREFIX . "ms_payment`,
 		`" . DB_PREFIX . "ms_suborder`,
+		`" . DB_PREFIX . "ms_suborder_history`,
+		`" . DB_PREFIX . "ms_order_comment`,
 		`" . DB_PREFIX . "ms_db_schema`,
 		`" . DB_PREFIX . "ms_version`");
 	}
@@ -307,7 +338,7 @@ class ModelMultisellerInstall extends Model {
 		
 		// remove MultiMerch routes
 		$this->db->query("DELETE FROM " . DB_PREFIX . "layout WHERE name = 'MultiMerch Seller Account'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "layout_route WHERE route = 'seller/account'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "layout_route WHERE route = 'seller/account-%'");
 
 		$this->db->query("DELETE FROM " . DB_PREFIX . "layout WHERE name = 'MultiMerch Seller List'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "layout_route WHERE route = 'seller/catalog-seller'");

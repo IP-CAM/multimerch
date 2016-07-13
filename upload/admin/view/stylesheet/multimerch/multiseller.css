@@ -2,7 +2,7 @@
     overflow-x: initial;
 }
 
-.control-inline input, .control-inline select {
+.control-inline input, .control-inline select, .input-auto {
     width: auto;
     display: inline;
 }
@@ -33,7 +33,7 @@ td h3 {
 	margin: 0;
 }
 
-tr.ffSample {
+.ffSample {
 	display: none;
 }
 
@@ -55,6 +55,7 @@ table.list td.comment {
 	height: 32px;
 	display: inline-block;
 	margin: 0 1px;
+	font-size: 20px;
 }
 
 .ms-button-small {
@@ -68,10 +69,6 @@ table.list td.comment {
 
 .ms-button-edit {
 	background-image: url(../../image/multiseller/ms-pencil.png);
-}
-
-.ms-button-paypal {
-	background-image: url(../../image/multiseller/ms-paypal.png);
 }
 
 .ms-button-paypal-mass-seller {
@@ -144,6 +141,21 @@ h1 img {
 }
 
 /* datatables */
+
+.dataTables_wrapper .dataTables_processing {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin:0;
+    background: rgba(255,255,255,.90);
+    border: 1px solid #efefef;
+}
+
+.dataTables_wrapper .dataTables_processing i {
+    margin-top: 15px;
+}
+
 
 .dataTables_length, .dataTables_filter {
 	display: inline-block;

@@ -29,7 +29,7 @@
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $ms_settings_heading; ?></h3>
       </div>
       <div class="panel-body">
-        <form id="settings" action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-store" class="form-horizontal">
+        <form id="settings" method="post" enctype="multipart/form-data" id="form-store" class="form-horizontal">
                 <ul class="nav nav-tabs" id="tabs">
 			 		<li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
 			 		<li><a href="#tab-productform" data-toggle="tab"><?php echo $ms_config_productform; ?></a></li>
@@ -40,13 +40,14 @@
                 <div class="tab-content">
 			 	<!-- BEGIN GENERAL TAB -->
 			 	<div class="tab-pane active" id="tab-general">
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display:none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_notification_email_note; ?>"><?php echo $ms_config_notification_email; ?></span></label>
 						<div class="col-sm-10">
 							<input class="form-control" size="20" type="text" name="msconf_notification_email" value="<?php echo $msconf_notification_email; ?>" />
 						</div>
-					</div>				
-				
+					</div>
+
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_seller_validation_note; ?>"><?php echo $ms_config_seller_validation; ?></span></label>
 						<div class="col-sm-10">
@@ -68,7 +69,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display:none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_allow_inactive_seller_products_note; ?>"><?php echo $ms_config_allow_inactive_seller_products; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_allow_inactive_seller_products" value="1" <?php if($msconf_allow_inactive_seller_products == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -77,7 +79,8 @@
 					  	</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display:none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_disable_product_after_quantity_depleted_note; ?>"><?php echo $ms_config_disable_product_after_quantity_depleted; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_disable_product_after_quantity_depleted" value="1" <?php if($msconf_disable_product_after_quantity_depleted == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?>
@@ -97,14 +100,15 @@
 					  	</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_one_page_seller_registration_note; ?>"><?php echo $ms_config_enable_one_page_seller_registration; ?></span></label>
+					<!-- deprecated -->
+					<div style="display: none" class="form-group">
+						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_banner_note; ?>"><?php echo $ms_config_enable_banner; ?></span></label>
 						<div class="col-sm-10">
-							<label class="radio-inline"><input type="radio" name="msconf_enable_one_page_seller_registration" value="1" <?php if($msconf_enable_one_page_seller_registration == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?>
+							<label class="radio-inline"><input type="radio" name="msconf_enable_seller_banner" value="1" <?php if($this->config->get('msconf_enable_seller_banner')) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?>
 							</label>
-							<label class="radio-inline"><input type="radio" name="msconf_enable_one_page_seller_registration" value="0" <?php if($msconf_enable_one_page_seller_registration == 0) { ?> checked="checked" <?php } ?>  /><?php echo $text_no; ?>
+							<label class="radio-inline"><input type="radio" name="msconf_enable_seller_banner" value="0" <?php if(!$this->config->get('msconf_enable_seller_banner')) { ?> checked="checked" <?php } ?>  /><?php echo $text_no; ?>
 							</label>
-						</div>
+					  	</div>
 					</div>
 
 					<div class="form-group">
@@ -123,7 +127,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_graphical_sellermenu_note; ?>"><?php echo $ms_config_graphical_sellermenu; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_graphical_sellermenu" value="1" <?php if($msconf_graphical_sellermenu == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?>
@@ -133,7 +138,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display:none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_rte_note; ?>"><?php echo $ms_config_enable_rte; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_enable_rte" value="1" <?php if($msconf_enable_rte == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?>
@@ -170,7 +176,8 @@
 					  	</div>
 					</div>
 
-		   			<div class="form-group">
+					<!-- deprecated -->
+		   			<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_allow_specials_note; ?>"><?php echo $ms_config_allow_specials; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_allow_specials" value="1" <?php if($msconf_allow_specials == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -178,7 +185,8 @@
 					  	</div>
 					</div>
 
-		   			<div class="form-group">
+		   			<!-- deprecated -->
+		   			<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_allow_discounts_note; ?>"><?php echo $ms_config_allow_discounts; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_allow_discounts" value="1" <?php if($msconf_allow_discounts == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -194,7 +202,8 @@
 					  	</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+		   			<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_additional_category_restrictions_note; ?>"><?php echo $ms_config_additional_category_restrictions; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_additional_category_restrictions" value="0" <?php if($msconf_additional_category_restrictions == 0) { ?> checked="checked" <?php } ?>  /><?php echo $ms_none; ?></label>
@@ -264,7 +273,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+		   			<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_quantities_note; ?>"><?php echo $ms_config_enable_quantities; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_enable_quantities" value="1" <?php if($msconf_enable_quantities == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -273,6 +283,7 @@
 					  	</div>
 					</div>
 
+					<!--
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_provide_buyerinfo_note; ?>"><?php echo $ms_config_provide_buyerinfo; ?></span></label>
 						<div class="col-sm-10">
@@ -281,6 +292,7 @@
 							<label class="radio-inline"><input type="radio" name="msconf_provide_buyerinfo" value="2" <?php if($msconf_provide_buyerinfo == 2) { ?> checked="checked" <?php } ?>  /><?php echo $text_shipping_dependent; ?></label>
 					  	</div>
 					</div>
+					-->
 				</div>
 				<!-- END PRODUCT FORM TAB -->
 
@@ -316,21 +328,24 @@
 					  	</div>
 					</div>
 
-					<div class="form-group">
+					<!-- hidden -->
+					<div style="display: none" class="form-group">
                         <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_withdrawal_waiting_period_note; ?>"><?php echo $ms_config_withdrawal_waiting_period; ?></span></label>
 						<div class="col-sm-10 control-inline">
 							<input class="form-control" type="text" size="3" name="msconf_withdrawal_waiting_period" value="<?php echo $msconf_withdrawal_waiting_period; ?>" /><?php echo $ms_days; ?>
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- hidden -->
+					<div style="display:none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_minimum_withdrawal_note; ?>"><?php echo $ms_config_minimum_withdrawal; ?></span></label>
 						<div class="col-sm-10 control-inline">
 							<input class="form-control" type="text" name="msconf_minimum_withdrawal_amount" value="<?php echo $msconf_minimum_withdrawal_amount; ?>" size="3"/>
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+		   			<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_allow_partial_withdrawal_note; ?>"><?php echo $ms_config_allow_partial_withdrawal; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_allow_partial_withdrawal" value="1" <?php if($msconf_allow_partial_withdrawal == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -381,6 +396,16 @@
 							<span class="col-sm-2"><?php echo $ms_config_seller_avatar_image_size_seller_dashboard; ?></span>
 							<span class="col-sm-3"><input class="form-control" type="text" name="msconf_seller_avatar_dashboard_image_width" value="<?php echo $msconf_seller_avatar_dashboard_image_width; ?>" size="3" /> x <input class="form-control" type="text" name="msconf_seller_avatar_dashboard_image_height" value="<?php echo $msconf_seller_avatar_dashboard_image_height; ?>" size="3" /></span>
                             </div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><?php echo $ms_config_seller_banner_size; ?></label>
+						<div class="col-sm-10 control-inline control-label">
+                            <div class="row">
+							<span class="col-sm-2"></span>
+							<span class="col-sm-3"><input class="form-control" type="text" name="msconf_product_seller_banner_width" value="<?php echo $msconf_product_seller_banner_width; ?>" size="3" /> x <input class="form-control" type="text" name="msconf_product_seller_banner_height" value="<?php echo $msconf_product_seller_banner_height; ?>" size="3" /></span>
+							</div>
 						</div>
 					</div>
 
@@ -471,7 +496,8 @@
 					  	</div>
 					</div>
 
-					<div class="form-group">
+					<!-- hidden -->
+					<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_sellers_slug_note; ?>"><?php echo $ms_config_sellers_slug; ?></span></label>
 						<div class="col-sm-10">
 							<input class="form-control" type="text" name="msconf_sellers_slug" value="<?php echo isset($msconf_sellers_slug) ? $msconf_sellers_slug : 'sellers' ; ?>" />
@@ -479,7 +505,8 @@
 					</div>
                     </fieldset>
 
-                    <fieldset>
+					<!-- deprecated -->
+                    <fieldset style="display: none">
                     <legend><?php echo $ms_config_attributes; ?></legend>
 					<div class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_attribute_display_note; ?>"><?php echo $ms_config_attribute_display; ?></span></label>
@@ -491,9 +518,10 @@
 					</div>
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset style="display: none">
                     <legend><?php echo $ms_config_privacy; ?></legend>
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_enable_private_messaging_note; ?>"><?php echo $ms_config_enable_private_messaging; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_enable_private_messaging" value="2" <?php if($msconf_enable_private_messaging == 2) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -501,7 +529,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<!-- deprecated -->
+					<div style="display: none" class="form-group">
 						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_hide_customer_email_note; ?>"><?php echo $ms_config_hide_customer_email; ?></span></label>
 						<div class="col-sm-10">
 							<label class="radio-inline"><input type="radio" name="msconf_hide_customer_email" value="1" <?php if($msconf_hide_customer_email == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
@@ -509,13 +538,6 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_hide_email_in_email_note; ?>"><?php echo $ms_config_hide_email_in_email; ?></span></label>
-						<div class="col-sm-10">
-							<label class="radio-inline"><input type="radio" name="msconf_hide_emails_in_emails" value="1" <?php if($msconf_hide_emails_in_emails == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
-							<label class="radio-inline"><input type="radio" name="msconf_hide_emails_in_emails" value="0" <?php if($msconf_hide_emails_in_emails == 0) { ?> checked="checked" <?php } ?>  /><?php echo $text_no; ?></label>
-						</div>
-					</div>
                     </fieldset>
 
                     <fieldset>
@@ -536,23 +558,20 @@
 							<label class="radio-inline"><input type="radio" name="msconf_nickname_rules" value="2" <?php if ($msconf_nickname_rules == 2) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_nickname_rules_utf; ?></label>
 					  	</div>
 					</div>
-
-					<div class="form-group">
-						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_avatars_for_sellers_note; ?>"><?php echo $ms_config_avatars_for_sellers; ?></span></label>
-						<div class="col-sm-10">
-							<label class="radio-inline"><input type="radio" name="msconf_avatars_for_sellers" value="0" <?php if ($msconf_avatars_for_sellers == 0) { ?> checked="checked" <?php } ?>  /><?php echo $ms_config_avatars_manually; ?></label>
-						</div>
-					</div>
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset style="display: none">
                     <legend><?php echo $ms_config_other; ?></legend>
-					<div class="form-group">
-						<label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_hide_sellers_product_count_note; ?>"><?php echo $ms_config_hide_sellers_product_count; ?></span></label>
-						<div class="col-sm-10">
-							<label class="radio-inline"><input type="radio" name="msconf_hide_sellers_product_count" value="1" <?php if($msconf_hide_sellers_product_count == 1) { ?> checked="checked" <?php } ?>  /><?php echo $text_yes; ?></label>
-							<label class="radio-inline"><input type="radio" name="msconf_hide_sellers_product_count" value="0" <?php if($msconf_hide_sellers_product_count == 0) { ?> checked="checked" <?php } ?>  /><?php echo $text_no; ?></label>
-						</div>
+					<!-- hidden -->
+					<div style="display: none" class="form-group">
+						  <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $ms_config_display_order_statuses_note; ?>"><?php echo $ms_config_display_order_statuses; ?></span></label>
+						  <div class="col-sm-10">
+                              <div class="well well-sm" style="height: 150px; overflow: auto;">
+                                <?php foreach ($order_statuses as $status) { ?>
+                                  <input type="checkbox" name="msconf_display_order_statuses[]" value="<?php echo $status['order_status_id']; ?>" <?php if (in_array($status['order_status_id'], $msconf_display_order_statuses)) { ?>checked="checked"<?php } ?> /> <?php echo $status['name']; ?><br>
+                                <?php } ?>
+                              </div>
+                          </div>
 					</div>
 				    </fieldset>
 				</div>

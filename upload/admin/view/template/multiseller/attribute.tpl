@@ -2,7 +2,7 @@
 <div id="content">
   <div class="page-header">
     <div class="container-fluid">
-      <div class="pull-right"><a href="index.php?route=multiseller/attribute/create&token=<?php echo $token; ?>" data-toggle="tooltip" title="<?php echo $button_insert; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+      <div class="pull-right"><a href="index.php?route=multiseller/attribute/create&token=<?php echo $token; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
       </div>
       <h1><?php echo $ms_attribute_heading; ?></h1>
       <ul class="breadcrumb">
@@ -63,7 +63,7 @@ $(function() {
 			{ "mData": "type" },
 			{ "mData": "sort_order" },
 			{ "mData": "status" },
-			{ "mData": "actions", "bSortable": false, "sClass": "right" }
+			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 		]
 	});
 });

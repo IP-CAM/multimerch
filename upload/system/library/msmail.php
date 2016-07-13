@@ -27,6 +27,7 @@ class MsMail extends Model {
 	const SMT_SELLER_VOTE = 23;
 	
 	const SMT_REMIND_LISTING = 30;
+	const CMT_ORDER_UPDATED = 31;
 	
 	const AMT_SELLER_ACCOUNT_CREATED = 101;
 	const AMT_SELLER_ACCOUNT_AWAITING_MODERATION = 102;
@@ -121,10 +122,12 @@ class MsMail extends Model {
 
 		if (isset($data['order_id'])) {
 			if ($this->_modelExists('checkout/order')) {
+				// catalog
 				$this->load->model('checkout/order');
 				$this->load->model('account/order');
 				$order_info = $this->model_checkout_order->getOrder($data['order_id']);
 			} else {
+				// admin
 				$this->load->model('sale/order');
 				$order_info = $this->model_sale_order->getOrder($data['order_id']);
 			}
@@ -137,14 +140,15 @@ class MsMail extends Model {
 		//$message .= sprintf($this->language->get('ms_mail_regards'), HTTP_SERVER) . "\n" . $this->config->get('config_name');
 
 		$mail = new Mail();
+
 		$mail->protocol = $this->config->get('config_mail_protocol');
 		$mail->parameter = $this->config->get('config_mail_parameter');
-		$mail->hostname = $this->config->get('config_smtp_host');
-		$mail->username = $this->config->get('config_smtp_username');
-		$mail->password = $this->config->get('config_smtp_password');
-		$mail->port = $this->config->get('config_smtp_port');
-		$mail->timeout = $this->config->get('config_smtp_timeout');
-		
+		$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+		$mail->smtp_username = $this->config->get('config_mail_smtp_username');
+		$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+		$mail->smtp_port = $this->config->get('config_mail_smtp_port');
+		$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+
 		if (!isset($data['recipients'])) {
 			$mail->setTo($this->_getRecipients($mail_type));
 		} else {
@@ -228,7 +232,7 @@ class MsMail extends Model {
 				$total = $this->currency->format($this->MsLoader->MsOrderData->getOrderTotal($data['order_id'], array('seller_id' => $data['seller_id'])), $this->config->get('config_currency'));
 			
 				$mail_subject .= $this->language->get('ms_mail_subject_product_purchased');
-				if (!$this->config->get('msconf_hide_emails_in_emails')) {
+				if (!$this->config->get('msconf_hide_customer_email')) {
 					$mail_text .= sprintf($this->language->get('ms_mail_product_purchased'), $this->config->get('config_name'), $order_info['firstname'] . ' ' . $order_info['lastname'], $order_info['email'], $products, $total);
 				} else {
 					$mail_text .= sprintf($this->language->get('ms_mail_product_purchased_no_email'), $this->config->get('config_name'), $order_info['firstname'] . ' ' . $order_info['lastname'], $products, $total);
@@ -270,10 +274,10 @@ class MsMail extends Model {
 				
 			case self::SMT_SELLER_CONTACT:
 				$mail_subject .= $this->language->get('ms_mail_subject_seller_contact');
-				if (!$this->config->get('msconf_hide_emails_in_emails')) {
-					$mail_text .= sprintf($this->language->get('ms_mail_seller_contact'), $data['customer_name'], $data['customer_email'], isset($data['product_id']) ? $product['name'] : '', $data['customer_message']);
+				if (!$this->config->get('msconf_hide_customer_email')) {
+					$mail_text .= sprintf($this->language->get('ms_mail_seller_contact'), $data['customer_name'], $data['customer_email'], isset($product['name']) ? $product['name'] : '', $data['customer_message']);
 				} else {
-					$mail_text .= sprintf($this->language->get('ms_mail_seller_contact_no_mail'), $data['customer_name'], isset($data['product_id']) ? $product['name'] : '', $data['customer_message']);
+					$mail_text .= sprintf($this->language->get('ms_mail_seller_contact_no_mail'), $data['customer_name'], isset($product['name']) ? $product['name'] : '', $data['customer_message']);
 				}
 				break;
 				
@@ -281,7 +285,21 @@ class MsMail extends Model {
 				$mail_subject .= $this->language->get('ms_mail_subject_private_message');
 				$mail_text .= sprintf($this->language->get('ms_mail_private_message'), $data['customer_name'], $data['title'], $data['customer_message']);
 				break;
-			
+
+			case self::CMT_ORDER_UPDATED:
+				$mail_subject .= sprintf($this->language->get('ms_mail_subject_order_updated'), $order_info['order_id'], $seller['ms.nickname']);
+
+				// get products
+				$order_products = $this->MsLoader->MsOrderData->getOrderProducts(array('order_id' => $data['order_id'], 'seller_id' => $data['seller_id']));
+				$products = '';
+				foreach ($order_products as $p) {
+					if ($p['quantity'] > 1) $products .= "{$p['quantity']} x ";
+					$products .= "{$p['name']} \n";
+				}
+
+				$mail_text .= sprintf($this->language->get('ms_mail_order_updated'), $this->config->get('config_name'), $seller['ms.nickname'], $order_info['order_id'], $products, $data['status'], $data['comment']);
+				break;
+
 			case self::SMT_SELLER_VOTE:
 				$mail_subject .= $this->language->get('ms_mail_subject_seller_vote');
 				$mail_text .= sprintf($this->language->get('ms_mail_seller_vote_message'), $data['customer_name'], $data['title'], $data['customer_message']);

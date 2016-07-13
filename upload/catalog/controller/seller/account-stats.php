@@ -218,13 +218,13 @@ class ControllerSellerAccountStats extends ControllerSellerAccount {
 		foreach($months as $key=>$m){
 			if($m === false){
 				$columns[] = array(
-					'date_added' => date("M Y", strtotime($year . "-" . $key . "-" . "01")),
+					'date_added' => date("m/Y", strtotime($year . "-" . $key . "-" . "01")),
 					'order_num' => 0,
 					'total_revenue' => $this->currency->format($m['total_revenue'], $this->config->get('config_currency')),
 					'average_revenue' => $this->currency->format($m['average_revenue'], $this->config->get('config_currency'))
 				);
 			}else{
-				$m['date_added'] = date("M Y", strtotime($m['date_added']));
+				$m['date_added'] = date("m/Y", strtotime($m['date_added']));
 				$m['total_revenue'] = $this->currency->format($m['total_revenue'], $this->config->get('config_currency'));
 				$m['average_revenue'] = $this->currency->format($m['average_revenue'], $this->config->get('config_currency'));
 				$columns[] = $m;

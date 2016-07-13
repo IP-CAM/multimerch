@@ -32,6 +32,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 	public function jxSaveSellerInfo() {
 		$data = $this->request->post;
 		$seller = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
+
 		$json = array();
 		$json['redirect'] = $this->url->link('seller/account-dashboard');
 
@@ -43,7 +44,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			// seller doesn't exist yet
 			if (empty($data['seller']['nickname'])) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_empty');
-			} else if (mb_strlen($data['seller']['nickname']) < 4 || mb_strlen($data['seller']['nickname']) > 128 ) {
+			} else if (utf8_strlen($data['seller']['nickname']) < 4 || utf8_strlen($data['seller']['nickname']) > 128 ) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_length');
 			} else if ( ($data['seller']['nickname'] != $seller['ms.nickname']) && ($this->MsLoader->MsSeller->nicknameTaken($data['seller']['nickname'])) ) {
 				$json['errors']['seller[nickname]'] = $this->language->get('ms_error_sellerinfo_nickname_taken');
@@ -87,11 +88,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 		}
 
-		if (mb_strlen($data['seller']['company']) > 50 ) {
-			$json['errors']['seller[company]'] = $this->language->get('ms_error_sellerinfo_company_length');
-		}
-
-		if (mb_strlen($data['seller']['description']) > 1000) {
+		if (utf8_strlen($data['seller']['description']) > 1000) {
 			$json['errors']['seller[description]'] = $this->language->get('ms_error_sellerinfo_description_length');
 		}
 
@@ -100,8 +97,16 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 		}
 
 		if (isset($data['seller']['avatar_name']) && !empty($data['seller']['avatar_name'])) {
-			if ($this->config->get('msconf_avatars_for_sellers') == 0 && !$this->MsLoader->MsFile->checkFileAgainstSession($data['seller']['avatar_name'])) {
+			if (!$this->MsLoader->MsFile->checkFileAgainstSession($data['seller']['avatar_name'])) {
 				$json['errors']['seller[avatar]'] = $this->language->get('ms_error_file_upload_error');
+			}
+		}
+
+		if ($this->config->get('msconf_enable_seller_banner')) {
+			if (isset($data['seller']['banner_name']) && !empty($data['seller']['banner_name'])) {
+				if ($this->config->get('msconf_banners_for_sellers') == 0 && !$this->MsLoader->MsFile->checkFileAgainstSession($data['seller']['banner_name'])) {
+					$json['errors']['seller[banner]'] = $this->language->get('ms_error_file_upload_error');
+				}
 			}
 		}
 
@@ -144,7 +149,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				}
 			}
 
-			if (empty($seller)) {
+			if (empty($seller) || (!empty($seller) && $seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE)) {
 				$data['seller']['approved'] = 0;
 				// create new seller
 				switch ($this->config->get('msconf_seller_validation')) {
@@ -195,7 +200,12 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 
 				$data['seller']['seller_id'] = $this->customer->getId();
 				$data['seller']['product_validation'] = $this->config->get('msconf_product_validation');
-				$this->MsLoader->MsSeller->createSeller($data['seller']);
+
+				if (!empty($seller) && $seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {
+					$this->MsLoader->MsSeller->editSeller($data['seller']);
+				} else {
+					$this->MsLoader->MsSeller->createSeller($data['seller']);
+				}
 
 				$commissions = $this->MsLoader->MsCommission->calculateCommission(array('seller_group_id' => $this->config->get('msconf_default_seller_group_id')));
 				$fee = (float)$commissions[MsCommission::RATE_SIGNUP]['flat'];
@@ -338,24 +348,24 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 
 	public function index() {
 		$this->document->addScript('catalog/view/javascript/account-seller-profile.js');
-		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
+		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.min.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 
-		// ckeditor
-		if($this->config->get('msconf_enable_rte'))
+		// rte
+		if($this->config->get('msconf_enable_rte')) {
 			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
+		}
 
-		$this->load->model('localisation/country');
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
 
 		$seller = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 
 		$this->data['salt'] = $this->MsLoader->MsSeller->getSalt($this->customer->getId());
-		$this->data['statusclass'] = 'attention';
+		$this->data['statusclass'] = 'warning';
 
 		if ($seller) {
 			switch ($seller['ms.seller_status']) {
 				case MsSeller::STATUS_UNPAID:
+				case MsSeller::STATUS_INCOMPLETE:
 					$this->data['statusclass'] = 'warning';
 					break;
 				case MsSeller::STATUS_ACTIVE:
@@ -367,8 +377,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 					break;
 			}
 
-			$this->data['seller'] = $seller;
-			$this->data['country_id'] = $seller['ms.country_id'];
+			$this->data['seller'] = $seller; unset($this->data['seller']['banner']);
 
 			if (!empty($seller['ms.avatar'])) {
 				$this->data['seller']['avatar']['name'] = $seller['ms.avatar'];
@@ -376,16 +385,31 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				$this->session->data['multiseller']['files'][] = $seller['ms.avatar'];
 			}
 
-			$this->data['statustext'] = $this->language->get('ms_account_status') . $this->language->get('ms_seller_status_' . $seller['ms.seller_status']);
+			if ($this->config->get('msconf_enable_seller_banner')) {
+				if (!empty($seller['banner'])) {
+					$this->data['seller']['banner']['name'] = $seller['banner'];
+					$this->data['seller']['banner']['thumb'] = $this->MsLoader->MsFile->resizeImage($seller['banner'], $this->config->get('msconf_product_seller_banner_width'), $this->config->get('msconf_product_seller_banner_height'));
+					$this->session->data['multiseller']['files'][] = $seller['banner'];
+				}
+			}
+
+			$this->data['statustext'] = '';
+
+			if ($seller['ms.seller_status'] != MsSeller::STATUS_INCOMPLETE) {
+				$this->data['statustext'] = $this->language->get('ms_account_status') . $this->language->get('ms_seller_status_' . $seller['ms.seller_status']);
+			}
 
 			if ($seller['ms.seller_status'] == MsSeller::STATUS_INACTIVE && !$seller['ms.seller_approved']) {
 				$this->data['statustext'] .= $this->language->get('ms_account_status_tobeapproved');
 			}
 
+			if ($seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {
+				$this->data['statustext'] .= $this->language->get('ms_account_status_please_fill_in');
+			}
+
 			$this->data['ms_account_sellerinfo_terms_note'] = '';
 		} else {
 			$this->data['seller'] = FALSE;
-			$this->data['country_id'] = $this->config->get('config_country_id');
 
 
 			$this->data['statustext'] = $this->language->get('ms_account_status_please_fill_in');
@@ -396,7 +420,7 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 				$information_info = $this->model_catalog_information->getInformation($this->config->get('msconf_seller_terms_page'));
 
 				if ($information_info) {
-					$this->data['ms_account_sellerinfo_terms_note'] = sprintf($this->language->get('ms_account_sellerinfo_terms_note'), $this->url->link('information/information/info', 'information_id=' . $this->config->get('msconf_seller_terms_page'), 'SSL'), $information_info['title'], $information_info['title']);
+					$this->data['ms_account_sellerinfo_terms_note'] = sprintf($this->language->get('ms_account_sellerinfo_terms_note'), $this->url->link('information/information/agree', 'information_id=' . $this->config->get('msconf_seller_terms_page'), 'SSL'), $information_info['title'], $information_info['title']);
 				} else {
 					$this->data['ms_account_sellerinfo_terms_note'] = '';
 				}
@@ -405,8 +429,9 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 			}
 		}
 
-		if (!$seller || $seller['ms.seller_status'] == MsSeller::STATUS_UNPAID) {
+		if (!$seller || $seller['ms.seller_status'] == MsSeller::STATUS_UNPAID || $seller['ms.seller_status'] == MsSeller::STATUS_INCOMPLETE) {
 			$this->data['group_commissions'] = $this->MsLoader->MsCommission->calculateCommission(array('seller_group_id' => $this->config->get('msconf_default_seller_group_id')));
+
 			switch($this->data['group_commissions'][MsCommission::RATE_SIGNUP]['payment_method']) {
 				case MsPayment::METHOD_PAYPAL:
 					$this->data['ms_commission_payment_type'] = $this->language->get('ms_account_sellerinfo_fee_paypal');
@@ -424,8 +449,9 @@ class ControllerSellerAccountProfile extends ControllerSellerAccount {
 						'custom' => 'custom'
 					);
 
-					list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('payment-paypal');
-					$this->data['payment_form'] = $this->render();
+
+					list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('payment-paypal');
+					$this->data['payment_form'] =  $this->load->view($template, $this->data);
 					break;
 
 				case MsPayment::METHOD_BALANCE:

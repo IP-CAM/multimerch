@@ -3,17 +3,19 @@
 class ControllerSellerAccountProduct extends ControllerSellerAccount {
 	public function getTableData() {
 		$colMap = array(
-			'product_name' => '`pd.name`',
+			'product_name' => 'pd.name',
 			'product_status' => '`mp.product_status`',
-			'date_created' => '`p.date_created`',
-			'list_until' => '`mp.list_until`',
+			'date_added' => '`p.date_added`',
+			'list_until' => 'mp.list_until',
 			'number_sold' => 'mp.number_sold',
 			'product_price' => 'p.price',
 		);
 		
-		$sorts = array('product_name', 'product_price', 'date_created', 'list_until', 'product_status', 'product_earnings', 'number_sold');
+		$sorts = array('product_name', 'product_price', 'date_added', 'list_until', 'product_status', 'product_earnings', 'number_sold');
+		$filters = array_diff($sorts, array('product_status'));
 		
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
+		$filterParams = $this->MsLoader->MsHelper->getFilterParams($filters, $colMap);
 
 		$seller_id = $this->customer->getId();
 		$products = $this->MsLoader->MsProduct->getProducts(
@@ -25,6 +27,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			array(
 				'order_by'  => $sortCol,
 				'order_way' => $sortDir,
+				'filters' => $filterParams,
 				'offset' => $this->request->get['iDisplayStart'],
 				'limit' => $this->request->get['iDisplayLength']
 			),
@@ -62,7 +65,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			if ($product['p.image'] && file_exists(DIR_IMAGE . $product['p.image'])) {
 				$image = $this->MsLoader->MsFile->resizeImage($product['p.image'], $this->config->get('msconf_product_seller_product_list_seller_area_image_width'), $this->config->get('msconf_product_seller_product_list_seller_area_image_height'));
 			} else {
-				$image = $this->MsLoader->MsFile->resizeImage('no_image.jpg', $this->config->get('msconf_product_seller_product_list_seller_area_image_width'), $this->config->get('msconf_product_seller_product_list_seller_area_image_height'));
+				$image = $this->MsLoader->MsFile->resizeImage('no_image.png', $this->config->get('msconf_product_seller_product_list_seller_area_image_width'), $this->config->get('msconf_product_seller_product_list_seller_area_image_height'));
 			}
 			
 			// actions
@@ -90,7 +93,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 			
 			// product status
 			$status = "";
-			if ($product['mp.product_status'] == MsProduct::STATUS_ACTIVE) { 
+			if ($product['mp.product_status'] == MsProduct::STATUS_ACTIVE) {
 				$status = "<span class='active' style='color: #080;'>" . $this->language->get('ms_product_status_' . $product['mp.product_status']) . "</td></span>";
 			} else {
 				$status = "<span class='inactive' style='color: #b00;'>" . $this->language->get('ms_product_status_' . $product['mp.product_status']) . "</td></span>";
@@ -112,7 +115,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					'number_sold' => $product['mp.number_sold'],
 					'product_earnings' => $this->currency->format($sale_data['seller_total'], $this->config->get('config_currency')),
 					'product_status' => $status,
-					'date_created' => date($this->language->get('date_format_short'), strtotime($product['p.date_created'])),
+					'date_added' => date($this->language->get('date_format_short'), strtotime($product['p.date_added'])),
 					'list_until' => $list_until,
 					'actions' => $actions
 				)
@@ -268,21 +271,22 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		echo $this->currency->format((float)$rates[MsCommission::RATE_LISTING]['flat'] + ((float)$rates[MsCommission::RATE_LISTING]['percent'] * $data['price'] / 100), $this->config->get('config_currency'));
 	}
 	
-	public function jxSubmitProduct() {
+	public function jxSubmitProduct()
+	{
 		//ob_start();
 		$data = $this->request->post;
 
 		$seller = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 
 		if (isset($data['product_id']) && !empty($data['product_id'])) {
-			if  ($this->MsLoader->MsProduct->productOwnedBySeller($data['product_id'], $this->customer->getId())) {
+			if ($this->MsLoader->MsProduct->productOwnedBySeller($data['product_id'], $this->customer->getId())) {
 				$product = $this->MsLoader->MsProduct->getProduct($data['product_id']);
 				$data['images'] = $this->MsLoader->MsProduct->getProductImages($data['product_id']);
 			} else {
 				return;
 			}
 		}
-		
+
 		$json = array();
 
 		// Only check default language for errors
@@ -290,32 +294,32 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$default = 0;
 		$attributes = array();
 		$product_attributes = array();
-		
+
 		foreach ($this->MsLoader->MsAttribute->getAttributes(array('multilang' => 1, 'enabled' => 1)) as $attribute) {
 			$attributes[$attribute['attribute_id']] = $attribute;
 			$attributes[$attribute['attribute_id']]['values'] = $this->MsLoader->MsAttribute->getAttributeValues($attribute['attribute_id']);
-		}		
-		
+		}
+
 		foreach ($data['languages'] as $language_id => $language) {
 			// main language inputs are mandatory
 
-			$description_length = $this->config->get('msconf_enable_rte') ? mb_strlen(strip_tags(htmlspecialchars_decode($language['product_description'], ENT_COMPAT))) : mb_strlen(htmlspecialchars_decode($language['product_description'], ENT_COMPAT));
+			$description_length = $this->config->get('msconf_enable_rte') ? utf8_strlen(strip_tags(htmlspecialchars_decode($language['product_description'], ENT_COMPAT))) : utf8_strlen(htmlspecialchars_decode($language['product_description'], ENT_COMPAT));
 			if ($i == 0) {
 				$default = $language_id;
-				
+
 				if (empty($language['product_name'])) {
-					$json['errors']['product_name_' . $language_id] = $this->language->get('ms_error_product_name_empty'); 
-				} else if (mb_strlen($language['product_name']) < 4 || mb_strlen($language['product_name']) > 50 ) {
+					$json['errors']['product_name_' . $language_id] = $this->language->get('ms_error_product_name_empty');
+				} else if (utf8_strlen($language['product_name']) < 4 || utf8_strlen($language['product_name']) > 50) {
 					$json['errors']['product_name_' . $language_id] = sprintf($this->language->get('ms_error_product_name_length'), 4, 50);
 				}
 
 				if (empty($language['product_description'])) {
-					$json['errors']['product_description_' . $language_id] = $this->language->get('ms_error_product_description_empty'); 
+					$json['errors']['product_description_' . $language_id] = $this->language->get('ms_error_product_description_empty');
 				} else if ($description_length < 25 || $description_length > 4000) {
 					$json['errors']['product_description_' . $language_id] = sprintf($this->language->get('ms_error_product_description_length'), 25, 4000);
 				}
 			} else {
-				if (!empty($language['product_name']) && (mb_strlen($language['product_name']) < 4 || mb_strlen($language['product_name']) > 50)) {
+				if (!empty($language['product_name']) && (utf8_strlen($language['product_name']) < 4 || utf8_strlen($language['product_name']) > 50)) {
 					$json['errors']['product_name_' . $language_id] = sprintf($this->language->get('ms_error_product_name_length'), 4, 50);
 				} else if (empty($language['product_name'])) {
 					$data['languages'][$language_id]['product_name'] = $data['languages'][$default]['product_name'];
@@ -327,7 +331,7 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					$data['languages'][$language_id]['product_description'] = $data['languages'][$default]['product_description'];
 				}
 			}
-			
+
 			if (in_array('metaDescription', $this->config->get('msconf_product_included_fields'))) {
 				$data['languages'][$language_id]['product_meta_description'] = $data['languages'][$default]['product_meta_description'];
 			}
@@ -335,45 +339,47 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				$data['languages'][$language_id]['product_meta_keyword'] = $data['languages'][$default]['product_meta_keyword'];
 			}
 
-			if (!empty($language['product_tags']) && mb_strlen($language['product_tags']) > 1000) {
-				$json['errors']['product_tags_' . $language_id] = $this->language->get('ms_error_product_tags_length');			
+			if (!empty($language['product_tags']) && utf8_strlen($language['product_tags']) > 1000) {
+				$json['errors']['product_tags_' . $language_id] = $this->language->get('ms_error_product_tags_length');
+			} else if (empty($language['product_tags']) && $i != 0) {
+				$data['languages'][$language_id]['product_tags'] = $data['languages'][$default]['product_tags'];
 			}
-			
+
 			// strip disallowed tags in description
 			if ($this->config->get('msconf_enable_rte')) {
 				if ($this->config->get('msconf_rte_whitelist') != '') {
 					$allowed_tags = explode(",", $this->config->get('msconf_rte_whitelist'));
 					$allowed_tags_ready = "";
-					foreach($allowed_tags as $tag) {
-						$allowed_tags_ready .= "<".trim($tag).">";
+					foreach ($allowed_tags as $tag) {
+						$allowed_tags_ready .= "<" . trim($tag) . ">";
 					}
-					$data['languages'][$language_id]['product_description'] = htmlspecialchars(strip_tags(htmlspecialchars_decode($language['product_description'], ENT_COMPAT), $allowed_tags_ready), ENT_COMPAT, 'UTF-8');
+					$data['languages'][$language_id]['product_description'] = htmlspecialchars(strip_tags(htmlspecialchars_decode($data['languages'][$language_id]['product_description'], ENT_COMPAT), $allowed_tags_ready), ENT_COMPAT, 'UTF-8');
 				}
 			} else {
-				$data['languages'][$language_id]['product_description'] = htmlspecialchars(nl2br($language['product_description']), ENT_COMPAT, 'UTF-8');
+				$data['languages'][$language_id]['product_description'] = htmlspecialchars(nl2br($data['languages'][$language_id]['product_description']), ENT_COMPAT, 'UTF-8');
 			}
-			
+
 			// multilang attributes
 			if (isset($language['product_attributes'])) {
 				$product_attributes = $language['product_attributes'];
 				unset($data['languages'][$language_id]['product_attributes']);
-				
+
 				foreach ($attributes as $attribute_id => $attribute) {
 					// required attributes empty, errors, for first language only
 					if ($i == 0 && $attribute['required'] && (!isset($product_attributes[$attribute_id]) || empty($product_attributes[$attribute_id]) || empty($product_attributes[$attribute_id]['value']))) {
-						$json['errors']["languages[$language_id][product_attributes][$attribute_id]"] = $this->language->get('ms_error_product_attribute_required'); 
+						$json['errors']["languages[$language_id][product_attributes][$attribute_id]"] = $this->language->get('ms_error_product_attribute_required');
 						continue;
 					}
-					
+
 					// attribute validation
 					if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXT) {
-						if (mb_strlen($product_attributes[$attribute_id]['value']) > 100) {
+						if (utf8_strlen($product_attributes[$attribute_id]['value']) > 100) {
 							$json['errors']["languages[$language_id][product_attributes][$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 100);
 							continue;
 						}
-					// text input validation
+						// text input validation
 					} else if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXTAREA) {
-						if (mb_strlen($product_attributes[$attribute_id]['value']) > 2000) {
+						if (utf8_strlen($product_attributes[$attribute_id]['value']) > 2000) {
 							$json['errors']["languages[$language_id][product_attributes][$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 2000);
 							continue;
 						}
@@ -386,18 +392,19 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					$data['languages'][$language_id]['product_attributes'][$attribute_id] = array(
 						'attribute_type' => $attribute['attribute_type'],
 						// sorcery
-						'value' => !empty($product_attributes[$attribute_id]['value']) ? $product_attributes[$attribute_id]['value'] :  (isset($data['languages'][$default]['product_attributes'][$attribute_id]['value']) ? $data['languages'][$default]['product_attributes'][$attribute_id]['value'] : ''),
+						'value' => !empty($product_attributes[$attribute_id]['value']) ? $product_attributes[$attribute_id]['value'] : (isset($data['languages'][$default]['product_attributes'][$attribute_id]['value']) ? $data['languages'][$default]['product_attributes'][$attribute_id]['value'] : ''),
 						'value_id' => $product_attributes[$attribute_id]['value_id']
 					);
 				}
 			}
-			
+
 			$i++;
 		}
 
+		//$data['product_price'] = $this->MsLoader->MsHelper->uniformDecimalPoint($data['product_price']);
 		if ((float)$data['product_price'] == 0) {
 			if (!is_numeric($data['product_price'])) {
-				$json['errors']['product_price'] = $this->language->get('ms_error_product_price_invalid');			
+				$json['errors']['product_price'] = $this->language->get('ms_error_product_price_invalid');
 			} else if ($this->config->get('msconf_allow_free_products') == 0) {
 				$json['errors']['product_price'] = $this->language->get('ms_error_product_price_empty');
 			}
@@ -406,15 +413,15 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		} else if (($this->config->get('msconf_maximum_product_price') != 0) && ((float)$data['product_price'] > (float)$this->config->get('msconf_maximum_product_price'))) {
 			$json['errors']['product_price'] = $this->language->get('ms_error_product_price_high');
 		}
-		
+
 		$msconf_downloads_limits = $this->config->get('msconf_downloads_limits');
 		if (!isset($data['product_downloads'])) {
 			if ($msconf_downloads_limits[0] > 0) {
-				$json['errors']['product_download'] = sprintf($this->language->get('ms_error_product_download_count'),$msconf_downloads_limits[0]);
-			}			
+				$json['errors']['product_download'] = sprintf($this->language->get('ms_error_product_download_count'), $msconf_downloads_limits[0]);
+			}
 		} else {
 			if ($msconf_downloads_limits[1] > 0 && count($data['product_downloads']) > $msconf_downloads_limits[1]) {
-				$json['errors']['product_download'] = sprintf($this->language->get('ms_error_product_download_maximum'),$msconf_downloads_limits[1]);
+				$json['errors']['product_download'] = sprintf($this->language->get('ms_error_product_download_maximum'), $msconf_downloads_limits[1]);
 			} else if ($msconf_downloads_limits[0] > 0 && count($data['product_downloads']) < $msconf_downloads_limits[0]) {
 				$json['errors']['product_download'] = sprintf($this->language->get('ms_error_product_download_count'), $msconf_downloads_limits[0]);
 			} else {
@@ -422,28 +429,28 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					if (!empty($download['filename'])) {
 						if (!$this->MsLoader->MsFile->checkFileAgainstSession($download['filename'])) {
 							$json['errors']['product_download'] = $this->language->get('ms_error_file_upload_error');
-						}						
+						}
 					} else if (!empty($download['download_id']) && !empty($product['product_id'])) {
-						if (!$this->MsLoader->MsProduct->hasDownload($product['product_id'],$download['download_id'])) {
+						if (!$this->MsLoader->MsProduct->hasDownload($product['product_id'], $download['download_id'])) {
 							$json['errors']['product_download'] = $this->language->get('ms_error_file_upload_error');
 						}
 					} else {
-						unset($data['product_downloads'][$key]);	
+						unset($data['product_downloads'][$key]);
 					}
 					//str_replace($this->MsLoader->MsSeller->getNickname() . '_', '', $download);
 					//$download = substr_replace($download, '.' . $this->MsLoader->MsSeller->getNickname() . '_', strpos($download,'.'), strlen('.'));
 				}
 			}
 		}
-		
+
 		$msconf_images_limits = $this->config->get('msconf_images_limits');
 		if (!isset($data['product_images'])) {
 			if ($msconf_images_limits[0] > 0) {
-				$json['errors']['product_image'] = sprintf($this->language->get('ms_error_product_image_count'),$msconf_images_limits[0]);
-			}			
+				$json['errors']['product_image'] = sprintf($this->language->get('ms_error_product_image_count'), $msconf_images_limits[0]);
+			}
 		} else {
 			if ($msconf_images_limits[1] > 0 && count($data['product_images']) > $msconf_images_limits[1]) {
-				$json['errors']['product_image'] = sprintf($this->language->get('ms_error_product_image_maximum'),$msconf_images_limits[1]);
+				$json['errors']['product_image'] = sprintf($this->language->get('ms_error_product_image_maximum'), $msconf_images_limits[1]);
 			} else if ($msconf_images_limits[0] > 0 && count($data['product_images']) < $msconf_images_limits[0]) {
 				$json['errors']['product_image'] = sprintf($this->language->get('ms_error_product_image_count'), $msconf_images_limits[0]);
 			} else {
@@ -452,15 +459,15 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 						$json['errors']['product_image'] = $this->language->get('ms_error_file_upload_error');
 					}
 				}
-				
+
 				$data['product_thumbnail'] = array_shift($data['product_images']);
 			}
 		}
-		
-		if (!empty($data['product_message']) && mb_strlen($data['product_message']) > 1000) {
-			$json['errors']['product_message'] = $this->language->get('ms_error_product_message_length');			
+
+		if (!empty($data['product_message']) && utf8_strlen($data['product_message']) > 1000) {
+			$json['errors']['product_message'] = $this->language->get('ms_error_product_message_length');
 		}
-		
+
 		// Special Prices
 		unset($data['product_specials'][0]); // Remove sample row
 		if (isset($data['product_specials']) && is_array($data['product_specials'])) {
@@ -472,12 +479,12 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				if ((!$this->MsLoader->MsHelper->isUnsignedFloat($product_special['price'])) || ((float)$product_special['price'] < (float)0)) {
 					$json['errors']['specials'] = $this->language->get('ms_error_invalid_special_price_price');
 				}
-				if ( !isset($product_special['date_start']) || ($product_special['date_start'] == NULL) || (!isset($product_special['date_end']) || $product_special['date_end'] == NULL) ) {
+				if (!isset($product_special['date_start']) || ($product_special['date_start'] == NULL) || (!isset($product_special['date_end']) || $product_special['date_end'] == NULL)) {
 					$json['errors']['specials'] = $this->language->get('ms_error_invalid_special_price_dates');
 				}
 			}
 		}
-		
+
 		// Quantity Discounts
 		unset($data['product_discounts'][0]); // Remove sample row
 		if (isset($data['product_discounts']) && is_array($data['product_discounts'])) {
@@ -492,19 +499,19 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				if ((!$this->MsLoader->MsHelper->isUnsignedFloat($product_discount['price'])) || ((float)$product_discount['price'] < (float)0)) {
 					$json['errors']['quantity_discounts'] = $this->language->get('ms_error_invalid_quantity_discount_price');
 				}
-				if ( !isset($product_discount['date_start']) || ($product_discount['date_start'] == NULL) || (!isset($product_discount['date_end']) || $product_discount['date_end'] == NULL) ) {
+				if (!isset($product_discount['date_start']) || ($product_discount['date_start'] == NULL) || (!isset($product_discount['date_end']) || $product_discount['date_end'] == NULL)) {
 					$json['errors']['quantity_discounts'] = $this->language->get('ms_error_invalid_quantity_discount_dates');
 				}
 			}
 		}
-		
+
 		// uncomment to enable RTE for message field 
 		/*
 		if(isset($data['product_message'])) {
 			$data['product_message'] = strip_tags(html_entity_decode($data['product_message']), $allowed_tags_ready);
 		}
 		*/
-		
+
 		if (isset($data['product_category']) && !empty($data['product_category'])) {
 			$categories = $this->MsLoader->MsProduct->getCategories();
 			$disabled = array();
@@ -514,10 +521,10 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 			// convert to array if needed
 			$data['product_category'] = is_array($data['product_category']) ? $data['product_category'] : array($data['product_category']);
-			
+
 			// remove disabled categories if set
-			$data['product_category'] = array_diff($data['product_category'], $disabled);				
-			
+			$data['product_category'] = array_diff($data['product_category'], $disabled);
+
 			if (!$this->config->get('msconf_allow_multiple_categories') && count($data['product_category']) > 1) {
 				$data['product_category'] = array($data['product_category'][0]);
 			}
@@ -525,43 +532,43 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 		// data array could have been modified in the previous step
 		if (!isset($data['product_category']) || empty($data['product_category'])) {
-			$json['errors']['product_category'] = $this->language->get('ms_error_product_category_empty'); 		
+			$json['errors']['product_category'] = $this->language->get('ms_error_product_category_empty');
 		}
 
 		if (in_array('model', $this->config->get('msconf_product_included_fields'))) {
 			if (empty($data['product_model'])) {
 				$json['errors']['product_model'] = $this->language->get('ms_error_product_model_empty');
-			} else if (mb_strlen($data['product_model']) < 4 || mb_strlen($data['product_model']) > 64 ) {
+			} else if (utf8_strlen($data['product_model']) < 4 || utf8_strlen($data['product_model']) > 64) {
 				$json['errors']['product_model'] = sprintf($this->language->get('ms_error_product_model_length'), 4, 64);
 			}
 		}
 
 		// generic attributes
 		$attributes = array();
-		$product_attributes = array();		
+		$product_attributes = array();
 
 		if (isset($data['product_attributes'])) {
 			$product_attributes = $data['product_attributes'];
 			unset($data['product_attributes']);
 		}
-		
+
 		foreach ($this->MsLoader->MsAttribute->getAttributes(array('multilang' => 0, 'enabled' => 1)) as $attribute) {
 			$attributes[$attribute['attribute_id']] = $attribute;
 			$attributes[$attribute['attribute_id']]['values'] = $this->MsLoader->MsAttribute->getAttributeValues($attribute['attribute_id']);
 		}
-		
+
 		foreach ($attributes as $attribute_id => $attribute) {
 			// attributes with no values defined, skip
 			if (empty($attribute['values']) && in_array($attribute['attribute_type'], array(MsAttribute::TYPE_CHECKBOX, MsAttribute::TYPE_SELECT, MsAttribute::TYPE_RADIO)))
-				continue;				
-			
+				continue;
+
 			// required attributes empty, errors
 			// haha
 			if (($attribute['required'] || $attribute['attribute_type'] == MsAttribute::TYPE_RADIO) && (!isset($product_attributes[$attribute_id]) || empty($product_attributes[$attribute_id]) || (isset($product_attributes[$attribute_id]['value'])) && empty($product_attributes[$attribute_id]['value']))) {
-				$json['errors']["product_attributes[$attribute_id]"] = $this->language->get('ms_error_product_attribute_required'); 
+				$json['errors']["product_attributes[$attribute_id]"] = $this->language->get('ms_error_product_attribute_required');
 				continue;
 			}
-			
+
 			// attribute validation
 			if (in_array($attribute['attribute_type'], array(MsAttribute::TYPE_SELECT, MsAttribute::TYPE_RADIO, MsAttribute::TYPE_IMAGE)) && isset($product_attributes[$attribute_id])) {
 				// select, radio, image
@@ -581,20 +588,20 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 					foreach ($product_attributes[$attribute_id] as $key => $attribute_value_id) {
 						if ((int)$attribute_value_id != 0) {
 							// @TODO check for permitted value id
-							$data['product_attributes'][$attribute_id]['attribute_type']  = $attribute['attribute_type'];
-							$data['product_attributes'][$attribute_id]['values'][]  = (int)$attribute_value_id;
+							$data['product_attributes'][$attribute_id]['attribute_type'] = $attribute['attribute_type'];
+							$data['product_attributes'][$attribute_id]['values'][] = (int)$attribute_value_id;
 						}
 					}
 				}
 				continue;
 			} else if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXT) {
-				if (mb_strlen($product_attributes[$attribute_id]['value']) > 100) {
+				if (utf8_strlen($product_attributes[$attribute_id]['value']) > 100) {
 					$json['errors']["product_attributes[$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 100);
 					continue;
 				}
 				// text input validation
 			} else if ($attribute['attribute_type'] == MsAttribute::TYPE_TEXTAREA) {
-				if (mb_strlen($product_attributes[$attribute_id]['value']) > 2000) {
+				if (utf8_strlen($product_attributes[$attribute_id]['value']) > 2000) {
 					$json['errors']["product_attributes[$attribute_id]"] = sprintf($this->language->get('ms_error_product_attribute_long'), 2000);
 					continue;
 				}
@@ -608,69 +615,54 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 
 			// set attributes
 			//if (isset($data['product_attributes'][$attribute_id])) { ?
-				$data['product_attributes'][$attribute_id] = array(
-					'attribute_type' => $attribute['attribute_type'],
-					'value' => $product_attributes[$attribute_id]['value'],
-					'value_id' => $product_attributes[$attribute_id]['value_id'],
-				);
+			$data['product_attributes'][$attribute_id] = array(
+				'attribute_type' => $attribute['attribute_type'],
+				'value' => $product_attributes[$attribute_id]['value'],
+				'value_id' => $product_attributes[$attribute_id]['value_id'],
+			);
 			//}
 		}
-		
+
 		// options
 		//unset($data['product_option'][0]); // Remove sample row		
-		
-        if(!isset($data['product_subtract'])){
-            $data['product_subtract'] = 0;
-        }
+
 		if ($this->config->get('msconf_enable_shipping') == 1) { // enable shipping
 			$data['product_enable_shipping'] = 1;
 		} else if ($this->config->get('msconf_enable_shipping') == 2) { // seller select
-		 	if  (!isset($data['product_enable_shipping']) || $data['product_enable_shipping'] != 1) {
-		 		$data['product_enable_shipping'] = 0;
-		 	} else {
-		 		$data['product_enable_shipping'] = 1;
-		 	}
+			if (!isset($data['product_enable_shipping']) || $data['product_enable_shipping'] != 1) {
+				$data['product_enable_shipping'] = 0;
+			} else {
+				$data['product_enable_shipping'] = 1;
+			}
 		} else { // disable shipping
 			$data['product_enable_shipping'] = 0;
 		}
-		
-		// Set the quantity
+
+		// Quantities - accept by default
 		$seller_group = $this->MsLoader->MsSellerGroup->getSellerGroup($seller['ms.seller_group']);
-		if ($this->config->get('msconf_enable_quantities') == 1) { // Enable quantities
-			if (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0) { // Seller group quantity is set
-				$data['product_quantity'] = (int)$seller_group['product_quantity'];
-			} else {
-				$data['product_quantity'] = (int)$data['product_quantity'];
-			}
-			$data['product_subtract'] = 1;
-		} else if ($this->config->get('msconf_enable_quantities') == 2) { // Shipping dependent
-			if ($this->config->get('msconf_enable_shipping') == 1) {
-				$data['product_subtract'] = 1;
-				if (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0) { // Seller group quantity is set
-					$data['product_quantity'] = (int)$seller_group['product_quantity'];
-				} else {
-					if (!isset($data['product_quantity']))
-						$data['product_quantity'] = 0;
-				}
-			} else if ($this->config->get('msconf_enable_shipping') == 2) {
+		$data['product_subtract'] = 1;
+		if (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0) { // Seller group quantity is set
+			$data['product_quantity'] = (int)$seller_group['product_quantity'];
+		} else {
+			$data['product_quantity'] = isset($data['product_quantity']) ? (int)$data['product_quantity'] : 0;
+		}
+
+		// Disable quantities for digital products and if selected by seller
+		if ($this->config->get('msconf_enable_quantities') == 2) {
+			if ($this->config->get('msconf_enable_shipping') == 2) {
 				if (!$data['product_enable_shipping']) {
 					$data['product_quantity'] = 999;
-				} else {
-					$data['product_subtract'] = 1;
-					if (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0) { // Seller group quantity is set
-						$data['product_quantity'] = (int)$seller_group['product_quantity'];
-					} else {
-						if (!isset($data['product_quantity']))
-							$data['product_quantity'] = 0;
-					}
+					$data['product_subtract'] = 0;
 				}
-			} else { // Shipping disabled and quantity is shipping dependent
+			} else {
 				$data['product_quantity'] = 999;
+				$data['product_subtract'] = 0;
 			}
-		} else { // Disable quantities
+		} else if ($this->config->get('msconf_enable_quantities') == 0) {
 			$data['product_quantity'] = 999;
+			$data['product_subtract'] = 0;
 		}
-		
+
 		// SEO urls generation for products
 		if ($this->config->get('msconf_enable_seo_urls_product')) {
 			$latin_check = '/[^\x{0030}-\x{007f}]/u';
@@ -974,74 +966,38 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 	}	
 	
 	public function jxAutocomplete() {
-        $data = $this->request->post;
-        $json = array();
+		$json = array();
 
-        switch($data['type']){
-            case 'manufacturers':
-                if (isset($data['filter_name'])) {
-                    $data = array(
-                        'filter_name' => $data['filter_name'],
-                        'start'       => 0,
-                        'limit'       => 20
-                    );
-					
-					$this->load->model('catalog/manufacturer');
-					$results = $this->model_catalog_manufacturer->getManufacturers($data);
+		if (isset($this->request->get['filter_name'])) {
+			$this->load->model('catalog/manufacturer');
 
-                    foreach ($results as $result) {
-                        $json[] = array(
-                            'manufacturer_id' => $result['manufacturer_id'],
-                            'name'            => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))
-                        );
-                    }
-                }
-        }
+			$filter_data = array(
+				'filter_name' => $this->request->get['filter_name'],
+				'start' => 0,
+				'limit' => 5
+			);
 
-        $sort_order = array();
+			$results = $this->model_catalog_manufacturer->getManufacturers($filter_data);
 
-        foreach ($json as $key => $value) {
-            $sort_order[$key] = $value['name'];
-        }
+			foreach ($results as $result) {
+				$json[] = array(
+					'manufacturer_id' => $result['manufacturer_id'],
+					'name' => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))
+				);
+			}
+		}
 
-        array_multisort($sort_order, SORT_ASC, $json);
+		$sort_order = array();
 
-        $this->response->setOutput(json_encode($json));
-    }
+		foreach ($json as $key => $value) {
+			$sort_order[$key] = $value['name'];
+		}
 
-    public function jxShippingCategories()
-    {
-        $this->load->model('catalog/category');
-        $this->load->model('catalog/product');
+		array_multisort($sort_order, SORT_ASC, $json);
 
-        $product_id = empty($this->request->post['product_id']) ? 0 : $this->request->post['product_id'];
-        $seller_id  = $this->customer->getId();
-        $product    = NULL;
-
-        if(!empty($product_id))
-        {
-            if($this->MsLoader->MsProduct->productOwnedBySeller($product_id, $seller_id))
-            {
-                $product = $this->MsLoader->MsProduct->getProduct($product_id);
-            }
-            else
-                $product = NULL;
-        }
-
-        $this->data['product'] = $product;
-        $this->data['product']['category_id'] = $this->MsLoader->MsProduct->getProductCategories($product_id);
-        $this->data['product']['shipping'] = $this->request->post['type'];
-        $this->data['categories'] = $this->MsLoader->MsProduct->getCategories();
-        $this->data['msconf_allow_multiple_categories'] = $this->config->get('msconf_allow_multiple_categories');
-        $this->data['msconf_enable_shipping'] = $this->config->get('msconf_enable_shipping');
-        $this->data['msconf_enable_categories'] = $this->config->get('msconf_enable_categories');
-        $this->data['msconf_physical_product_categories'] = $this->config->get('msconf_physical_product_categories');
-        $this->data['msconf_digital_product_categories'] = $this->config->get('msconf_digital_product_categories');
-
-        $this->template = 'default/template/multiseller/account-product-form-shipping-categories.tpl';
-
-        $this->response->setOutput($this->render(TRUE), $this->config->get('config_compression'));
-    }
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
 
     public function index() {
 		// paypal listing payment confirmation
@@ -1074,32 +1030,55 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		$this->response->setOutput($this->load->view($template, array_merge($this->data, $children)));
 	}
 	
-	private function _initForm() {
+	private function _initProductFilters() {
+		if (empty($this->request->get['product_id'])) return;
+		
+		$productId = $this->request->get['product_id'];
+		$filters = $this->MsLoader->MsFilter->getProductFilters($productId);
+		
+		$this->data['product_filters'] = array();
+		foreach ($filters as $filter_id) {
+			$filter_info = $this->MsLoader->MsFilter->getFilter($filter_id);
+			if ($filter_info) {
+				$this->data['product_filters'][] = array(
+					'filter_id' => $filter_info['filter_id'],
+					'name' => $filter_info['group'] . ' &gt; ' . $filter_info['name']
+				);
+			}
+		}
+	}
+	
+	private function _initForm()
+	{
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/product');
 		$this->load->model('localisation/currency');
 		$this->load->model('localisation/language');
-		
-		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.js');
+		$this->load->model('account/customer_group');
+
+		$this->document->addScript('catalog/view/javascript/plupload/plupload.full.min.js');
 		$this->document->addScript('catalog/view/javascript/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
 		$this->document->addScript('catalog/view/javascript/account-product-form.js');
 		$this->document->addScript('catalog/view/javascript/multimerch/account-product-form-options.js');
-		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
+		$this->document->addScript('catalog/view/javascript/multimerch/Sortable.js');
 
-
-		// ckeditor
-		if($this->config->get('msconf_enable_rte'))
+		// rte
+		if ($this->config->get('msconf_enable_rte')) {
 			$this->document->addScript('catalog/view/javascript/multimerch/ckeditor/ckeditor.js');
+		}
 
 		$this->data['seller'] = $this->MsLoader->MsSeller->getSeller($this->customer->getId());
 		$this->data['seller_group'] = $this->MsLoader->MsSellerGroup->getSellerGroup($this->data['seller']['ms.seller_group']);
-		
+
+		$this->data['customer_groups'] = $this->model_account_customer_group->getCustomerGroups();
+		$this->data['hide_customer_groups'] = (count($this->data['customer_groups']) < 2) ? true : false;
+
 		$product_id = isset($this->request->get['product_id']) ? (int)$this->request->get['product_id'] : 0;
 		if ($product_id) $product_status = $this->MsLoader->MsProduct->getStatus($product_id);
 
 		if (!$product_id || $product_status == MsProduct::STATUS_UNPAID) {
 			$this->data['seller']['commissions'] = $this->MsLoader->MsCommission->calculateCommission(array('seller_id' => $this->customer->getId()));
-			switch($this->data['seller']['commissions'][MsCommission::RATE_LISTING]['payment_method']) {
+			switch ($this->data['seller']['commissions'][MsCommission::RATE_LISTING]['payment_method']) {
 				case MsPayment::METHOD_PAYPAL:
 					$this->data['ms_commission_payment_type'] = $this->language->get('ms_account_product_listing_paypal');
 					$this->data['payment_data'] = array(
@@ -1115,22 +1094,22 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 						'notify_url' => $this->url->link('payment/multimerch-paypal/listingIPN'),
 						'custom' => 'custom'
 					);
-					
-					list($this->template, $this->children) = $this->MsLoader->MsHelper->loadTemplate('payment-paypal', array());
-					$this->data['payment_form'] = $this->render();
+
+					list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('payment-paypal');
+					$this->data['payment_form'] =  $this->load->view($template, $this->data);
 					break;
-					
+
 				case MsPayment::METHOD_BALANCE:
 				default:
 					$this->data['ms_commission_payment_type'] = $this->language->get('ms_account_product_listing_balance');
 					break;
-			} 
+			}
 		}
 		$this->data['salt'] = $this->MsLoader->MsSeller->getSalt($this->customer->getId());
 		$this->data['categories'] = $this->MsLoader->MsProduct->getCategories();
-        $this->data['date_available'] = date('Y-m-d', time() - 86400);
-        $this->data['tax_classes'] = $this->MsLoader->MsHelper->getTaxClasses();
-        $this->data['stock_statuses'] = $this->MsLoader->MsHelper->getStockStatuses();
+		$this->data['date_available'] = date('Y-m-d', time() - 86400);
+		$this->data['tax_classes'] = $this->MsLoader->MsHelper->getTaxClasses();
+		$this->data['stock_statuses'] = $this->MsLoader->MsHelper->getStockStatuses();
 
 		$attributes = $this->MsLoader->MsAttribute->getAttributes(
 			array(
@@ -1147,16 +1126,16 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		if (!empty($attributes)) {
 			foreach ($attributes as $attr) {
 				if ($attr['attribute_type'] == MsAttribute::TYPE_RADIO) $attr['required'] = 1;
-				
+
 				$attr['values'] = $this->MsLoader->MsAttribute->getAttributeValues($attr['attribute_id']);
-				
+
 				if (empty($attr['values']) && in_array($attr['attribute_type'], array(MsAttribute::TYPE_CHECKBOX, MsAttribute::TYPE_SELECT, MsAttribute::TYPE_RADIO)))
 					continue;
 
 				foreach ($attr['values'] as &$value) {
-					$value['image'] = (!empty($value['image']) ? $this->MsLoader->MsFile->resizeImage($value['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.jpg', 50, 50));
+					$value['image'] = (!empty($value['image']) ? $this->MsLoader->MsFile->resizeImage($value['image'], 50, 50) : $this->MsLoader->MsFile->resizeImage('no_image.png', 50, 50));
 				}
-				
+
 				if ($attr['multilang'] && in_array($attr['attribute_type'], array(MsAttribute::TYPE_TEXT, MsAttribute::TYPE_TEXTAREA))) {
 					$this->data['multilang_attributes'][] = $attr;
 				} else {
@@ -1164,16 +1143,22 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 				}
 			}
 		}
-		
+
+		$this->data['enable_quantities'] = 0;
+		if ($this->config->get('msconf_enable_quantities') == 1) {
+			$this->data['enable_quantities'] = 1;
+		} else if ($this->config->get('msconf_enable_quantities') == 2) {
+			// shipping-dependent
+			if ($this->config->get('msconf_enable_shipping') == 1) {
+				$this->data['enable_quantities'] = 1;
+			}
+		}
+
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		$this->data['msconf_allow_multiple_categories'] = $this->config->get('msconf_allow_multiple_categories');
-		$this->data['msconf_enable_shipping'] = $this->config->get('msconf_enable_shipping');
 		$this->data['msconf_images_limits'] = $this->config->get('msconf_images_limits');
 		$this->data['msconf_downloads_limits'] = $this->config->get('msconf_downloads_limits');
 		$this->data['msconf_enable_quantities'] = $this->config->get('msconf_enable_quantities');
-        $this->data['msconf_enable_categories'] = $this->config->get('msconf_enable_categories');
-        $this->data['msconf_physical_product_categories'] = $this->config->get('msconf_physical_product_categories');
-        $this->data['msconf_digital_product_categories'] = $this->config->get('msconf_digital_product_categories');
         $this->data['ms_account_product_download_note'] = sprintf($this->language->get('ms_account_product_download_note'), $this->config->get('msconf_allowed_download_types'));
 		$this->data['ms_account_product_image_note'] = sprintf($this->language->get('ms_account_product_image_note'), $this->config->get('msconf_allowed_image_types'));
 		$this->data['back'] = $this->url->link('seller/account-product', '', 'SSL');
@@ -1242,16 +1227,20 @@ class ControllerSellerAccountProduct extends ControllerSellerAccount {
 		}
 			
 		$this->_initForm();
+		$this->_initProductFilters();
 
 		if (!empty($this->data['normal_attributes']) || !empty($this->data['multilang_attributes'])) {
 			$a = $this->MsLoader->MsAttribute->getProductAttributeValues($product_id);
 			$this->data['multilang_attribute_values'] = $a[1];
 			$this->data['normal_attribute_values'] = $a[0]; 
 		}
-		
+
+		// enable quantities for shippable products
+		if (isset($product['shipping']) && $product['shipping'] == 1 && $this->config->get('msconf_enable_quantities') == 2) $this->data['enable_quantities'] = 1;
+
 		$product['specials'] = $this->MsLoader->MsProduct->getProductSpecials($product_id);
 		$product['discounts'] = $this->MsLoader->MsProduct->getProductDiscounts($product_id);
-		
+
 		if (!empty($product['thumbnail'])) {
 		
 			if ($clone){

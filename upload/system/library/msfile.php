@@ -77,7 +77,7 @@ class MsFile extends Model {
 			}
 		} else {
 			// todo filename size
-			if (mb_strlen($file['name']) > 150) {
+			if (utf8_strlen($file['name']) > 150) {
 				$errors[] = $this->language->get('ms_error_file_upload_error');
 			}
 		}
@@ -144,17 +144,13 @@ class MsFile extends Model {
 		return TRUE;
 	}
 
-	public function checkPredefinedAvatar($fileName) {
-		return (strpos($fileName, $this->config->get('msconf_predefined_avatars_path'))===0 && file_exists(DIR_IMAGE . $fileName));
-	}
-
 	public function moveDownload($fileName) {
 		$newpath = $fileName;
 
 		$key = array_search($fileName, $this->session->data['multiseller']['files']);
 
 		//strip nonce and timestamp
-		$original_file_name = substr($fileName, strpos($fileName, '.') + 1, mb_strlen($fileName));
+		$original_file_name = substr($fileName, strpos($fileName, '.') + 1, utf8_strlen($fileName));
 		//var_dump($original_file_name);
 		if ($this->_isNewUpload($fileName)) {
 			$newpath = $original_file_name . '.' . md5(rand());
@@ -168,10 +164,8 @@ class MsFile extends Model {
 	}
 
 	public function moveImage($path) {
-		if (!$this->checkPredefinedAvatar($path)) {
-			$key = array_search($path, $this->session->data['multiseller']['files']);
-			if ($key === FALSE) return;
-		}
+		$key = array_search($path, $this->session->data['multiseller']['files']);
+		if ($key === FALSE) return;
 
 		$dirname = dirname($path) . '/';
 		$filename = basename($path);
@@ -189,24 +183,18 @@ class MsFile extends Model {
 			$dirname = $this->config->get('msconf_temp_image_path');
 			//strip nonce and timestamp
 			$originalFilename = $filename;
-			$filename = substr($filename, strpos($filename, '.') + 1, mb_strlen($filename));
+			$filename = substr($filename, strpos($filename, '.') + 1, utf8_strlen($filename));
 		}
 
 		if (DIR_IMAGE . $imageDir . $this->customer->getId() . "/" . $filename != DIR_IMAGE . $path) {
 			$newFilename = $this->_checkExistingFiles(DIR_IMAGE . $imageDir . $this->customer->getId(), $filename);
 			$newPath = $imageDir . $this->customer->getId() . "/" . $newFilename;
-			if ($this->checkPredefinedAvatar($path)) {
-				copy(DIR_IMAGE . $dirname . (isset($originalFilename) ? $originalFilename : $filename), DIR_IMAGE . $newPath);
-			} else {
-				rename(DIR_IMAGE . $dirname . (isset($originalFilename) ? $originalFilename : $filename), DIR_IMAGE . $newPath);
-			}
+			rename(DIR_IMAGE . $dirname . (isset($originalFilename) ? $originalFilename : $filename), DIR_IMAGE . $newPath);
 		} else {
 			$newPath = $imageDir . $this->customer->getId() . "/" . $filename;
 		}
 
-		if (!$this->checkPredefinedAvatar($path)) {
-			unset ($this->session->data['multiseller']['files'][$key]);
-		}
+		unset ($this->session->data['multiseller']['files'][$key]);
 		return $newPath;
 	}
 
@@ -236,7 +224,7 @@ class MsFile extends Model {
 		unset ($this->session->data['multiseller']['files'][$key]);
 	}
 
-	public function resizeImage($filename, $width, $height) {
+	public function resizeImage($filename, $width, $height, $w = '') {
 		// todo consider using default cache folder
 		if (!file_exists(DIR_IMAGE . $filename) || !$filename || !filesize(DIR_IMAGE . $filename)) {
 			return;
@@ -250,7 +238,7 @@ class MsFile extends Model {
 
 		$temporary_filename = time() . '_' . md5(rand()) . '.' . $info["basename"];
 		$image = new Image(DIR_IMAGE . $filename);
-		$image->resize($width, $height);
+		$image->resize($width, $height, $w);
 		$image->save(DIR_IMAGE . $this->config->get('msconf_temp_image_path') . $temporary_filename);
 
 		$file = substr($info['basename'], 0, strrpos($info['basename'], '.')) . '-' . $width . 'x' . $height . '.' . $extension;
@@ -267,34 +255,6 @@ class MsFile extends Model {
 			$base = defined('HTTP_CATALOG') ? HTTP_CATALOG : HTTP_SERVER;
 			return $base . 'image/' . $this->config->get('msconf_temp_image_path') . $new_image;
 		}
-	}
-
-	public function getPredefinedAvatars($path = '') {
-		static $avatars = array();
-
-		$dir = DIR_IMAGE . $this->config->get('msconf_predefined_avatars_path') . $path;
-
-		$list = array_values(array_diff(scandir($dir), array('.', '..')));
-
-		foreach ($list as $value) {
-			$full_path = $dir . $value;
-			if (is_dir($full_path) && is_readable($full_path)) {
-				$this->getPredefinedAvatars($path . $value . '/');
-			} elseif (is_file($full_path) && is_readable($full_path)) {
-				$category = basename(dirname($full_path));
-				if (!isset($avatars[$category])) {
-					$avatars[$category] = array();
-				}
-
-				$avatars[$category][] = array(
-					'filename' => $value,
-					'dir' => $this->config->get('msconf_predefined_avatars_path') . $path, // image can be placed in any subfolder level, so dir not always the same as category
-					'image' => $this->resizeImage($this->config->get('msconf_predefined_avatars_path') . $path . $value, $this->config->get('msconf_preview_seller_avatar_image_width'), $this->config->get('msconf_preview_seller_avatar_image_height'))
-				);
-			}
-		}
-
-		return $avatars;
 	}
 }
 ?>

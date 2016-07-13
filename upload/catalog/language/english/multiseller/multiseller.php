@@ -5,6 +5,8 @@
 // **********
 $_['ms_viewinstore'] = 'View in store';
 $_['ms_view'] = 'View';
+$_['ms_view_modify'] = 'View / Modify';
+$_['ms_view_invoice'] = 'View invoice';
 $_['ms_publish'] = 'Publish';
 $_['ms_unpublish'] = 'Unpublish';
 $_['ms_edit'] = 'Edit';
@@ -26,6 +28,7 @@ $_['ms_by'] = 'by';
 $_['ms_action'] = 'Action';
 $_['ms_sender'] = 'Sender';
 $_['ms_message'] = 'Message';
+$_['ms_none'] = 'None';
 
 
 $_['ms_date_created'] = 'Date created';
@@ -37,12 +40,12 @@ $_['ms_button_add_discount'] = 'Define a new quantity discount';
 $_['ms_button_submit_request'] = 'Submit request';
 $_['ms_button_save'] = 'Save';
 $_['ms_button_cancel'] = 'Cancel';
-$_['ms_button_select_predefined_avatar'] = 'Select Pre-defined avatar';
 
 $_['ms_button_select_image'] = 'Select image';
 $_['ms_button_select_images'] = 'Select images';
 $_['ms_button_select_files'] = 'Select files';
 
+$_['ms_transaction_order_created'] = 'Order created';
 $_['ms_transaction_order'] = 'Sale: Order Id #%s';
 $_['ms_transaction_sale'] = 'Sale: %s (-%s commission)';
 $_['ms_transaction_refund'] = 'Refund: %s';
@@ -242,7 +245,7 @@ $_['ms_error_file_size'] = 'File too big';
 $_['ms_error_image_too_small'] = 'Image file dimensions are too small. Minimum allowed size is: %s x %s (Width x Height)';
 $_['ms_error_image_too_big'] = 'Image file dimensions are too big. Maximum allowed size is: %s x %s (Width x Height)';
 $_['ms_error_file_upload_error'] = 'File upload error';
-$_['ms_error_form_submit_error'] = 'Error occured when submitting the form. Please contact the store owner for more information.';
+$_['ms_error_form_submit_error'] = 'Error occurred when submitting the form. Please contact the store owner for more information.';
 $_['ms_error_form_notice'] = 'Please check all form tabs for errors.';
 $_['ms_error_product_name_empty'] = 'Product name cannot be empty';
 $_['ms_error_product_name_length'] = 'Product name should be between %s and %s characters';
@@ -282,7 +285,10 @@ $_['ms_error_seller_product'] = 'You can\'t add your own product to cart';
 // Account - General
 $_['ms_account_unread_pm'] = 'You have unread private message';
 $_['ms_account_unread_pms'] = 'You have %s unread private messages';
-$_['ms_account_register_seller'] = 'Register Seller Account';
+$_['ms_account_register_new'] = 'New Seller';
+$_['ms_account_register_seller'] = 'Register seller account';
+$_['ms_account_register_seller_note'] = 'Create a seller account and start selling your products in our store!';
+$_['ms_account_register_details'] = 'Step 1: Your Details';
 $_['ms_account_register_seller_success_heading'] = 'Your Seller Account Has Been Created!';
 $_['ms_account_register_seller_success_message']  = '<p>Welcome to %s!</p> <p>Congratulations! Your new seller account has been successfully created!</p> <p>You can now take advantage of seller privileges and start selling your products with us.</p> <p>If you have any problems, <a href="%s">contact us</a>.</p>';
 $_['ms_account_register_seller_success_approval'] = '<p>Welcome to %s!</p> <p>Your seller account has been registered and is waiting for approval. You will be notified by email once your account has been activated by the store owner.</p><p>If you have any problems, <a href="%s">contact us</a>.</p>';
@@ -291,6 +297,7 @@ $_['ms_seller'] = 'Seller';
 $_['ms_seller_forseller'] = 'For seller';
 $_['ms_account_dashboard'] = 'Dashboard';
 $_['ms_account_seller_account'] = 'Seller Account';
+$_['ms_account_customer_account'] = 'Customer Account';
 $_['ms_account_sellerinfo'] = 'Seller profile';
 $_['ms_account_sellerinfo_new'] = 'New seller account';
 $_['ms_account_newproduct'] = 'New product';
@@ -299,6 +306,7 @@ $_['ms_account_transactions'] = 'Transactions';
 $_['ms_account_orders'] = 'Orders';
 $_['ms_account_withdraw'] = 'Request payout';
 $_['ms_account_stats'] = 'Statistics';
+$_['ms_account_settings'] = 'Settings';
 
 // Account - New product
 $_['ms_account_newproduct_heading'] = 'New Product';
@@ -365,6 +373,8 @@ $_['ms_account_product_date_available'] = 'Date Available';
 $_['ms_account_product_stock_status'] = 'Out Of Stock Status';
 $_['ms_account_product_stock_status_note'] = 'Status shown when a product is out of stock';
 $_['ms_account_product_subtract'] = 'Subtract Stock';
+$_['ms_account_product_customer_group'] = 'Customer Group';
+
 
 // Options
 $_['ms_account_product_tab_options'] = 'Options';
@@ -421,12 +431,14 @@ $_['ms_account_sellerinfo_zone_not_selected'] = 'No region/state selected';
 $_['ms_account_sellerinfo_zone_note'] = 'Select your region/state from the list.';
 $_['ms_account_sellerinfo_avatar'] = 'Avatar';
 $_['ms_account_sellerinfo_avatar_note'] = 'Select your avatar';
+$_['ms_account_sellerinfo_banner'] = 'Banner';
+$_['ms_account_sellerinfo_banner_note'] = 'Upload a banner that will be displayed on your profile page';
 $_['ms_account_sellerinfo_paypal'] = 'Paypal';
 $_['ms_account_sellerinfo_paypal_note'] = 'Specify your PayPal address';
 $_['ms_account_sellerinfo_reviewer_message'] = 'Message to the reviewer';
 $_['ms_account_sellerinfo_reviewer_message_note'] = 'Your message to the reviewer';
 $_['ms_account_sellerinfo_terms'] = 'Accept terms';
-$_['ms_account_sellerinfo_terms_note'] = 'I have read and agree to the <a class="colorbox" href="%s" alt="%s"><b>%s</b></a>';
+$_['ms_account_sellerinfo_terms_note'] = 'I have read and agree to the <a class="agree" href="%s" alt="%s"><b>%s</b></a>';
 $_['ms_account_sellerinfo_fee_flat'] = 'There is a signup fee of <span>%s</span> to become a seller at %s.';
 $_['ms_account_sellerinfo_fee_balance'] = 'This amount will be deducted from your initial balance.';
 $_['ms_account_sellerinfo_fee_paypal'] = 'You will be redirected to the PayPal payment page after form submission.';
@@ -435,11 +447,12 @@ $_['ms_account_sellerinfo_saved'] = 'Seller account data saved.';
 
 $_['ms_account_status'] = 'Your seller account status is: ';
 $_['ms_account_status_tobeapproved'] = '<br />You will be able to use your account as soon as it is approved by the store owner.';
-$_['ms_account_status_please_fill_in'] = 'Please complete the following form to create a seller account.';
+$_['ms_account_status_please_fill_in'] = '<br />Please complete the following form to create a seller account.';
 
 $_['ms_seller_status_' . MsSeller::STATUS_ACTIVE] = 'Active';
 $_['ms_seller_status_' . MsSeller::STATUS_INACTIVE] = 'Inactive';
 $_['ms_seller_status_' . MsSeller::STATUS_DISABLED] = 'Disabled';
+$_['ms_seller_status_' . MsSeller::STATUS_INCOMPLETE] = 'Incomplete';
 $_['ms_seller_status_' . MsSeller::STATUS_DELETED] = 'Deleted';
 $_['ms_seller_status_' . MsSeller::STATUS_UNPAID] = 'Unpaid signup fee';
 
@@ -503,6 +516,21 @@ You have received a new private message from %s!
 You can reply in the messaging area in your account.
 EOT;
 
+$_['ms_mail_subject_order_updated'] = 'Your order #%s has been updated by %s';
+$_['ms_mail_order_updated'] = <<<EOT
+Your order at %s has been updated by %s:
+
+Order#: %s
+
+Products:
+%s
+
+Status: %s
+
+Comment:
+%s
+
+EOT;
 
 $_['ms_mail_subject_seller_vote'] = 'Vote for the seller';
 $_['ms_mail_seller_vote_message'] = 'Vote for the seller';
@@ -536,10 +564,18 @@ $_['ms_account_orders_breadcrumbs'] = 'Your Orders';
 $_['ms_account_orders_id'] = 'Order #';
 $_['ms_account_orders_customer'] = 'Customer';
 $_['ms_account_orders_products'] = 'Products';
+$_['ms_account_orders_history'] = 'History';
+$_['ms_account_orders_addresses'] = 'Addresses';
 $_['ms_account_orders_total'] = 'Total amount';
 $_['ms_account_orders_view'] = 'View order';
 $_['ms_account_orders_noorders'] = 'You don\'t have any orders yet!';
+$_['ms_account_orders_nohistory'] = 'There is no history for this order yet!';
 $_['ms_account_orders_change_status']    = 'Change order status';
+$_['ms_account_orders_add_comment']    = 'Add order comment...';
+$_['ms_account_orders_add_history']    = 'Add History';
+
+
+$_['ms_account_order_information'] = 'Order Information';
 
 // Account - Dashboard
 $_['ms_account_dashboard_heading'] = 'Seller Dashboard';
@@ -558,11 +594,35 @@ $_['ms_account_dashboard_sales_month'] = 'Sales this month';
 $_['ms_account_dashboard_earnings_month'] = 'Earnings this month';
 $_['ms_account_dashboard_nav'] = 'Quick navigation';
 $_['ms_account_dashboard_nav_profile'] = 'Modify your seller profile';
+$_['ms_account_dashboard_nav_setting'] = 'Modify your seller settings';
 $_['ms_account_dashboard_nav_product'] = 'Create a new product';
 $_['ms_account_dashboard_nav_products'] = 'Manage your products';
 $_['ms_account_dashboard_nav_orders'] = 'View your orders';
 $_['ms_account_dashboard_nav_balance'] = 'View your financial records';
 $_['ms_account_dashboard_nav_payout'] = 'Request your payout';
+$_['ms_account_sellersetting_breadcrumbs'] = 'Seller Settings';
+
+//Account - Settings
+$_['ms_seller_information'] = "Information";
+$_['ms_seller_address'] = "Address (for invoicing purposes)";
+$_['ms_seller_full_name'] = "Full name";
+$_['ms_seller_address1'] = "Address Line 1";
+$_['ms_seller_address1_placeholder'] = 'Street address, P.O. box, company name, c/o';
+$_['ms_seller_address2'] = "Address Line 2";
+$_['ms_seller_address2_placeholder'] = 'Apartment, suite, unit, building, floor etc.';
+$_['ms_seller_city'] = "City";
+$_['ms_seller_state'] = "State/Province/Region";
+$_['ms_seller_zip'] = "ZIP/Postal Code";
+$_['ms_seller_country'] = "Country";
+$_['ms_success_settings_saved'] = "Settings successfully saved!";
+
+$_['ms_seller_company'] = 'Company';
+$_['ms_seller_website'] = 'Website';
+$_['ms_seller_phone'] = 'Phone';
+$_['ms_seller_logo'] = 'Logo';
+
+$_['ms_account_sellerinfo_logo_note'] = "Select your logo (displayed in your invoices)";
+
 
 // Account - Request withdrawal
 $_['ms_account_withdraw_heading'] = 'Request Payout';
@@ -609,7 +669,7 @@ $_['ms_account_stats_average_order'] = 'Average order';
 $_['ms_account_stats_today'] = 'Today, ';
 $_['ms_account_stats_yesterday'] = 'Yesterday, ';
 $_['ms_account_stats_daily_average'] = 'Daily average for ';
-$_['ms_account_stats_date_month_format'] = 'F Y';
+$_['ms_account_stats_date_month_format'] = 'm/Y';
 $_['ms_account_stats_projected_totals'] = 'Projected totals for ';
 $_['ms_account_stats_grand_total_sales'] = 'Grand total sales';
 
@@ -657,12 +717,30 @@ $_['ms_catalog_seller_products_breadcrumbs'] = '%s\'s products';
 $_['ms_catalog_seller_products_empty'] = 'This seller doesn\'t have any products yet!';
 
 // Catalog - Seller contact dialog
-$_['ms_sellercontact_title'] = 'Contact seller';
-$_['ms_sellercontact_name'] = 'Your name';
-$_['ms_sellercontact_email'] = 'Your email';
-$_['ms_sellercontact_text'] = 'Your message';
+$_['ms_sellercontact_title'] = 'Send a message to seller';
+$_['ms_sellercontact_signin'] = 'Please <a href="%s">sign in</a> to contact %s';
+$_['ms_sellercontact_sendto'] = 'Send a message to %s';
+$_['ms_sellercontact_text'] = 'Message: ';
 $_['ms_sellercontact_captcha'] = 'Captcha';
 $_['ms_sellercontact_sendmessage'] = 'Send a message to %s';
+$_['ms_sellercontact_close'] = 'Close';
+$_['ms_sellercontact_send'] = 'Send';
 $_['ms_sellercontact_success'] = 'Your message has been successfully sent';
+
+// Product filters
+$_['ms_entry_filter'] = 'Filters';
+$_['ms_autocomplete'] = '(Autocomplete)';
+
+// Invoices
+$_['heading_invoice_title']         = 'Order Invoice';
+
+// Validation
+$_['ms_validate_default'] = 'The \'%s\' field is invalid';
+$_['ms_validate_required'] = 'The \'%s\' field is required';
+$_['ms_validate_alpha_numeric'] = 'The \'%s\' field may only contain alpha-numeric characters';
+$_['ms_validate_max_len'] = 'The \'%s\' field needs to be \'%s\' or shorter in length';
+$_['ms_validate_min_len'] = 'The \'%s\' field needs to be \'%s\' or longer in length';
+$_['ms_validate_phone_number'] = 'The \'%s\' field is not a phone number';
+$_['ms_validate_valid_url'] = 'The \'%s\' field must be a valid URL';
 
 ?>

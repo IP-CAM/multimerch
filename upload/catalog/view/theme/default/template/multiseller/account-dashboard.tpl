@@ -20,10 +20,10 @@
     <?php } ?>
     <div id="content" class="<?php echo $class; ?> ms-account-dashboard"><?php echo $content_top; ?>
     <h1><?php echo $ms_account_dashboard_heading; ?></h1>
-
-	<div class="overview col-md-4">
+    <div class="row">
+	<div class="overview col-md-2">
 		<h3><?php echo $ms_account_dashboard_overview; ?></h3>
-		<img src="<?php echo $seller['avatar']; ?>" /><br />
+		<a href="<?php echo $this->url->link('seller/catalog-seller/profile', 'seller_id=' . $seller['seller_id']); ?>"><img src="<?php echo $seller['avatar']; ?>" /></a><br />
 		<span class="nickname"><?php echo $seller['ms.nickname']; ?></span>
 		<p><span><?php echo $ms_date_created; ?>:</span> <span><?php echo $seller['date_created']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_seller_group; ?>:</span> <span><?php echo $seller['seller_group']; ?></span></p>
@@ -31,7 +31,7 @@
 			<span><?php echo $ms_account_dashboard_listing; ?>:</span>
 			
 			<span>
-			<?php echo $this->currency->getSymbolLeft(); ?><?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_LISTING]['flat'], $this->config->get('config_currency'), '', FALSE) : '0' ?><?php echo $this->currency->getSymbolRight(); ?>
+			<?php echo $this->currency->format(isset($seller['commission_rates'][MsCommission::RATE_LISTING]['flat']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['flat'] : 0, $this->config->get('config_currency')); ?>
 			+ <?php echo isset($seller['commission_rates'][MsCommission::RATE_LISTING]['percent']) ? $seller['commission_rates'][MsCommission::RATE_LISTING]['percent'] : '0'; ?>%
 			</span>
 		</p>
@@ -40,7 +40,7 @@
 			<span><?php echo $ms_account_dashboard_sale; ?>:</span>
 			
 			<span>
-			<?php echo $this->currency->getSymbolLeft(); ?><?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_SALE]['flat'], $this->config->get('config_currency'), '', FALSE) : '0' ?><?php echo $this->currency->getSymbolRight(); ?>
+			<?php echo $this->currency->format(isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['flat'] : 0, $this->config->get('config_currency')); ?>
 			+ <?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['percent']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['percent'] : '0'; ?>%
 			</span>
 		</p>
@@ -50,23 +50,22 @@
 			
 			<span>
 			<?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['percent']) ? 100 - $seller['commission_rates'][MsCommission::RATE_SALE]['percent'] : '100'; ?>% - 
-			<?php echo $this->currency->getSymbolLeft(); ?><?php echo isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $this->currency->format($seller['commission_rates'][MsCommission::RATE_SALE]['flat'], $this->config->get('config_currency'), '', FALSE) : '0' ?><?php echo $this->currency->getSymbolRight(); ?>
+			<?php echo $this->currency->format(isset($seller['commission_rates'][MsCommission::RATE_SALE]['flat']) ? $seller['commission_rates'][MsCommission::RATE_SALE]['flat'] : 0, $this->config->get('config_currency')); ?>
 			</span>
 		</p>
 	</div>
-	
-	<div class="stats col-md-4">
-		<div class="container">
+
+	<div class="stats col-md-2">
 		<h3><?php echo $ms_account_dashboard_stats; ?></h3>
 		<p><span><?php echo $ms_account_dashboard_balance; ?>:</span> <span><?php echo $seller['balance']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_total_sales; ?>:</span> <span><?php echo $seller['total_sales']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_total_earnings; ?>:</span> <span><?php echo $seller['total_earnings']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_sales_month; ?>:</span> <span><?php echo $seller['sales_month']; ?></span></p>
 		<p><span><?php echo $ms_account_dashboard_earnings_month; ?>:</span> <span><?php echo $seller['earnings_month']; ?></span></p>
-		</div>
 	</div>
-	
-	<div class="nav col-md-4">
+	<div class="nav col-md-5"></div>
+
+	<div class="nav col-md-3">
 		<h3><?php echo $ms_account_dashboard_nav; ?></h3>
 		<a href="<?php echo $this->url->link('seller/account-profile', '', 'SSL'); ?>">
 			<img src="catalog/view/theme/<?php echo $this->config->get('config_template'); ?>/image/ms-profile.png" />
@@ -104,8 +103,14 @@
 			<img src="catalog/view/theme/<?php echo $this->config->get('config_template'); ?>/image/ms-stats.png" />
 			<span><?php echo $ms_account_stats; ?></span>
 		</a>
+
+		<a href="<?php echo $this->url->link('seller/account-setting', '', 'SSL'); ?>">
+			<img src="catalog/view/theme/<?php echo $this->config->get('config_template'); ?>/image/ms-gear.png" />
+			<span><?php echo $ms_account_settings; ?></span>
+		</a>
 	</div>
-	
+    </div>
+
 	<h2><?php echo $ms_account_dashboard_orders; ?></h2>
 	<table class="list table table-bordered">
 		<thead>
@@ -114,10 +119,11 @@
 				<?php if (!$this->config->get('msconf_hide_customer_email')) { ?>
 					<td><?php echo $ms_account_orders_customer; ?></td>
 				<?php } ?>
+				<td><?php echo $ms_status; ?></td>
 				<td style="width: 40%"><?php echo $ms_account_orders_products; ?></td>
 				<td><?php echo $ms_date_created; ?></td>
 				<td><?php echo $ms_account_orders_total; ?></td>
-				<td><?php echo $ms_account_orders_view; ?></td>
+				<td><?php echo $ms_action; ?></td>
 			</tr>
 		</thead>
 		
@@ -129,6 +135,7 @@
 				<?php if (!$this->config->get('msconf_hide_customer_email')) { ?>
 					<td><?php echo $order['customer']; ?></td>
 				<?php } ?>
+				<td><?php echo $order['status']; ?></td>
 				<td class="left products">
 				<?php foreach ($order['products'] as $p) { ?>
 				<p>
@@ -143,7 +150,10 @@
 				</td>
 				<td><?php echo $order['date_created']; ?></td>
 				<td><?php echo $order['total']; ?></td>
-				<td><a href="<?php echo $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']); ?>" class="ms-button ms-button-view"></a></td>
+				<td>
+					<a class="btn btn-primary" href="<?php echo $this->url->link('seller/account-order/viewOrder', 'order_id=' . $order['order_id']); ?>" title="<?php echo $this->language->get('ms_view_modify') ?>"><i class="fa fa-search"></i></a>
+					<a class="btn btn-default" target="_blank" href="<?php echo $this->url->link('seller/account-order/invoice', 'order_id=' . $order['order_id'], 'SSL') ;?>" title="' . $this->language->get('ms_view_invoice') . '"><i class="fa fa-file-text-o"></i></a>
+				</td>
 			</tr>
 			<?php } ?>
 		<?php } else { ?>

@@ -24,17 +24,15 @@
         <?php $class = 'col-sm-8'; ?>
         <?php } ?>
 		<div class="<?php echo $class; ?> seller-data">
+			<?php if ($this->config->get('msconf_enable_seller_banner') && isset($seller['banner'])) { ?>
 			<ul class="thumbnails seller-banner">
-				<?php if ($seller['thumb']) { ?>
-					<li><a class="thumbnail" title="<?php echo $seller['nickname']; ?>"><img src="<?php echo $seller['thumb']; ?>" title="<?php echo $seller['nickname']; ?>" alt="<?php echo $seller['nickname']; ?>" /></a></li>
-				<?php } ?>
+					<li><a class="thumbnail"><img src="<?php echo $seller['banner']; ?>" title="<?php echo $seller['nickname']; ?>" alt="<?php echo $seller['nickname']; ?>" /></a></li>
 			</ul>
-
+			<?php } ?>
 			<div class="seller-description"><?php echo $seller['description']; ?></div>
 
 			<?php if ($seller['products']) { ?>
 			<hr />
-			<!--<h3>$ms_catalog_seller_profile_featured</h3>-->
 			<h3><?php echo $ms_catalog_seller_profile_products; ?></h3>
 			<div class="row">
 			  <?php foreach ($seller['products'] as $product) { ?>
@@ -45,13 +43,14 @@
 					<h4><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></h4>
 				  </div>
 				  <div class="button-group">
-					<button type="button" class="btn btn-main btn-block"><span><?php echo $ms_view; ?></span></button>
+					<a href="<?php echo $product['href']; ?>"><button type="button" class="btn btn-main btn-block"><span><?php echo $ms_view; ?></span></button></a>
 				  </div>
 				</div>
 			  </div>
 			  <?php } ?>
 			</div>
 			<?php } ?>
+			<!-- end products -->
 		</div>
 
 		<!-- right column -->
@@ -78,22 +77,17 @@
 				</div>
 			</div>
 
-			<!--
-			<hr />
-			<div class="social">
-				<h3><?php echo $ms_catalog_seller_profile_social; ?></h3>
-			</div>
-			-->
-
 			<?php if ($this->config->get('mmess_conf_enable') || $this->config->get('msconf_enable_private_messaging') == 2) { ?>
 				<?php if ((!$this->customer->getId()) || ($this->customer->getId() != $seller['seller_id'])) { ?>
-					<hr />
+					<?php echo $contactForm; ?>
 					<div class="contact">
 						<h3><?php echo $ms_sellercontact_title ?></h3>
 						<?php if ($this->customer->getId()) { ?>
-							<li><a href="index.php?route=seller/catalog-seller/jxRenderContactDialog&seller_id=<?php echo $seller_id; ?>" class="ms-sellercontact" title="<?php echo $ms_sellercontact_title; ?>"><?php echo $ms_catalog_product_contact; ?></a></li>
+						  <div class="button-group">
+							<button type="button" class="btn btn-default btn-block ms-sellercontact" data-toggle="modal" data-target="#contactDialog"><span><?php echo $ms_catalog_product_contact; ?></span></button>
+						  </div>
 						<?php } else { ?>
-							Please <a href="#">sign in</a> to contact <?php echo $seller['nickname']; ?>
+							<?php echo sprintf($this->language->get('ms_sellercontact_signin'), $this->url->link('account/login', '', 'SSL'), $seller['nickname']); ?>
 						<?php } ?>
 					</div>
 				<?php } ?>

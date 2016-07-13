@@ -16,7 +16,7 @@
     <div id="content" class="<?php echo $class; ?>"><?php echo $content_top; ?>
       <h2><?php echo $ms_catalog_seller_products; ?></h2>
       <?php if ($seller['products']) { ?>
-      <p><a href="<?php echo $compare; ?>" id="compare-total"> <?php echo $text_compare; ?></a></p>
+      <p><a href="<?php echo $this->url->link('product/compare'); ?>" id="compare-total"> <?php echo $text_compare; ?></a></p>
       <div class="row">
         <div class="col-sm-3">
           <div class="btn-group hidden-xs">
@@ -100,10 +100,7 @@
         <div class="col-sm-6 text-right"><?php echo $results; ?></div>
       </div>
       <?php } else { ?>
-      <p><?php echo $text_empty; ?></p>
-      <div class="buttons">
-        <div class="pull-right"><a href="<?php echo $continue; ?>" class="btn btn-primary"><?php echo $button_continue; ?></a></div>
-      </div>
+      <p><?php echo $ms_catalog_seller_products_empty; ?></p>
       <?php } ?>
       <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>

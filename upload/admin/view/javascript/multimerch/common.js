@@ -1,14 +1,14 @@
 $(function() {
 	$.fn.dataTableExt.sErrMode = 'throw';
 
-	/*if (typeof msGlobals.config_language != 'undefined') {
+	if (typeof msGlobals.config_language != 'undefined') {
 		$.extend($.fn.dataTable.defaults, {
 			"oLanguage": {
 				"sUrl": msGlobals.config_language
 			}
 		});
-	}*/
-	
+	}
+
 	$.extend($.fn.dataTable.defaults, {
 		"bProcessing": true,
 		"bSortCellsTop": true,

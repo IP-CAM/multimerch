@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <!DOCTYPE modification [
-<!ENTITY adminFolder "admin">
 <!ENTITY themeFolder "default">
 ]>
 <modification>
@@ -64,11 +63,13 @@
 				$this->MsLoader->MsHelper->addStyle('multiseller');
 				
 				// note: renamed catalog
-				$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_language') . ".txt";
+				$lang = "view/javascript/multimerch/datatables/lang/" . $this->config->get('config_language') . ".lng";
 				$data['dt_language'] = file_exists(DIR_APPLICATION . $lang) ? "'catalog/$lang'" : "undefined";
 
 				// Add complemented common.js
 				$this->document->addScript('catalog/view/javascript/ms-common.js');
+
+				$data['ms_seller_created'] = $this->MsLoader->MsSeller->isCustomerSeller($this->customer->getId());
 			]]></add>
 		</operation>
 	</file>
@@ -121,36 +122,6 @@
 		</operation>
 	</file>
 	
-	<file name="catalog/controller/account/order.php">
-		<operation error="log">
-			<search position="after" offset="2"><![CDATA[
-				$order_id = 0; 
-			]]></search>
-			<add><![CDATA[
-				$this->load->model('localisation/order_status');
-				$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-			]]></add>
-		</operation>
-
-		<operation error="log">
-			<search position="after"><![CDATA[
-				foreach ($products as $product) {
-			]]></search>
-			<add><![CDATA[
-				$seller_id = $this->MsLoader->MsProduct->getSellerId($product['product_id']);
-			]]></add>
-		</operation>
-
-		<operation error="log">
-			<search position="after"><![CDATA[
-				$data['products'][] = array(
-			]]></search>
-			<add><![CDATA[
-				'order_status_id' => $this->model_localisation_order_status->getSuborderStatusId($order_id, $seller_id),
-			]]></add>
-		</operation>
-	</file>
-
 	<file name="catalog/controller/common/footer.php">
 		<operation>
 			<search position="after"><![CDATA[

@@ -79,7 +79,7 @@ $(document).ready(function() {
 			{ "mData": "payment_status" },
 			{ "mData": "date_created" },
 			{ "mData": "date_paid" },
-			{ "mData": "actions", "bSortable": false, "sClass": "right" }
+			{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
 		],
         "aaSorting":  [[6,'desc']]
 	});

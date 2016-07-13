@@ -5,6 +5,7 @@ final class MsSeller extends Model {
 	const STATUS_DISABLED = 3;
 	const STATUS_DELETED = 4;
 	const STATUS_UNPAID = 5;
+	const STATUS_INCOMPLETE = 6;
 		
 	const MS_SELLER_VALIDATION_NONE = 1;
 	const MS_SELLER_VALIDATION_ACTIVATION = 2;
@@ -40,7 +41,12 @@ final class MsSeller extends Model {
 			}
   		}
 	}
-		
+
+	private function _dupeSlug($slug) {
+			$similarity_query = $this->db->query("SELECT * FROM ". DB_PREFIX . "url_alias WHERE keyword LIKE '" . $this->db->escape($slug) . "%'");
+			return ($similarity_query->num_rows > 0) ? $slug . $similarity_query->num_rows : $slug;
+	}
+
   	public function isCustomerSeller($customer_id) {
 		$sql = "SELECT COUNT(*) as 'total'
 				FROM `" . DB_PREFIX . "ms_seller`
@@ -75,42 +81,34 @@ final class MsSeller extends Model {
 	}
 		
 	public function createSeller($data) {
-		if (isset($data['avatar_name'])) {
-			$avatar = $this->MsLoader->MsFile->moveImage($data['avatar_name']);
-		} else {
-			$avatar = '';
-		}
-		
+		$avatar = isset($data['avatar_name']) ? $this->MsLoader->MsFile->moveImage($data['avatar_name']) : '';
+		$banner = isset($data['banner_name']) ? $this->MsLoader->MsFile->moveImage($data['banner_name']) : '';
+
 		if (isset($data['commission']))
 			$commission_id = $this->MsLoader->MsCommission->createCommission($data['commission']);
 		
 		$sql = "INSERT INTO " . DB_PREFIX . "ms_seller
 				SET seller_id = " . (int)$data['seller_id'] . ",
-					seller_status = " . (int)$data['status'] . ",
-					seller_approved = " . (int)$data['approved'] . ",
+					seller_status = " . (isset($data['status']) ? (int)$data['status'] : self::STATUS_INACTIVE) . ",
+					seller_approved = " . (isset($data['approved']) ? (int)$data['approved'] : 0) . ",
 					seller_group = " .  (isset($data['seller_group']) ? (int)$data['seller_group'] : $this->config->get('msconf_default_seller_group_id'))  .  ",
 					nickname = '" . $this->db->escape($data['nickname']) . "',
-					description = '" . $this->db->escape($data['description']) . "',
-					company = '" . $this->db->escape($data['company']) . "',
-					country_id = " . (int)$data['country'] . ",
-					zone_id = " . (int)$data['zone'] . ",
+					description = '" . $this->db->escape(isset($data['description']) ? $data['description'] : '') . "',
+					company = '" . $this->db->escape(isset($data['company']) ? $data['company'] : '') . "',
+					country_id = " . (isset($data['country']) ? (int)$data['country'] : 0) . ",
+					zone_id = " . (isset($data['zone']) ? (int)$data['zone'] : 0) . ",
 					commission_id = " . (isset($commission_id) ? $commission_id : 'NULL') . ",
-					product_validation = " . (int)$data['product_validation'] . ",
-					paypal = '" . $this->db->escape($data['paypal']) . "',
+					product_validation = " . (isset($data['product_validation']) ? (int)$data['product_validation'] : $this->config->get('msconf_product_validation')) . ",
+					paypal = '" . $this->db->escape(isset($data['paypal']) ? $data['paypal'] : '') . "',
 					avatar = '" . $this->db->escape($avatar) . "',
+					banner = '" . $this->db->escape($banner) . "',
 					date_created = NOW()";
 
 		$this->db->query($sql);
 		$seller_id = $this->db->getLastId();
 
 		if (isset($data['keyword'])) {
-			$similarity_query = $this->db->query("SELECT * FROM ". DB_PREFIX . "url_alias WHERE keyword LIKE '" . $this->db->escape($data['keyword']) . "%'");
-			$number = $similarity_query->num_rows;
-			
-			if ($number > 0) {
-				$data['keyword'] = $data['keyword'] . "-" . $number;
-			}
-			$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'seller_id=" . (int)$seller_id . "', keyword = '" . $this->db->escape($data['keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'seller_id=" . (int)$seller_id . "', keyword = '" . $this->db->escape($this->_dupeSlug($data['keyword'])) . "'");
 		}
 	}
 	
@@ -143,6 +141,22 @@ final class MsSeller extends Model {
 			$avatar = '';
 		}
 
+		$old_banner = $this->getSellerBanner($seller_id);
+
+		if (!isset($data['banner_name']) || ($old_banner['banner'] != $data['banner_name'])) {
+			$this->MsLoader->MsFile->deleteImage($old_banner['banner']);
+		}
+
+		if (isset($data['banner_name'])) {
+			if ($old_banner['banner'] != $data['banner_name']) {
+				$banner = $this->MsLoader->MsFile->moveImage($data['banner_name']);
+			} else {
+				$banner = $old_banner['banner'];
+			}
+		} else {
+			$banner = '';
+		}
+
 		$sql = "UPDATE " . DB_PREFIX . "ms_seller
 				SET description = '" . $this->db->escape($data['description']) . "',
 					company = '" . $this->db->escape($data['company']) . "',
@@ -152,6 +166,7 @@ final class MsSeller extends Model {
 					. (isset($data['status']) ? "seller_status=  " .  (int)$data['status'] . "," : '')
 					. (isset($data['approved']) ? "seller_approved=  " .  (int)$data['approved'] . "," : '')
 					. "paypal = '" . $this->db->escape($data['paypal']) . "',
+					banner = '" . $this->db->escape($banner) . "',
 					avatar = '" . $this->db->escape($avatar) . "'
 				WHERE seller_id = " . (int)$seller_id;
 		
@@ -159,14 +174,7 @@ final class MsSeller extends Model {
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'seller_id=" . (int)$seller_id. "'");
 		if (isset($data['keyword'])) {
-			$similarity_query = $this->db->query("SELECT * FROM ". DB_PREFIX . "url_alias WHERE keyword LIKE '" . $this->db->escape($data['keyword']) . "%'");
-			$number = $similarity_query->num_rows;
-			
-			if ($number > 0) {
-				$data['keyword'] = $data['keyword'] . "-" . $number;
-			}
-			
-			$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'seller_id=" . (int)$seller_id . "', keyword = '" . $this->db->escape($data['keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'seller_id=" . (int)$seller_id . "', keyword = '" . $this->db->escape($this->_dupeSlug($data['keyword'])) . "'");
 		}
 	}		
 		
@@ -174,7 +182,13 @@ final class MsSeller extends Model {
 		$query = $this->db->query("SELECT avatar as avatar FROM " . DB_PREFIX . "ms_seller WHERE seller_id = '" . (int)$seller_id . "'");
 		
 		return $query->row;
-	}		
+	}
+    
+	public function getSellerBanner($seller_id) {
+		$query = $this->db->query("SELECT banner as banner FROM " . DB_PREFIX . "ms_seller WHERE seller_id = '" . (int)$seller_id . "'");
+
+		return $query->row;
+	}
 		
   	public function getNickname() {
   		return $this->nickname;
@@ -190,10 +204,6 @@ final class MsSeller extends Model {
 
   	public function getDescription() {
   		return $this->description;
-  	}
-  	
-  	public function getAvatarPath() {
-  		return $this->avatar;
   	}
   	
   	public function getStatus() {
@@ -228,9 +238,15 @@ final class MsSeller extends Model {
 		return $res->row['salt'];		
 	}
 	
-	
+
 	public function adminEditSeller($data) {
 		$seller_id = (int)$data['seller_id'];
+
+        //settings block
+        if(!empty($data['settings'])) {
+            $this->MsLoader->MsSetting->createSetting($data);
+        }
+        //end settings block
 
 		// commissions
 		if (!$data['commission_id']) {
@@ -242,13 +258,7 @@ final class MsSeller extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'seller_id=" . (int)$seller_id. "'");
 		
 		if (isset($data['keyword'])) {
-			$similarity_query = $this->db->query("SELECT * FROM ". DB_PREFIX . "url_alias WHERE keyword LIKE '" . $this->db->escape($data['keyword']) . "%'");
-			$number = $similarity_query->num_rows;
-			
-			if ($number > 0) {
-				$data['keyword'] = $data['keyword'] . "-" . $number;
-			}
-			$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'seller_id=" . (int)$seller_id . "', keyword = '" . $this->db->escape($data['keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'seller_id=" . (int)$seller_id . "', keyword = '" . $this->db->escape($this->_dupeSlug($data['keyword'])) . "'");
 		}
 
 		$sql = "UPDATE " . DB_PREFIX . "ms_seller
@@ -295,6 +305,7 @@ final class MsSeller extends Model {
 						ms.date_created as 'ms.date_created',
 						ms.product_validation as 'ms.product_validation',
 						ms.avatar as 'ms.avatar',
+						ms.banner as 'banner',
 						ms.country_id as 'ms.country_id',
 						ms.zone_id as 'ms.zone_id',
 						ms.description as 'ms.description',
@@ -378,6 +389,7 @@ final class MsSeller extends Model {
 					ms.seller_approved as 'ms.seller_approved',
 					ms.date_created as 'ms.date_created',
 					ms.avatar as 'ms.avatar',
+					ms.banner as 'banner',
 					ms.country_id as 'ms.country_id',
 					ms.zone_id as 'ms.zone_id',
 					ms.description as 'ms.description',

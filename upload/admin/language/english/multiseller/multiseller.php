@@ -24,11 +24,10 @@ $_['ms_id'] = '#';
 $_['ms_error_directory'] = "Warning: Could not create directory: %s. Please create it manually and make it server-writable before proceeding. <br />";
 $_['ms_error_directory_notwritable'] = "Warning: Directory already exists and is not writable: %s. Please make sure it's empty and make it server-writable before proceeding. <br />";
 $_['ms_error_directory_exists'] = "Warning: Directory already exists: %s. Please make sure it's empty before proceeding. <br />";
-$_['ms_error_ckeditor'] = "Warning: Failed to copy CKEditor files from %s to %s. Please do it manually if you intend to use it for seller profile and product forms <br />";
-$_['ms_notice_ckeditor'] = "Notice: If you intend to use RTE (Rich Text Editor) for the seller profile and product forms, please manually copy CKEditor files from %s to %s. <br />";
 $_['ms_error_product_publish'] = 'Failed to publish some products: seller account not active.';
 $_['ms_success_installed'] = 'Extension successfully installed';
 $_['ms_success_product_status'] = 'Successfully changed product status.';
+$_['ms_success_products_seller'] = 'Successfully changed products seller.';
 
 $_['ms_db_upgrade'] = 'Please <a href="%s">click here</a> to upgrade your MultiMerch Marketplace database to the latest version.';
 $_['ms_db_success'] = 'Your MultiMerch Marketplace database is now up to date!';
@@ -53,6 +52,9 @@ $_['ms_seller'] = 'Seller';
 $_['ms_all_sellers'] = 'All sellers';
 $_['ms_amount'] = 'Amount';
 $_['ms_product'] = 'Product';
+$_['ms_quantity'] = 'Quantity';
+$_['ms_sales'] = 'Sales';
+$_['ms_price'] = 'Price';
 $_['ms_net_amount'] = 'Net amount';
 $_['ms_days'] = 'days';
 $_['ms_from'] = 'From';
@@ -68,6 +70,21 @@ $_['ms_description'] = 'Description';
 
 $_['ms_commission'] = 'Commission';
 $_['ms_commissions_fees'] = 'Commissions & fees';
+
+$_['ms_user_settings'] = 'User settings';
+$_['ms_seller_full_name'] = "Full name";
+$_['ms_seller_address1'] = "Address Line 1";
+$_['ms_seller_address1_placeholder'] = 'Street address, P.O. box, company name, c/o';
+$_['ms_seller_address2'] = "Address Line 2";
+$_['ms_seller_address2_placeholder'] = 'Apartment, suite, unit, building, floor etc.';
+$_['ms_seller_city'] = "City";
+$_['ms_seller_state'] = "State/Province/Region";
+$_['ms_seller_zip'] = "ZIP/Postal Code";
+$_['ms_seller_country'] = "Country";
+$_['ms_seller_company'] = 'Company';
+$_['ms_seller_website'] = 'Website';
+$_['ms_seller_phone'] = 'Phone';
+
 $_['ms_commission_' . MsCommission::RATE_SALE] = 'Sale fee';
 $_['ms_commission_' . MsCommission::RATE_LISTING] = 'Listing fee / method';
 $_['ms_commission_' . MsCommission::RATE_SIGNUP] = 'Signup fee / method';
@@ -79,15 +96,19 @@ $_['ms_commission_actual'] = 'Actual fee rates';
 
 $_['ms_sort_order'] = 'Sort order';
 $_['ms_name'] = 'Name';
+$_['ms_config_width'] = 'Width';
+$_['ms_config_height'] = 'Height';
 $_['ms_description'] = 'Description';
 
 $_['ms_enable'] = 'Enable';
 $_['ms_disable'] = 'Disable';
 $_['ms_edit'] = 'Edit';
 $_['ms_delete'] = 'Delete';
+$_['ms_view_in_store'] = 'View in store';
 
 $_['ms_button_pay_masspay'] = 'Pay via MassPay';
 $_['ms_button_pay_masspay_all'] = 'All Pay via MassPay';
+
 // Menu
 $_['ms_menu_multiseller'] = 'MultiMerch';
 $_['ms_menu_sellers'] = 'Sellers';
@@ -95,8 +116,11 @@ $_['ms_menu_seller_groups'] = 'Seller groups';
 $_['ms_menu_attributes'] = 'Attributes';
 $_['ms_menu_products'] = 'Products';
 $_['ms_menu_transactions'] = 'Transactions';
+$_['ms_menu_debug'] = 'Debug';
 $_['ms_menu_payment'] = 'Payments';
+$_['ms_menu_addons'] = 'Addons';
 $_['ms_menu_settings'] = 'Settings';
+$_['ms_menu_install'] = 'Install';
 
 // Settings
 $_['ms_settings_heading'] = 'Settings';
@@ -120,6 +144,9 @@ $_['ms_config_disable_product_after_quantity_depleted_note'] = 'The product will
 
 $_['ms_config_allow_relisting'] = 'Allow re-listing disabled products';
 $_['ms_config_allow_relisting_note'] = 'Sellers will be able to re-list the products, which have been disabled (useful if you use product limitation by period or quantity in combination with listing fees)';
+
+$_['ms_config_enable_banner'] = 'Enable seller banners';
+$_['ms_config_enable_banner_note'] = 'Allow sellers to upload a banner that will be displayed on their profile page';
 
 $_['ms_config_enable_one_page_seller_registration'] = 'One-page registration';
 $_['ms_config_enable_one_page_seller_registration_note'] = 'Enable seller one-page registration';
@@ -146,6 +173,9 @@ $_['ms_config_credit_order_statuses_note'] = 'Seller balance will be funded for 
 
 $_['ms_config_debit_order_statuses'] = 'Charge statuses';
 $_['ms_config_debit_order_statuses_note'] = 'Seller balance will be charged for orders with charge statuses';
+
+$_['ms_config_display_order_statuses'] = 'Display order statuses';
+$_['ms_config_display_order_statuses_note'] = 'Order statuses that aren\'t selected here will not be visible to sellers';
 
 $_['ms_config_minimum_withdrawal'] = 'Minimum payout amount';
 $_['ms_config_minimum_withdrawal_note'] = 'Minimum balance amount required to request payout';
@@ -183,10 +213,10 @@ $_['ms_config_product_included_fields'] = 'Include fields for products';
 $_['ms_config_product_included_fields_note'] = 'Fields to be added in the product form';
 
 $_['ms_config_provide_buyerinfo'] = 'Mail buyer information';
-$_['ms_config_provide_buyerinfo_note'] = 'Include buyer address in the "Product purchased" email';
+$_['ms_config_provide_buyerinfo_note'] = 'Include buyer address in the Product purchased email';
 
-$_['ms_config_enable_shipping'] = 'Enable shipping';
-$_['ms_config_enable_shipping_note'] = 'New products will be created to require shipping';
+$_['ms_config_enable_shipping'] = 'Enable OpenCart\'s "Shippable" option';
+$_['ms_config_enable_shipping_note'] = 'New products will be created with OpenCart\'s \'Shippable\' field enabled. With MultiMerch Shipping Addon installed, this will enable shipping functionality.';
 
 $_['ms_config_enable_quantities'] = 'Enable quantities';
 $_['ms_config_enable_quantities_note'] = 'Allow sellers to specify quantities for products';
@@ -224,7 +254,7 @@ $_['ms_config_position'] = 'Position:';
 $_['ms_config_sort_order'] = 'Sort Order:';
 
 $_['ms_config_enable_rte'] = 'Enable Rich Text Editor for descriptions';
-$_['ms_config_enable_rte_note'] = 'Enable Rich Text Editor for product and seller description fields. To use this function, you need to copy the ckeditor javascript library folder from the admin (admin/view/javascript) to the catalog (catalog/view/javascript/multimerch)';
+$_['ms_config_enable_rte_note'] = 'Enable Summernote Rich Text Editor for product and seller description fields.';
 
 $_['ms_config_rte_whitelist'] = 'Tag whitelist';
 $_['ms_config_rte_whitelist_note'] = 'Permitted tags in RTE (empty = all tags permitted)';
@@ -235,6 +265,7 @@ $_['ms_config_seller_avatar_image_size_seller_profile'] = 'Seller profile';
 $_['ms_config_seller_avatar_image_size_seller_list'] = 'Seller list';
 $_['ms_config_seller_avatar_image_size_product_page'] = 'Product page';
 $_['ms_config_seller_avatar_image_size_seller_dashboard'] = 'Seller dashboard';
+$_['ms_config_seller_banner_size'] = 'Seller banner size';
 
 $_['ms_config_image_preview_size'] = 'Image preview size';
 $_['ms_config_image_preview_size_seller_avatar'] = 'Seller avatar';
@@ -292,16 +323,7 @@ $_['ms_config_nickname_rules_alnum'] = 'Alphanumeric';
 $_['ms_config_nickname_rules_ext'] = 'Extended latin';
 $_['ms_config_nickname_rules_utf'] = 'Full UTF-8';
 
-// Seller Avatars
-$_['ms_config_avatars_for_sellers'] = 'Avatars for sellers';
-$_['ms_config_avatars_for_sellers_note'] = 'Define the way seller avatars work';
-$_['ms_config_avatars_manually'] = 'Uploaded manually by seller';
-$_['ms_config_avatars_both'] = 'Both uploaded by seller and pre-defined';
-$_['ms_config_avatars_predefined'] = 'Only pre-defined';
-
 $_['ms_config_other'] = 'Other';
-$_['ms_config_hide_sellers_product_count'] = 'Hide count of sellers and products in the header';
-$_['ms_config_hide_sellers_product_count_note'] = 'Hides line, which contains count of sellers and products in the header';
 
 // Seller - List
 $_['ms_catalog_sellers_heading'] = 'Sellers';
@@ -319,9 +341,11 @@ $_['ms_catalog_sellers_status'] = 'Status';
 $_['ms_catalog_sellers_date_created'] = 'Date created';
 $_['ms_catalog_sellers_balance_paypal'] = 'Balance payout via PayPal';
 
+$_['ms_seller_change'] = 'Change seller';
 $_['ms_seller_status_' . MsSeller::STATUS_ACTIVE] = 'Active';
 $_['ms_seller_status_' . MsSeller::STATUS_INACTIVE] = 'Inactive';
 $_['ms_seller_status_' . MsSeller::STATUS_DISABLED] = 'Disabled';
+$_['ms_seller_status_' . MsSeller::STATUS_INCOMPLETE] = 'Incomplete';
 $_['ms_seller_status_' . MsSeller::STATUS_DELETED] = 'Deleted';
 $_['ms_seller_status_' . MsSeller::STATUS_UNPAID] = 'Unpaid signup fee';
 
@@ -355,8 +379,9 @@ $_['ms_catalog_sellerinfo_country_dont_display'] = 'Do not display country';
 $_['ms_catalog_sellerinfo_avatar'] = 'Avatar';
 $_['ms_catalog_sellerinfo_paypal'] = 'Paypal';
 $_['ms_catalog_sellerinfo_message'] = 'Message';
-$_['ms_catalog_sellerinfo_message_note'] = 'Will be appended to the default email text';
-$_['ms_catalog_sellerinfo_notify'] = 'Notify seller via email';
+$_['ms_catalog_sellerinfo_message_note'] = 'Include this message in the notification email to the seller (optional)';
+$_['ms_catalog_sellerinfo_notify'] = 'Notify seller';
+$_['ms_catalog_sellerinfo_notify_note'] = 'Check this box to send an email to the seller indicating his account has been modified';
 $_['ms_catalog_sellerinfo_product_validation'] = 'Product validation';
 $_['ms_catalog_sellerinfo_product_validation_note'] = 'Product validation for this seller';
 
@@ -372,6 +397,7 @@ $_['ms_catalog_products_heading'] = 'Products';
 $_['ms_catalog_products_breadcrumbs'] = 'Products';
 $_['ms_catalog_products_notify_sellers'] = 'Notify Sellers';
 $_['ms_catalog_products_bulk'] = '--Bulk status change--';
+$_['ms_catalog_products_bulk_seller'] = '--Bulk seller change--';
 $_['ms_catalog_products_noseller'] = '--No seller--';
 
 $_['ms_product_status_' . MsProduct::STATUS_ACTIVE] = 'Active';
@@ -394,6 +420,8 @@ $_['ms_catalog_products_field_date_available']   = 'Date Available';
 $_['ms_catalog_products_field_stock_status']     = 'Out Of Stock Status';
 $_['ms_catalog_products_field_tax_class']        = 'Tax Class';
 $_['ms_catalog_products_field_subtract']         = 'Subtract Stock';
+$_['ms_catalog_products_filters']         = 'Filters';
+$_['ms_catalog_products_min_order_qty']         = 'Minimum Order Quantity';
 
 // Catalog - Seller Groups
 $_['ms_catalog_seller_groups_heading'] = 'Seller groups';
@@ -444,6 +472,11 @@ $_['ms_error_payment_tostore'] = 'Incoming payments (seller to store) can not be
 $_['ms_error_payment_amount'] = 'Please specify a valid payment amount';
 $_['ms_error_payment_norequests'] = 'Error: no valid payouts to process. Please make sure the sellers have enough funds and valid PayPal addresses specified';
 $_['ms_success_payment_created'] = 'Payment successfully created';
+
+// Debug
+$_['ms_debug_heading'] = 'Debug';
+$_['ms_debug_breadcrumbs'] = 'Debug';
+$_['ms_debug_info'] = 'MultiMerch debug information';
 
 // Finances - Transactions
 $_['ms_transactions_heading'] = 'Transactions';
@@ -540,6 +573,7 @@ EOT;
 $_['ms_mail_product_purchased_comment'] = 'Comment: %s';
 
 // Sales - Mail
+$_['ms_transaction_order_created'] = 'Order created';
 $_['ms_transaction_order'] = 'Sale: Order Id #%s';
 $_['ms_transaction_sale'] = 'Sale: %s (-%s commission)';
 $_['ms_transaction_refund'] = 'Refund: %s';

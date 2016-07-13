@@ -48,7 +48,7 @@ class MsHelper extends Model {
 		
 		$breadcrumbs[] = array(
         	'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home', 'SSL'),
+			'href'      => $this->url->link('common/home', '', 'SSL'),
         	'separator' => false
       	);
 		
@@ -126,11 +126,11 @@ class MsHelper extends Model {
 		return array($template, $children);
 	}
 	
-	public function addStyle($style) {
+	public function addStyle($style, $rel = 'stylesheet', $media = 'screen') {
 		if (file_exists("catalog/view/theme/" . $this->config->get('config_template') . "/stylesheet/{$style}.css")) {
-			$this->document->addStyle("catalog/view/theme/" . $this->config->get('config_template') . "/stylesheet/{$style}.css");
+			$this->document->addStyle("catalog/view/theme/" . $this->config->get('config_template') . "/stylesheet/{$style}.css", $rel, $media);
 		} else {
-			$this->document->addStyle("catalog/view/theme/default/stylesheet/{$style}.css");
+			$this->document->addStyle("catalog/view/theme/default/stylesheet/{$style}.css", $rel, $media);
 		}
 	}
 	
@@ -233,7 +233,7 @@ class MsHelper extends Model {
 	}
 	
 	public function uniformDecimalPoint($number) {
-		return (float)(str_replace($this->language->get('thousand_point'), '', str_replace($this->language->get('decimal_point'), '.', $number)));
+		return (float)(str_replace($this->language->get('decimal_point'), '.', str_replace($this->language->get('thousand_point'), '', $number)));
 	}
 	
 	public function trueCurrencyFormat($number) {
@@ -249,6 +249,40 @@ class MsHelper extends Model {
 		$this->load->model('extension/extension');
 		$installed_extensions = $this->model_extension_extension->getInstalled('module');
 		return array_search('multiseller', $installed_extensions) !== FALSE;
+	}
+
+	public function renderPmDialog(&$data) {
+		if (isset($this->request->get['product_id'])) {
+			$seller_id = $this->MsLoader->MsProduct->getSellerId($this->request->get['product_id']);
+			$data['product_id'] = (int)$this->request->get['product_id'];
+		} else {
+			$seller_id = $this->request->get['seller_id'];
+			$data['product_id'] = 0;
+		}
+
+
+		$seller = $this->MsLoader->MsSeller->getSeller($seller_id);
+		if (empty($seller)) return false;
+
+		$data['seller_id'] = $seller_id;
+		list($template, $children) = $this->MsLoader->MsHelper->loadTemplate('dialog-sellercontact', 1);
+		return $this->load->view($template, $data);
+	}
+
+	public function getStatusName($data = array()) {
+		$this->load->model('localisation/order_status');
+
+		$order_statuses = $this->model_localisation_order_status->getOrderStatuses(array(
+			'language_id' => (isset($data['language_id']) ? $data['language_id'] : $this->config->get('config_language_id'))
+		));
+
+		foreach ($order_statuses as $order_status) {
+			if ($order_status['order_status_id'] == $data['order_status_id']) {
+				return $order_status['name'];
+			}
+		}
+
+		return '';
 	}
 }
 

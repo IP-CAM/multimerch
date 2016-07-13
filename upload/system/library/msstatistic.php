@@ -1,13 +1,17 @@
 <?php
 class MsStatistic extends Model {
+	private function _getConcatStatuses(){
+		return implode(',', $this->config->get('msconf_credit_order_statuses'));
+	}
+
 	public function getSalesByDay($data){
 		$sql = "SELECT count(DISTINCT order_id) as order_num, SUM(seller_net_amt) as total_revenue, AVG(seller_net_amt) as average_revenue
 		FROM `" . DB_PREFIX . "order` o
 		INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 		USING (order_id)
-		WHERE  1 = 1"
+		WHERE o.order_status_id in (" . $this->_getConcatStatuses()	.	")"
 		. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '')
-		. (isset($data['date']) ? " AND DATE(date_added) =  DATE('" .  $data['date'] . "')"  : '');
+		. (isset($data['date']) ? " AND DATE(date_added) =  DATE('" .	$this->db->escape($data['date']) . "')"  : '');
 
 		$res = $this->db->query($sql);
 
@@ -19,9 +23,9 @@ class MsStatistic extends Model {
 		FROM `" . DB_PREFIX . "order` o
 		INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 		USING (order_id)
-		WHERE  1 = 1"
+		WHERE o.order_status_id in ("	.	$this->_getConcatStatuses()	.	")"
 		. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '')
-		. (isset($data['date']) ? " AND YEAR(date_added) =  YEAR('" .  $data['date'] . "') AND MONTH(date_added) = MONTH('" .  $data['date'] . "') "  : '');
+		. (isset($data['date']) ? " AND YEAR(date_added) =  YEAR('" .	$this->db->escape($data['date'])	. "') AND MONTH(date_added) = MONTH('" .	$this->db->escape($data['date'])	. "') "  : '');
 
 		$res = $this->db->query($sql);
 
@@ -33,7 +37,7 @@ class MsStatistic extends Model {
 		FROM `" . DB_PREFIX . "order` o
 		INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 		USING (order_id)
-		WHERE  1 = 1"
+		WHERE o.order_status_id in ("	.	$this->_getConcatStatuses()	.	")"
 		. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '');
 
 		$res = $this->db->query($sql);
@@ -59,9 +63,10 @@ class MsStatistic extends Model {
 
 		$sql = "SELECT SQL_CALC_FOUND_ROWS  product_id, name, SUM(seller_net_amt) AS total_by_product, SUM(quantity) as sold
 				FROM " . DB_PREFIX . "order_product
+				JOIN `" . DB_PREFIX . "order` o USING (order_id)
 				LEFT JOIN " . DB_PREFIX . "ms_order_product_data
 					USING(order_id, product_id)
-				WHERE 1 = 1"
+				WHERE	o.order_status_id	in	("	.	$this->_getConcatStatuses()	.	")"
 				. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '')
 
 				. $wFilters
@@ -85,6 +90,7 @@ class MsStatistic extends Model {
 				INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 				USING (order_id)
 				WHERE seller_id = " . (int)$seller_id
+				. " AND o.order_status_id in ("	.	$this->_getConcatStatuses()	.	")"
 				. " GROUP BY YEAR(date_added)
 				ORDER BY year DESC";
 
@@ -106,6 +112,7 @@ class MsStatistic extends Model {
 				LEFT JOIN " . DB_PREFIX . "order_product
 				USING ( order_id, product_id )
 				WHERE seller_id =  " . (int)$seller_id
+				. " AND o.order_status_id in ("	.	$this->_getConcatStatuses()	.	")"
 				. " AND YEAR( date_added ) = " .(int)$year;
 
 
@@ -125,6 +132,7 @@ class MsStatistic extends Model {
 				LEFT JOIN " . DB_PREFIX . "order_product
 				USING ( order_id, product_id )
 				WHERE seller_id =  " . (int)$seller_id
+				.	" AND o.order_status_id in ("	.	$this->_getConcatStatuses()	.	")"
 				. " AND YEAR( date_added ) = " .(int)$year;
 
 		$res = $this->db->query($sql);
@@ -144,7 +152,7 @@ class MsStatistic extends Model {
 		FROM `" . DB_PREFIX . "order` o
 		INNER JOIN `" . DB_PREFIX . "ms_order_product_data` mopd
 		USING (order_id)
-		WHERE  1 = 1"
+		WHERE o.order_status_id in ("	.	$this->_getConcatStatuses()	.	")"
 		. (isset($data['seller_id']) ? " AND seller_id =  " .  (int)$data['seller_id'] : '')
 		. (isset($data['year']) ? " AND YEAR(date_added) =  " .  (int)$data['year'] : '')
 		. " GROUP BY month"

@@ -7,11 +7,11 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 			'name' => 'pd.name',
 			'status' => 'mp.product_status',
 			'seller' => 'ms.nickname',
-			'date_created' => 'p.date_created',
+			'date_added' => 'p.date_added',
 			'date_modified' => 'p.date_modified'
 		);
 
-		$sorts = array('name', 'seller', 'date_created', 'date_modified', 'status');
+		$sorts = array('name', 'seller', 'date_added', 'date_modified', 'status');
 		$filters = array_diff($sorts, array('status'));
 		
 		list($sortCol, $sortDir) = $this->MsLoader->MsHelper->getSortParams($sorts, $colMap);
@@ -42,22 +42,17 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 
 		$columns = array();
 		foreach ($results as $result) {
-			// image
-			if ($result['p.image'] && file_exists(DIR_IMAGE . $result['p.image'])) {
-				$image = $this->MsLoader->MsFile->resizeImage($result['p.image'], 40, 40);
-			} else {
-				$image = $this->MsLoader->MsFile->resizeImage('no_image.png', 40, 40);
-			}
 
+			$shop_url = $this->config->get('config_url') . "index.php?route=product/product&product_id=" . $result['product_id'];
 			// actions
 			$actions = "";
-			$actions .= "<a class='ms-button ms-button-edit' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('text_edit')."'></a>";
-			$actions .= "<a class='ms-button ms-button-delete' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'></a>";
-
+			$actions .= "<a class='btn btn-info' target='_blank' class='ms-button' href='" . $shop_url . "' title='".$this->language->get('ms_view_in_store')."'><i class='fa fa-search'></i></a>";
+			$actions .= "<a class='btn btn-primary' href='" . $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('button_edit')."'><i class='fa fa-pencil''></i></a>";
+			$actions .= "<a class='btn btn-danger' href='" . $this->url->link('multiseller/product/delete', 'token=' . $this->session->data['token'] . '&product_id=' . $result['product_id'], 'SSL') . "' title='".$this->language->get('ms_delete')."'><i class='fa fa-times'></i></a>";
 			// seller select
 			$sellerselect = "";
 			$sellerselect .= "
-			<select>
+			<select class='form-control'>
 				<option value='0'>" . $this->language->get('ms_catalog_products_noseller') . "</option>";
 				
 				foreach($sellers as $s) {
@@ -65,19 +60,21 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 				}
 
 			$sellerselect .= "
+			</optgroup>
 			</select>
-			<span class='ms-assign-seller' style='background-image: url(view/image/success.png); width: 16px; height: 16px; display: inline-block; cursor: pointer; vertical-align: middle' title='Save' />
+			<button type='button' data-toggle='tooltip' title='' class='ms-assign-seller btn btn-primary' data-original-title='" . $this->language->get('ms_apply') . "'><i class='fa fa-fw fa-check'></i></button>
 			";
-			
 			$columns[] = array_merge(
 				$result,
 				array(
 					'checkbox' => "<input type='checkbox' name='selected[]' value='{$result['product_id']}' />",
-					'image' => "<img src='$image' style='padding: 1px; border: 1px solid #DDDDDD' />",
 					'name' => $result['pd.name'],
 					'seller' => $sellerselect,
+					'price' => $this->currency->format($result['p.price'], $this->config->get('config_currency')),
+					'quantity' => $result['p.quantity'],
+					'sales' => $result['mp.number_sold'],
 					'status' => $result['mp.product_status'] ? $this->language->get('ms_product_status_' . $result['mp.product_status']) : '',
-					'date_created' => date($this->language->get('date_format_short'), strtotime($result['p.date_created'])),
+					'date_added' => date($this->language->get('date_format_short'), strtotime($result['p.date_added'])),
 					'date_modified' => date($this->language->get('date_format_short'), strtotime($result['p.date_modified'])),
 					'actions' => $actions
 				)
@@ -92,8 +89,10 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	}
 	
 	public function index() {
+		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
 		$this->validate(__FUNCTION__);
-		
+		$this->data['add'] = $this->url->link('catalog/product/add', 'token=' . $this->session->data['token'], 'SSL');
+
 		if (isset($this->session->data['error'])) {
 			$this->data['error_warning'] = $this->session->data['error'];
 			unset($this->session->data['error']);
@@ -122,7 +121,15 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 				'href' => $this->url->link('multiseller/product', '', 'SSL'),
 			)
 		));
-		
+		$this->data['sellers'] = $this->MsLoader->MsSeller->getSellers(
+			array(
+				'seller_status' => array(MsSeller::STATUS_ACTIVE, MsSeller::STATUS_INACTIVE)
+			),
+			array(
+				'order_by'  => 'ms.nickname',
+				'order_way' => 'ASC'
+			)
+		);
 		$this->data['column_left'] = $this->load->controller('common/column_left');
 		$this->data['footer'] = $this->load->controller('common/footer');
 		$this->data['header'] = $this->load->controller('common/header');
@@ -132,7 +139,7 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 	public function jxProductStatus() {
 		$this->validate(__FUNCTION__);
 		$mails = array();
-		
+
 		if (isset($this->request->post['selected'])) {
 			foreach ($this->request->post['selected'] as $product_id) {
 				$seller = $this->MsLoader->MsSeller->getSeller($this->MsLoader->MsProduct->getSellerId($product_id));
@@ -191,41 +198,58 @@ class ControllerMultisellerProduct extends ControllerMultisellerBase {
 		$json = array();
 		
 		$this->validate(__FUNCTION__);
-		$product_id = $this->request->get['product_id'];
-		$seller = $this->MsLoader->MsSeller->getSeller($this->request->get['seller_id']);
-		$this->MsLoader->MsProduct->createRecord($product_id, array('seller_id' => $this->request->get['seller_id']));
-		$this->MsLoader->MsProduct->changeSeller($product_id, $this->request->get['seller_id']);
-		$json['product_status'] = $this->language->get('ms_product_status_' . $seller['ms.seller_status']);
-		switch($seller['ms.seller_status']) {
-			case MsSeller::STATUS_INACTIVE:
-			case MsSeller::STATUS_UNPAID:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_INACTIVE);
-				$this->MsLoader->MsProduct->disapprove($product_id);
-				$json['product_status'] = $this->language->get('ms_product_status_' . MsProduct::STATUS_INACTIVE);			
-				break;
-			case MsSeller::STATUS_DISABLED:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DISABLED);
-				$this->MsLoader->MsProduct->disapprove($product_id);			
-				break;
-			case MsSeller::STATUS_DELETED:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
-				$this->MsLoader->MsProduct->disapprove($product_id);			
-				break;
-			case MsSeller::STATUS_UNPAID:
-				$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
-				$this->MsLoader->MsProduct->disapprove($product_id);			
-				break;				
-			default:
-				$product = $this->MsLoader->MsProduct->getProduct($product_id);
-				$json['product_status'] = $this->language->get('ms_product_status_' . $product['mp.product_status']);
-				break;
+		if(isset($this->request->get['product_id'])){
+			$products = array($this->request->get['product_id']);
 		}
+		else if(isset($this->request->post['selected'])){
+			$products = $this->request->post['selected'];
+		}
+		$seller = $this->MsLoader->MsSeller->getSeller($this->request->get['seller_id']);
+		foreach ($products as $product_id) {
+			$this->MsLoader->MsProduct->createRecord($product_id, array('seller_id' => $this->request->get['seller_id']));
+			$this->MsLoader->MsProduct->changeSeller($product_id, $this->request->get['seller_id']);
+			$json['product_status'] = $this->language->get('ms_product_status_' . $seller['ms.seller_status']);
+			switch($seller['ms.seller_status']) {
+				case MsSeller::STATUS_INACTIVE:
+				case MsSeller::STATUS_UNPAID:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_INACTIVE);
+					$this->MsLoader->MsProduct->disapprove($product_id);
+					$json['product_status'] = $this->language->get('ms_product_status_' . MsProduct::STATUS_INACTIVE);			
+					break;
+				case MsSeller::STATUS_DISABLED:
+				case MsSeller::STATUS_INCOMPLETE:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DISABLED);
+					$this->MsLoader->MsProduct->disapprove($product_id);			
+					break;
+				case MsSeller::STATUS_DELETED:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
+					$this->MsLoader->MsProduct->disapprove($product_id);			
+					break;
+				case MsSeller::STATUS_UNPAID:
+					$this->MsLoader->MsProduct->changeStatus($product_id, MsProduct::STATUS_DELETED);
+					$this->MsLoader->MsProduct->disapprove($product_id);			
+					break;				
+				default:
+					$product = $this->MsLoader->MsProduct->getProduct($product_id);
+					$json['product_status'] = $this->language->get('ms_product_status_' . $product['mp.product_status']);
+					break;
+			}
+		}
+		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
 	
 	public function delete() {
-		$product_id = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : 0;
-		$this->MsLoader->MsProduct->deleteProduct($product_id);
+		if(isset($this->request->post['selected'])){
+			$product_ids = $this->request->post['selected'];
+		} else if($this->request->get['product_id']) {
+			$product_id =  $this->request->get['product_id'];
+			$product_ids = array($product_id);
+		}
+		foreach($product_ids as $product_id) {
+			$this->MsLoader->MsProduct->deleteProduct($product_id);
+		}
+
 		$this->response->redirect($this->url->link('multiseller/product', 'token=' . $this->session->data['token'], 'SSL'));
 	}	
 }

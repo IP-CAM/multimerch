@@ -1,5 +1,18 @@
 <?php
 
+if (!class_exists('ControllerMultisellerBase')) {
+    die('
+<h3>MultiMerch Installation Error - ControllerMultisellerBase class not found</h3>
+<pre>This usually means vQmod is missing or broken. Please make sure that:
+
+1. You have installed the latest version of vQmod available at <a href="http://vqmod.com/">http://vqmod.com/</a>
+2. You have run vQmod installation script at <a target="_blank" href="'.HTTP_CATALOG.'vqmod/install/">'.HTTP_CATALOG.'vqmod/install/</a> successfully (see <a target="_blank" href="https://github.com/vqmod/vqmod/wiki/Installing-vQmod-on-OpenCart">Installing vQmod on OpenCart</a> for more information)
+3. Your vqmod/ and vqmod/vqcache/ folders are server-writable. Contact your hosting provider for more information
+4. You have copied all MultiMerch files and folders from the upload/ folder to your OpenCart root
+</pre>
+    ');
+}
+
 class ControllerModuleMultiseller extends ControllerMultisellerBase {
 	private $_controllers = array(
 		"multiseller/base",
@@ -8,19 +21,18 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"multiseller/payment",
 		"multiseller/seller",
 		"multiseller/transaction",
+		"multiseller/dashboard",
+		"multiseller/debug",
 		"multiseller/seller-group"
 	);
 	
 	private $settings = array(
 		"msconf_seller_validation" => MsSeller::MS_SELLER_VALIDATION_NONE,
 		"msconf_product_validation" => MsProduct::MS_PRODUCT_VALIDATION_NONE,
-		"msconf_allow_inactive_seller_products" => 0,
+
 		"msconf_nickname_rules" => 0, // 0 - alnum, 1 - latin extended, 2 - utf
 		"msconf_credit_order_statuses" => array(5),
 		"msconf_debit_order_statuses" => array(8),
-		"msconf_minimum_withdrawal_amount" => "50",
-		"msconf_allow_partial_withdrawal" => 1,
-		
 		"msconf_paypal_sandbox" => 1,
 		"msconf_paypal_address" => "",
 		
@@ -29,11 +41,11 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"msconf_allowed_download_types" => 'zip,rar,pdf',
 		"msconf_minimum_product_price" => 0,
 		"msconf_maximum_product_price" => 0,
-		"msconf_notification_email" => "",
+
 		"msconf_allow_free_products" => 0,
 		
 		"msconf_allow_multiple_categories" => 0,
-		"msconf_additional_category_restrictions" => 0, // 0 - none, 1 - topmost, 2 - all parents
+
 		"msconf_restrict_categories" => array(),
 		"msconf_product_included_fields" => array(),
 		
@@ -41,37 +53,22 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"msconf_downloads_limits" => array(0,0),
 		
 		"msconf_enable_shipping" => 0, // 0 - no, 1 - yes, 2 - seller select
-		"msconf_provide_buyerinfo" => 0, // 0 - no, 1 - yes, 2 - shipping dependent
-		"msconf_enable_quantities" => 0, // 0 - no, 1 - yes, 2 - shipping dependent
-        "msconf_enable_categories" => 0, // 0 - no, 1 - yes
-        "msconf_physical_product_categories" => array(),
-        "msconf_digital_product_categories" => array(),
 
-		"msconf_disable_product_after_quantity_depleted" => 0,
 		"msconf_allow_relisting" => 0,
 		
-		"msconf_enable_seo_urls_seller" => 0,
-		"msconf_enable_seo_urls_product" => 0,
-		"msconf_enable_update_seo_urls" => 0,
 		"msconf_enable_non_alphanumeric_seo" => 0,
 		"msconf_product_image_path" => 'sellers/',
-		"msconf_predefined_avatars_path" => 'avatars/',
 		"msconf_temp_image_path" => 'tmp/',
 		"msconf_temp_download_path" => 'tmp/',
 		"msconf_seller_terms_page" => "",
 		"msconf_default_seller_group_id" => 1,
-		"msconf_allow_specials" => 1,
-		"msconf_allow_discounts" => 1,
-		"msconf_withdrawal_waiting_period" => 0,
-		"msconf_graphical_sellermenu" => 1,
-		
-		"msconf_enable_rte" => 0,
+
 		"msconf_rte_whitelist" => "",
 		
 		"msconf_seller_avatar_seller_profile_image_width" => 100,
 		"msconf_seller_avatar_seller_profile_image_height" => 100,
-		"msconf_seller_avatar_seller_list_image_width" => 100,
-		"msconf_seller_avatar_seller_list_image_height" => 100,
+		"msconf_seller_avatar_seller_list_image_width" => 228,
+		"msconf_seller_avatar_seller_list_image_height" => 228,
 		"msconf_seller_avatar_product_page_image_width" => 100,
 		"msconf_seller_avatar_product_page_image_height" => 100,
 		"msconf_seller_avatar_dashboard_image_width" => 100,
@@ -86,28 +83,50 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		"msconf_product_seller_products_image_height" => 100,
 		"msconf_product_seller_product_list_seller_area_image_width" => 40,
 		"msconf_product_seller_product_list_seller_area_image_height" => 40,
-		
+		"msconf_product_seller_banner_width" => 750,
+		"msconf_product_seller_banner_height" => 100,
+
 		"msconf_min_uploaded_image_width" => 0,
 		"msconf_min_uploaded_image_height" => 0,
 		"msconf_max_uploaded_image_width" => 0,
 		"msconf_max_uploaded_image_height" => 0,
-		
-		"msconf_sellers_slug" => "sellers",
-		
-		"msconf_attribute_display" => 0, // 0 - MM, 1 - OC, 2 - both
-		
-		"msconf_hide_customer_email" => 0,
-		"msconf_hide_emails_in_emails" => 0,
-		"msconf_hide_sellers_product_count" => 1,
-		"msconf_avatars_for_sellers" => 0, // 0 - Uploaded manually by seller, 1 - Both, uploaded by seller and pre-defined, 2 - Only pre-defined
+
 		"msconf_change_seller_nickname" => 1,
 
-		"msconf_enable_private_messaging" => 1, // 0 - no, 2 - yes (email only)
-		"msconf_enable_one_page_seller_registration" => 0 // 0 - no, 1 - yes
+		// hidden
+		"msconf_sellers_slug" => "sellers",
+		"msconf_enable_quantities" => 1, // 0 - no, 1 - yes, 2 - shipping dependent
+		"msconf_enable_rte" => 1,
+		"msconf_minimum_withdrawal_amount" => "50",
+		"msconf_withdrawal_waiting_period" => 0,
+		"msconf_display_order_statuses" => array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),
+
+		// deprecated
+		"msconf_notification_email" => "",
+		"msconf_allow_inactive_seller_products" => 0,
+		"msconf_disable_product_after_quantity_depleted" => 0,
+		"msconf_graphical_sellermenu" => 1,
+		"msconf_enable_seller_banner" => 1,
+
+		"msconf_allow_specials" => 1,
+		"msconf_allow_discounts" => 1,
+
+		"msconf_attribute_display" => 1, // 0 - MM, 1 - OC, 2 - both
+
+		"msconf_additional_category_restrictions" => 0, // 0 - none, 1 - topmost, 2 - all parents
+		"msconf_provide_buyerinfo" => 0, // 0 - no, 1 - yes, 2 - shipping dependent
+
+		"msconf_allow_partial_withdrawal" => 1,
+
+		"msconf_enable_seo_urls_seller" => 0,
+		"msconf_enable_seo_urls_product" => 0,
+		"msconf_enable_update_seo_urls" => 0,
+		"msconf_hide_customer_email" => 1,
+		"msconf_enable_private_messaging" => 2, // 0 - no, 2 - yes (email only)
 	);
 	
 	public function __construct($registry) {
-		parent::__construct($registry);	
+		parent::__construct($registry);
 		$this->registry = $registry;
 	}
 	
@@ -194,12 +213,6 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 				}
 			}
 		}
-		
-		// ckeditor
-		/*if (!copy(DIR_APPLICATION . 'view/javascript/ckeditor/', DIR_CATALOG . 'view/javascript/multimerch/')) {
-			$this->session->data['error'] .= sprintf($this->language->get('ms_error_ckeditor'), DIR_APPLICATION . 'view/javascript/ckeditor/', DIR_CATALOG . 'view/javascript/multimerch/');
-		}*/
-		$this->session->data['error'] .= sprintf($this->language->get('ms_notice_ckeditor'), DIR_APPLICATION . 'view/javascript/ckeditor/', DIR_CATALOG . 'view/javascript/multimerch/ckeditor/');
 	}
 
 	public function uninstall() {
@@ -220,10 +233,13 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 		magic*/
 
 		if (!isset($this->request->post['msconf_credit_order_statuses']))
-			$this->request->post['msconf_credit_order_statuses'] = array();
+			$this->request->post['msconf_credit_order_statuses'] = array(-1);
 		
 		if (!isset($this->request->post['msconf_debit_order_statuses']))
-			$this->request->post['msconf_debit_order_statuses'] = array();
+			$this->request->post['msconf_debit_order_statuses'] = array(-1);
+
+		if (!isset($this->request->post['msconf_display_order_statuses']))
+			$this->request->post['msconf_display_order_statuses'] = array(-1);
 		
 		if (!isset($this->request->post['msconf_product_options']))
 			$this->request->post['msconf_product_options'] = array();
@@ -287,7 +303,9 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			'subtract' => $this->language->get('ms_catalog_products_field_subtract'),
 			'stockStatus' => $this->language->get('ms_catalog_products_field_stock_status'),
 			'metaDescription' => $this->language->get('ms_catalog_products_field_meta_description'),
-			'metaKeywords' => $this->language->get('ms_catalog_products_field_meta_keyword')
+			'metaKeywords' => $this->language->get('ms_catalog_products_field_meta_keyword'),
+			'filters' => $this->language->get('ms_catalog_products_filters'),
+            'minOrderQty' => $this->language->get('ms_catalog_products_min_order_qty')
 		);
 		
 		$this->document->setTitle($this->language->get('ms_settings_heading'));
@@ -299,7 +317,7 @@ class ControllerModuleMultiseller extends ControllerMultisellerBase {
 			),
 			array(
 				'text' => $this->language->get('ms_settings_breadcrumbs'),
-				'href' => $this->url->link('multiseller/settings', '', 'SSL'),
+				'href' => $this->url->link('module/multiseller', '', 'SSL'),
 			)
 		));
 		

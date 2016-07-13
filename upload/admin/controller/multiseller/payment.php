@@ -43,7 +43,7 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 			if ($result['amount'] > 0 && $result['payment_status'] == MsPayment::STATUS_UNPAID) { 
 				$actions .= "<a class='ms-button ms-button-mark' title='" . $this->language->get('ms_payment_mark') . "'></a>";
 			}
-			$actions .= "<a class='ms-button ms-button-delete' title='" . $this->language->get('ms_payment_delete') . "'></a>";
+			$actions .= "<a class='btn btn-danger' title='" . $this->language->get('ms_payment_delete') . "'><i class='fa fa-trash-o'></i></a>";
 			
 			// paymentstatus
 			$paymentstatus = "<select name='ms-payment-status'>";
@@ -67,7 +67,7 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 					'payment_type' => $this->language->get('ms_payment_type_' . $result['payment_type']),
 					'seller' => "<a href='".$this->url->link('multiseller/seller/update', 'token=' . $this->session->data['token'] . '&seller_id=' . $result['seller_id'], 'SSL')."'>{$result['nickname']}</a>",
 					'amount' => $this->currency->format(abs($result['amount']),$result['currency_code']),
-					'description' => (mb_strlen($result['mpay.description']) > 80 ? mb_substr($result['mpay.description'], 0, 80) . '...' : $result['mpay.description']),
+					'description' => (utf8_strlen($result['mpay.description']) > 80 ? mb_substr($result['mpay.description'], 0, 80) . '...' : $result['mpay.description']),
 					'payment_status' => $paymentstatus,
 					'date_created' => date($this->language->get('date_format_short'), strtotime($result['mpay.date_created'])),
 					'date_paid' => $result['mpay.date_paid'] ? date($this->language->get('date_format_short'), strtotime($result['mpay.date_paid'])) : '',
@@ -84,7 +84,9 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 		
 	public function index() {
 		$this->validate(__FUNCTION__);
-		
+
+		$this->document->addScript('//code.jquery.com/ui/1.11.2/jquery-ui.min.js');
+
 		// paypal listing payment confirmation
 		if (isset($this->request->post['payment_status']) && strtolower($this->request->post['payment_status']) == 'completed') {
 			$this->data['success'] = $this->language->get('ms_payment_completed');
@@ -295,11 +297,11 @@ class ControllerMultisellerPayment extends ControllerMultisellerBase {
 			'notify_url' => HTTP_CATALOG . 'index.php?route=payment/multimerch-paypal/payoutIPN',
 			'custom' => $payment_id
 		);
-		
-		list($this->template) = $this->MsLoader->MsHelper->admLoadTemplate('payment/multimerch-paypal');
-		
-		$json['form'] = $this->render();
+
+		list($template, $children) = $this->MsLoader->MsHelper->admLoadTemplate('payment/multimerch-paypal');
+		$json['form'] = $this->load->view($template, $this->data);
 		$json['success'] = 1;
+
 		$this->response->setOutput(json_encode($json));
 	}	
 	

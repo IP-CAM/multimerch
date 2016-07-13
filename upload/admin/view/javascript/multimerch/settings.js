@@ -1,9 +1,9 @@
 $(function() {
-	$('body').delegate("a.ffRemove", "click", function() {
+	$('body').delegate(".ffRemove", "click", function() {
 		$(this).parents('tr').remove();
 	});
 
-	$('body').delegate("a.ffClone", "click", function() {
+	$('body').delegate(".ffClone", "click", function() {
 		var lastRow = $(this).parents('table').find('tbody tr:last input:last').attr('name');
 		if (typeof lastRow == "undefined") {
 			var newRowNum = 1;

@@ -8,7 +8,7 @@
   <div class="alert alert-danger warning main" style="display: none"><i class="fa fa-exclamation-circle"></i></div>
 
   <?php if (isset($success) && ($success)) { ?>
-		<div class="success"><?php echo $success; ?></div>
+		<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> <?php echo $success; ?></div>
   <?php } ?>
 
   <div class="row"><?php echo $column_left; ?>
@@ -25,13 +25,13 @@
 	<form id="ms-new-product" class="form-horizontal" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>" />
 		<input type="hidden" name="action" id="ms_action" />
-		<input type="hidden" name="list_until" value="<?php echo $list_until; ?>" />
+		<input type="hidden" name="list_until" value="<?php echo isset($list_until) ? $list_until : '' ?>" />
 
 		<ul id="general-tabs" class="nav nav-tabs">
 			<li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $ms_account_product_tab_general; ?></a></li>
 
 			<?php
-			$data_tab_fields = array('model', 'sku', 'upc', 'ean', 'jan', 'isbn', 'mpn', 'manufacturer', 'taxClass', 'subtract', 'stockStatus', 'dateAvailable');
+			$data_tab_fields = array('model', 'sku', 'upc', 'ean', 'jan', 'isbn', 'mpn', 'manufacturer', 'taxClass', 'subtract', 'stockStatus', 'dateAvailable', 'filters');
 			$intersection_fields = array_intersect($data_tab_fields, $this->config->get('msconf_product_included_fields'));
      		if (!empty($intersection_fields)) { ?>
      		<li><a href="#tab-data" data-toggle="tab"><?php echo $ms_account_product_tab_data; ?></a></li>
@@ -52,20 +52,22 @@
 		<div class="tab-content ms-product">
      	<div id="tab-general" class="tab-pane active">
      		<?php if (count($languages) > 1) { ?>
-			<div class="nav nav-tabs" id="language-tabs">
-				<?php foreach ($languages as $language) { ?>
-				<li><a class="lang" data-toggle="tab" href="#language<?php echo $language['language_id']; ?>"><img src="image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
+			<?php $first = key($languages); ?>
+			<ul class="nav nav-tabs" id="language-tabs">
+				<?php foreach ($languages as $k => $language) { ?>
+				<li <?php if ($k == $first) { ?> class="active" <?php } ?>><a data-toggle="tab" href="#language<?php echo $language['language_id']; ?>"><img src="image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
 				<?php } ?>
-			</div>
+			</ul>
 			<?php } ?>
-			
+
+			<div class="tab-content">
 			<?php
 			reset($languages); $first = key($languages);
 			foreach ($languages as $k => $language) {
 				$langId = $language['language_id'];
 				?>
 				
-				<div class="ms-language-div" id="language<?php echo $langId; ?>">
+				<div class="ms-language-div tab-pane <?php if ($k == $first) { echo 'active'; } ?>" id="language<?php echo $langId; ?>">
                     <fieldset>
                     <legend><?php echo $ms_account_product_name_description; ?></legend>
 					<div class="form-group <?php if ($k == $first) { echo 'required'; } ?>">
@@ -81,7 +83,7 @@
 						<label class="col-sm-2 control-label"><?php echo $ms_account_product_description; ?></label>
 						<div class="col-sm-10">
 							<!-- todo strip tags if rte disabled -->
-							<textarea class="form-control"  name="languages[<?php echo $langId; ?>][product_description]" class="<?php echo $this->config->get('msconf_enable_rte') ? "ckeditor" : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($product['languages'][$langId]['description']) : strip_tags(htmlspecialchars_decode($product['languages'][$langId]['description'])); ?></textarea>
+							<textarea name="languages[<?php echo $langId; ?>][product_description]" class="form-control <?php echo $this->config->get('msconf_enable_rte') ? 'ckeditor' : ''; ?>"><?php echo $this->config->get('msconf_enable_rte') ? htmlspecialchars_decode($product['languages'][$langId]['description']) : strip_tags(htmlspecialchars_decode($product['languages'][$langId]['description'])); ?></textarea>
 							<p class="ms-note"><?php echo $ms_account_product_description_note; ?></p>
 							<p class="error" id="error_product_description_<?php echo $langId; ?>"></p>
 						</div>
@@ -143,6 +145,7 @@
 					</fieldset>
 				</div>
 			<?php } ?>
+			</div>
 
 			<fieldset>
             	<legend><?php echo $ms_account_product_price_attributes; ?></legend>
@@ -162,53 +165,23 @@
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_category; ?></label>
 					<div class="col-sm-10" id="product_category_block">
 						<?php if (!$msconf_allow_multiple_categories) { ?>
-
-						<select class="form-control" name="product_category">
-							<option value=""><?php echo ''; ?></option>
-							<?php foreach ($categories as $category) { ?>
-                                <?php if($msconf_enable_categories && $msconf_enable_shipping == 2) { ?>
-                                    <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
-                                        <?php if(in_array($category['category_id'],$msconf_physical_product_categories)) { ?>
-                                            <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
-                                    <?php }} else { ?>
-                                        <?php if(in_array($category['category_id'],$msconf_digital_product_categories)) { ?>
-                                            <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
-                                    <?php }} ?>
-                                <?php } else { ?>
-                                <option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
-							<?php }} ?>
-						</select>
-
+							<select class="form-control" name="product_category">
+								<option value=""><?php echo ''; ?></option>
+								<?php foreach ($categories as $category) { ?>
+									<option value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>selected="selected"<?php } ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>><?php echo $category['name']; ?></option>
+								<?php } ?>
+							</select>
 						<?php } else { ?>
-
-						<div class="scrollbox">
-						<?php $class = 'odd'; ?>
-						<?php foreach ($categories as $category) { ?>
-                            <?php if($msconf_enable_categories && $msconf_enable_shipping == 2) { ?>
-                                <?php if($product['shipping'] == 1 || $product['shipping'] == NULL) { ?>
-                                    <?php if(in_array($category['category_id'],$msconf_physical_product_categories)) { ?>
-                                        <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                                        <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
-                                            <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
-                                            <?php echo $category['name']; ?>
-                                        </div>
-                                <?php }} else { ?>
-                                     <?php if(in_array($category['category_id'],$msconf_digital_product_categories)) { ?>
-                                        <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                                        <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
-                                            <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
-                                            <?php echo $category['name']; ?>
-                                        </div>
-                                <?php }} ?>
-                            <?php } else { ?>
-                                <?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                                <div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
-                                    <input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
-                                    <?php echo $category['name']; ?>
-                                </div>
-                            <?php }} ?>
-						</div>
-
+							<div class="scrollbox">
+							<?php $class = 'odd'; ?>
+							<?php foreach ($categories as $category) { ?>
+									<?php $class = ($class == 'even' ? 'odd' : 'even'); ?>
+									<div class="<?php echo $class; ?> <?php echo ($category['disabled'] ? 'disabled' : ''); ?>">
+										<input type="checkbox" name="product_category[]" value="<?php echo $category['category_id']; ?>" <?php if (in_array($category['category_id'], explode(',',$product['category_id'])) && !$category['disabled']) { ?>checked="checked"<?php } ?> <?php if ($category['disabled']) { ?>disabled="disabled"<?php } ?>/>
+										<?php echo $category['name']; ?>
+									</div>
+								<?php } ?>
+							</div>
 						<?php } ?>
 
 						<p class="ms-note"><?php echo $ms_account_product_category_note; ?></p>
@@ -216,7 +189,7 @@
 					</div>
 				</div>
 
-				<?php if ($msconf_enable_shipping == 2) { ?>
+				<?php if ($this->config->get('msconf_enable_shipping') == 2) { ?>
 				<div class="form-group">
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_enable_shipping; ?></label>
 					<div class="col-sm-10">
@@ -230,16 +203,14 @@
 				</div>
 				<?php } ?>
 
-				<div class="form-group" <?php if ($msconf_enable_quantities == 0 || ($msconf_enable_shipping != 1 && $msconf_enable_quantities == 2 && isset($product['shipping']) && $product['shipping'] == 0) || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>style="display: none"<?php } ?>>
+				<div class="form-group" <?php if (!$enable_quantities) { ?>style="display: none"<?php } ?>>
 					<label class="col-sm-2 control-label"><?php echo $ms_account_product_quantity; ?></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="product_quantity" value="<?php echo $product['quantity']; ?>" <?php if ($msconf_enable_quantities < 2 || (isset($seller_group['product_quantity']) && $seller_group['product_quantity'] != 0)) { ?>class="ffUnchangeable"<?php } ?> />
+						<input type="text" class="form-control" name="product_quantity" value="<?php echo $product['quantity']; ?>" />
 						<p class="ms-note"><?php echo $ms_account_product_quantity_note; ?></p>
 						<p class="error" id="error_product_quantity"></p>
 					</div>
 				</div>
-
-
 
 				<?php if (isset($normal_attributes) && !empty($normal_attributes)) { ?>
 				<?php foreach ($normal_attributes as $attr) { ?>
@@ -291,17 +262,32 @@
 						<?php } ?>
 
 						<?php if ($attr['attribute_type'] == MsAttribute::TYPE_DATE) { ?>
-							<input type="text" class="form-control" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" class="date" />
+							<div class="input-group date">
+							<input type="text" class="form-control inline" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" data-date-format="YYYY-MM-DD" />
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+							</span>
+							</div>
 							<input type="hidden" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value_id]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo key($normal_attribute_values[$attr['attribute_id']]); } ?>" />
 						<?php } ?>
 
 						<?php if ($attr['attribute_type'] == MsAttribute::TYPE_DATETIME) { ?>
-							<input type="text" class="form-control" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" class="datetime" />
+							<div class="input-group datetime">
+							<input type="text" class="form-control inline" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" data-date-format="YYYY-MM-DD HH:mm" />
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+							</span>
+							</div>
 							<input type="hidden" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value_id]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo key($normal_attribute_values[$attr['attribute_id']]); } ?>" />
 						<?php } ?>
 
 						<?php if ($attr['attribute_type'] == MsAttribute::TYPE_TIME) { ?>
-							<input type="text" class="form-control" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" class="time" />
+							<div class="input-group time">
+							<input type="text" class="form-control inline" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo current(reset($normal_attribute_values[$attr['attribute_id']])); } ?>" data-date-format="HH:mm" />
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+							</span>
+							</div>
 							<input type="hidden" name="product_attributes[<?php echo $attr['attribute_id']; ?>][value_id]" value="<?php if (isset($normal_attribute_values[$attr['attribute_id']])) { echo key($normal_attribute_values[$attr['attribute_id']]); } ?>" />
 						<?php } ?>
 
@@ -323,7 +309,9 @@
 						<a name="ms-file-addimages" id="ms-file-addimages" class="btn btn-primary"><span><?php echo $ms_button_select_images; ?></span></a>
 						<p class="ms-note"><?php echo $ms_account_product_image_note; ?></p>
 						<div class="error" id="error_product_image"></div>
+
 						<div class="image progress"></div>
+
 						<div class="product_image_files">
 						<?php if (isset($product['images'])) { ?>
 						<?php $i = 0; ?>
@@ -367,12 +355,6 @@
 						<?php } ?>
 						<?php } ?>
 						</div>
-
-						<div style="display: none">
-							<input type="checkbox" name="push_downloads" id="push_downloads" />
-							<label><?php echo $ms_account_product_push; ?></label>
-							<p class="ms-note"><?php echo $ms_account_product_push_note; ?></p>
-						</div>
 					</div>
 				</div>
 			</fieldset>
@@ -389,8 +371,8 @@
 						<p class="error" id="error_product_message"></p>
 					</div>
 				</div>
-				<?php } ?>
 			</fieldset>
+			<?php } ?>
 		</div>
 
         <!-- data tab -->
@@ -400,10 +382,18 @@
 				<label class="col-sm-2 control-label"><?php echo $ms_account_product_model; ?></label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="product_model" value="<?php echo $product['model']; ?>" />
-					<p class="error" id="error_product_model; ?>"></p>
+					<p class="error" id="error_product_model"></p>
 				</div>
 			</div>
 			<?php } ?>
+            <?php if (in_array('minOrderQty', $this->config->get('msconf_product_included_fields'))) { ?>
+            <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-minimum"><span data-toggle="tooltip" title="" data-original-title="Force a minimum ordered amount">Minimum Quantity</span></label>
+                <div class="col-sm-10">
+                    <input type="text" name="minimum" value="<?php echo $product['minimum'] ;?>" placeholder="Minimum Quantity" id="input-minimum" class="form-control">
+                </div>
+            </div>
+            <?php } ?>
 			<?php if (in_array('sku', $this->config->get('msconf_product_included_fields'))) { ?>
 			<div class="form-group required">
 				<label class="col-sm-2 control-label"><?php echo $ms_account_product_sku; ?></label>
@@ -523,6 +513,22 @@
 				<div class="col-sm-10"><input type="text" class="form-control" name="product_date_available" value="<?php echo $date_available; ?>" size="12" class="date" /></div>
 			</div>
 			<?php } ?>
+
+			<?php if (in_array('filters', $this->config->get('msconf_product_included_fields'))) { ?>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip"><?php echo $this->language->get('ms_entry_filter'); ?></span></label>
+				<div class="col-sm-10">
+					<input type="text" name="filter" value="" placeholder="<?php echo $this->language->get('ms_autocomplete'); ?>" id="input-filter" class="form-control" />
+					<div id="product-filter" class="well well-sm" style="height: 150px; overflow: auto;">
+					<?php if (isset($product_filters) && $product_filters) foreach ($product_filters as $product_filter) { ?>
+						<div id="product-filter<?php echo $product_filter['filter_id']; ?>"><i class="fa fa-minus-circle"></i>
+							<?php echo $product_filter['name']; ?><input type="hidden" name="product_filter[]" value="<?php echo $product_filter['filter_id']; ?>" />
+						</div>
+					<?php } ?>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
         </div>
 
 		<!-- options tab -->
@@ -538,6 +544,7 @@
 				<thead>
 				<tr>
 					<td><span class="required">*</span><?php echo $ms_account_product_priority; ?></td>
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>><span class="required">*</span><?php echo $ms_account_product_customer_group; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_price; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_date_start; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_date_end; ?></td>
@@ -549,10 +556,33 @@
 
 				<!-- sample row -->
 				<tr class="ffSample">
-					<td><input type="text" class="form-control inline" name="product_specials[0][priority]" value="" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[0][price]" value="" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[0][date_start]" value="" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[0][date_end]" value="" class="date" /></td>
+					<td><input type="text" class="form-control inline small" name="product_specials[0][priority]" value="" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_specials[0][customer_group_id]" class="form-control inline">
+						  <?php foreach ($customer_groups as $customer_group) { ?>
+						  <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+						  <?php } ?>
+						</select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_specials[0][price]" value="" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[0][date_start]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[0][date_end]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 
@@ -560,10 +590,33 @@
 				<?php $special_row = 1; ?>
 				<?php foreach ($product['specials'] as $product_special) { ?>
 				<tr>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][priority]" value="<?php echo $product_special['priority']; ?>" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']); ?>" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_start]" value="<?php echo $product_special['date_start']; ?>" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_end]" value="<?php echo $product_special['date_end']; ?>" class="date" /></td>
+					<td><input type="text" class="form-control inline small" name="product_specials[<?php echo $special_row; ?>][priority]" value="<?php echo $product_special['priority']; ?>" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_specials[<?php echo $special_row; ?>][customer_group_id]" class="form-control inline">
+						  <?php foreach ($customer_groups as $customer_group) { ?>
+						  <option value="<?php echo $customer_group['customer_group_id']; ?>" <?php if ($customer_group['customer_group_id'] == $product_special['customer_group_id']) { ?> selected="selected" <?php } ?>><?php echo $customer_group['name']; ?></option>
+						  <?php } ?>
+						</select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_specials[<?php echo $special_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_special['price']); ?>" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_start]" value="<?php echo $product_special['date_start']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_specials[<?php echo $special_row; ?>][date_end]" value="<?php echo $product_special['date_end']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 				<?php $special_row++; ?>
@@ -573,7 +626,7 @@
 
 				<tfoot>
 				<tr>
-				<td colspan="5" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_special; ?></a></td>
+				<td colspan="6" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_special; ?></a></td>
 				</tr>
 				</tfoot>
 			</table>
@@ -590,6 +643,7 @@
 				<thead>
 				<tr>
 					<td><span class="required">*</span><?php echo $ms_account_product_priority; ?></td>
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>><span class="required">*</span><?php echo $ms_account_product_customer_group; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_quantity; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_price; ?></td>
 					<td><span class="required">*</span><?php echo $ms_account_product_date_start; ?></td>
@@ -602,11 +656,34 @@
 				
 				<!-- sample row -->
 				<tr class="ffSample">				
-					<td><input type="text" class="form-control inline" name="product_discounts[0][priority]" value="" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][quantity]" value="" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][price]" value="" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][date_start]" value="" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[0][date_end]" value="" class="date" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[0][priority]" value="" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_discounts[0][customer_group_id]" class="form-control inline">
+                          <?php foreach ($customer_groups as $customer_group) { ?>
+                          <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+                          <?php } ?>
+                        </select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_discounts[0][quantity]" value="" size="2" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[0][price]" value="" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[0][date_start]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[0][date_end]" value="" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 				
@@ -614,11 +691,34 @@
 				<?php $discount_row = 1; ?>
 				<?php foreach ($product['discounts'] as $product_discount) { ?>
 				<tr>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][priority]" value="<?php echo $product_discount['priority']; ?>" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][quantity]" value="<?php echo $product_discount['quantity']; ?>" size="2" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']); ?>" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_start]" value="<?php echo $product_discount['date_start']; ?>" class="date" /></td>
-					<td><input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_end]" value="<?php echo $product_discount['date_end']; ?>" class="date" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[<?php echo $discount_row; ?>][priority]" value="<?php echo $product_discount['priority']; ?>" size="2" /></td>
+
+					<td <?php if ($hide_customer_groups) { ?> class="hidden" <?php } ?>>
+						<select name="product_discounts[<?php echo $discount_row; ?>][customer_group_id]" class="form-control inline">
+						  <?php foreach ($customer_groups as $customer_group) { ?>
+						  <option value="<?php echo $customer_group['customer_group_id']; ?>" <?php if ($customer_group['customer_group_id'] == $product_discount['customer_group_id']) { ?> selected="selected" <?php } ?>><?php echo $customer_group['name']; ?></option>
+						  <?php } ?>
+						</select>
+					</td>
+
+					<td><input type="text" class="form-control inline small" name="product_discounts[<?php echo $discount_row; ?>][quantity]" value="<?php echo $product_discount['quantity']; ?>" size="2" /></td>
+					<td><input type="text" class="form-control inline small" name="product_discounts[<?php echo $discount_row; ?>][price]" value="<?php echo $this->MsLoader->MsHelper->uniformDecimalPoint($product_discount['price']); ?>" /></td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_start]" value="<?php echo $product_discount['date_start']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date">
+						<input type="text" class="form-control inline" name="product_discounts[<?php echo $discount_row; ?>][date_end]" value="<?php echo $product_discount['date_end']; ?>" data-date-format="YYYY-MM-DD" />
+						<span class="input-group-btn">
+                			<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+						</span>
+						</div>
+					</td>
 					<td><a class="ms-button-delete" title="<?php echo $ms_delete; ?>"></a></td>
 				</tr>
 				<?php $discount_row++; ?>
@@ -628,7 +728,7 @@
 
 				<tfoot>
 				<tr>
-					<td colspan="6" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_discount; ?></a></td>
+					<td colspan="7" class="text-center"><a class="btn btn-primary ffClone"><?php echo $ms_button_add_discount; ?></a></td>
 				</tr>
 				</tfoot>
 			</table>
@@ -661,7 +761,7 @@
 
 		<div class="buttons">
 			<div class="pull-left"><a href="<?php echo $back; ?>" class="btn btn-default"><span><?php echo $ms_button_cancel; ?></span></a></div>
-			<?php if ($seller['ms.seller_status'] != MsSeller::STATUS_DISABLED && $seller['ms.seller_status'] != MsSeller::STATUS_DELETED) { ?>
+			<?php if ($seller['ms.seller_status'] != MsSeller::STATUS_DISABLED && $seller['ms.seller_status'] != MsSeller::STATUS_DELETED && $seller['ms.seller_status'] != MsSeller::STATUS_INCOMPLETE) { ?>
 			<div class="pull-right"><a class="btn btn-primary" id="ms-submit-button"><span><?php echo $ms_button_submit; ?></span></a></div>
 			<?php } ?>
 		</div>
@@ -677,10 +777,12 @@
 		session_id: '<?php echo session_id(); ?>',
 		product_id: '<?php echo $product['product_id']; ?>',
 		text_delete: '<?php echo htmlspecialchars($ms_delete, ENT_QUOTES, "UTF-8"); ?>',
+		text_none: '<?php echo htmlspecialchars($ms_none, ENT_QUOTES, "UTF-8"); ?>',
 		uploadError: '<?php echo htmlspecialchars($ms_error_file_upload_error, ENT_QUOTES, "UTF-8"); ?>',
 		formError: '<?php echo htmlspecialchars($ms_error_form_submit_error, ENT_QUOTES, "UTF-8"); ?>',
 		formNotice: '<?php echo htmlspecialchars($ms_error_form_notice, ENT_QUOTES, "UTF-8"); ?>',
-		config_enable_rte: '<?php echo $this->config->get('msconf_enable_rte'); ?>'
+		config_enable_rte: '<?php echo $this->config->get('msconf_enable_rte'); ?>',
+		config_enable_quantities: '<?php echo $this->config->get('msconf_enable_quantities'); ?>'
 	};
 </script>
 <?php echo $footer; ?>

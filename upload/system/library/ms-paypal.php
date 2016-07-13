@@ -99,8 +99,8 @@ class Paypal {
       	 CURLOPT_HTTPHEADER => ($this->_credentials['APPID'] ? array("X-PAYPAL-SECURITY-USERID: {$this->_credentials['USER']}", "X-PAYPAL-SECURITY-PASSWORD: {$this->_credentials['PWD']}", "X-PAYPAL-SECURITY-SIGNATURE: {$this->_credentials['SIGNATURE']}", "X-PAYPAL-APPLICATION-ID: {$this->_credentials['APPID']}", 'X-PAYPAL-REQUEST-DATA-FORMAT: NV' , 'X-PAYPAL-RESPONSE-DATA-FORMAT: NV') : ''),
          CURLOPT_URL => $this -> _endPoint,
          CURLOPT_VERBOSE => 1,
-         //CURLOPT_SSL_VERIFYPEER => true,
-         //CURLOPT_SSL_VERIFYHOST => 2,
+         CURLOPT_SSL_VERIFYPEER => 0,
+         CURLOPT_SSL_VERIFYHOST => 0,
          //CURLOPT_CAINFO => dirname(__FILE__) . '/cacert.pem', //CA cert file
          CURLOPT_RETURNTRANSFER => 1,
          CURLOPT_POST => 1,

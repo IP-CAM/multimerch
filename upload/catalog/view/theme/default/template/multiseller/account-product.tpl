@@ -7,7 +7,7 @@
   </ul>
 
   <?php if (isset($success) && ($success)) { ?>
-		<div class="success"><?php echo $success; ?></div>
+		<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> <?php echo $success; ?></div>
   <?php } ?>
 
   <?php if (isset($error_warning) && $error_warning) { ?>
@@ -39,6 +39,18 @@
 		<td><?php echo $ms_account_products_listing_until; ?></td>
 		<td class="large"><?php echo $ms_account_products_action; ?></td>
 	</tr>
+
+	<tr class="filter">
+		<td></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td></td>
+		<td><input type="text"/></td>
+		<td><input type="text"/></td>
+		<td></td>
+	</tr>
 	</thead>
 	<tbody></tbody>
 	</table>
@@ -63,10 +75,10 @@
 				{ "mData": "number_sold" },
 				{ "mData": "product_earnings" },
 				{ "mData": "product_status" },
-				{ "mData": "date_created" },
+				{ "mData": "date_added" },
 				{ "mData": "list_until" },
-				{ "mData": "actions", "bSortable": false, "sClass": "right" }
-			],
+				{ "mData": "actions", "bSortable": false, "sClass": "text-right" }
+			]
 		});
 	
 		$(document).on('click', '.ms-button-delete', function() {
